@@ -3,7 +3,7 @@
 ### 技术: lombok-swagger2-Dockerfile
 
 ### sql:
-##### sys_user: 密码：123
+##### sys_user: 密码: 123
     CREATE TABLE `sys_user` (
       `id` int(11) NOT NULL AUTO_INCREMENT,
       `username` varchar(255) DEFAULT NULL COMMENT '用户名',
