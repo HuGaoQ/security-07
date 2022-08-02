@@ -1,6 +1,6 @@
-架构: SpringBoot  2.1.5
+架构: SpringBoot+security+mybatisPlus+redis+mysql5.7+jwt
 jdk: 1.8
-技术: mysql-lombok-mybatisPlus-redis-jwt-swagger2-Dockerfile
+技术: lombok-swagger2-Dockerfile
 
 sql:
 sys_user: 密码：123
