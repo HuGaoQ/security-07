@@ -2,7 +2,6 @@ package com.ncamc.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.ncamc.entity.LoginUser;
-import com.ncamc.entity.Menu;
 import com.ncamc.entity.User;
 import com.ncamc.mapper.MenusMapperss;
 import com.ncamc.mapper.UserMapper;
@@ -20,7 +19,7 @@ import java.util.Objects;
  * @CreateTime: 2022-07-05 10:38
  */
 @Service
-public class UserDetailsServices implements UserDetailsService {
+public class UserDetailsServicesImpl implements UserDetailsService {
 
     @Autowired
     private UserMapper userMapper;
@@ -36,7 +35,7 @@ public class UserDetailsServices implements UserDetailsService {
         if (Objects.isNull(user)){
             throw new RuntimeException("账号或者密码错误");
         }
-        List<String> list = menusMapperss.SelectPermsByUserId(user.getId());
+        List<String> list = menusMapperss.SelectParamsByUserId(user.getId());
         return new LoginUser(user,list);
     }
 }

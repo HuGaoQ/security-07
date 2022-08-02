@@ -12,9 +12,7 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 
 /**
- * 
  * Cookie 工具类
- *
  */
 public final class CookieUtils {
 
@@ -22,7 +20,6 @@ public final class CookieUtils {
 
 	/**
 	 * 得到Cookie的值, 不编码
-	 * 
 	 * @param request
 	 * @param cookieName
 	 * @return
@@ -33,7 +30,6 @@ public final class CookieUtils {
 
 	/**
 	 * 得到Cookie的值,
-	 * 
 	 * @param request
 	 * @param cookieName
 	 * @return
@@ -63,7 +59,6 @@ public final class CookieUtils {
 
 	/**
 	 * 得到Cookie的值,
-	 * 
 	 * @param request
 	 * @param cookieName
 	 * @return
@@ -120,7 +115,6 @@ public final class CookieUtils {
 
 	/**
 	 * 设置Cookie的值，并使其在指定时间内生效
-	 * 
 	 * @param cookieMaxAge
 	 *            cookie生效的最大秒数
 	 */
@@ -136,12 +130,13 @@ public final class CookieUtils {
 				cookieValue = URLEncoder.encode(cookieValue, encodeString);
 			}
 			Cookie cookie = new Cookie(cookieName, cookieValue);
-			if (cookieMaxAge != null && cookieMaxAge > 0)
+			if (cookieMaxAge != null && cookieMaxAge > 0){
 				cookie.setMaxAge(cookieMaxAge);
-			if (null != request)// 设置域名的cookie
+			}
+			if (null != request){// 设置域名的cookie
 				cookie.setDomain(getDomainName(request));
-			cookie.setPath("/");
-
+				cookie.setPath("/");
+			}
 			if(httpOnly != null) {
 				cookie.setHttpOnly(httpOnly);
 			}
@@ -158,7 +153,7 @@ public final class CookieUtils {
 		String domainName = null;
 
 		String serverName = request.getRequestURL().toString();
-		if (serverName == null || serverName.equals("")) {
+		if (serverName == null || "".equals(serverName)) {
 			domainName = "";
 		} else {
 			serverName = serverName.toLowerCase();

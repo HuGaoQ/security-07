@@ -3,7 +3,7 @@
 
 <mapper namespace="com.ncamc.mapper.MenusMapperss">
 
-    <select id="SelectPermsByUserId" resultType="java.lang.String">
+    <select id="SelectParamsByUserId" resultType="java.lang.String">
             SELECT
                 perms
             FROM

@@ -14,10 +14,10 @@ public class CollectionUtils {
     public static <T> Collection<T> diff(Collection<T> c1, Collection<T> c2) {
         if (c1 != null && c1.size() != 0 && c2 != null && c2.size() != 0) {
             Collection<T> difference = new ArrayList();
-            Iterator i$ = c1.iterator();
+            Iterator i = c1.iterator();
 
-            while(i$.hasNext()) {
-                T item = (T) i$.next();
+            while(i.hasNext()) {
+                T item = (T) i.next();
                 if (!c2.contains(item)) {
                     difference.add(item);
                 }

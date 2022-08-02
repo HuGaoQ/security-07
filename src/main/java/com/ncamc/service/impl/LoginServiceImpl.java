@@ -1,6 +1,5 @@
 package com.ncamc.service.impl;
 
-import ch.qos.logback.core.status.StatusUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ncamc.config.JwtProperties;
 import com.ncamc.entity.LoginUser;
@@ -14,15 +13,12 @@ import com.ncamc.utils.ServletUtils;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpUtils;
 import java.util.Objects;
 
 /**
@@ -46,16 +42,16 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements L
 
     @SneakyThrows
     @Override
-    public ResponseResult login(User user_) {
+    public ResponseResult login(User users) {
         ResponseResult responseResult = null;
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(user_.getUsername(),user_.getPassword());
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(users.getUsername(),users.getPassword());
         Authentication authenticate = authenticationManager.authenticate(authenticationToken);
         LoginUser loginUser =(LoginUser) authenticate.getPrincipal();
         if (Objects.isNull(loginUser)){
             throw new RuntimeException("账号或者密码错误");
         }
         User user = loginUser.getUser();
-        if (user.getStatus().equals("0")){
+        if ("0".equals(user.getStatus())){
             if (user.getNumber() < 5){
                 userMapper.updateNumberById(user.getNumber(),user.getId());
                 String uid = loginUser.getUser().getId().toString();
@@ -76,13 +72,12 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements L
 
     @Override
     public ResponseResult getUsername(HttpServletRequest request) {
-        ResponseResult responseResult = null;
         String key = ServletUtils.longUid(request);
         LoginUser loginUser = redisCache.getCacheObject(key);
         if (Objects.isNull(loginUser)){
             throw  new RuntimeException("没有该用户请从新登录");
         }
-        return responseResult.ok(loginUser.getUser().getUsername());
+        return new ResponseResult(HttpStatus.OK.value(),loginUser.getUser().getUsername());
     }
 
     @Override
@@ -97,6 +92,5 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements L
         }
         return responseResult;
     }
-
 
 }

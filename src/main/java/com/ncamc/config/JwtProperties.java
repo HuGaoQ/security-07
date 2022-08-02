@@ -132,7 +132,7 @@ public class JwtProperties {
         this.privateKey = privateKey;
     }
 
-    public static Logger getLOGGER() {
+    public static Logger getLogger() {
         return LOGGER;
     }
 }

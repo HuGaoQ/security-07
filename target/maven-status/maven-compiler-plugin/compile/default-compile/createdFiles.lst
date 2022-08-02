@@ -27,10 +27,9 @@ com\ncamc\SecurityApplication07.class
 com\ncamc\service\impl\LoginServiceImpl.class
 com\ncamc\utils\JwtUtils.class
 com\ncamc\entity\Menu.class
+com\ncamc\service\UserDetailsServicesImpl.class
 com\ncamc\service\MenuService.class
 com\ncamc\config\SecurityConfig.class
-com\ncamc\service\impl\MenuServiceImpl.class
-com\ncamc\service\UserDetailsServices.class
 com\ncamc\utils\CollectionUtils.class
 com\ncamc\expression\LogoutSuccessHandlerImpl.class
 com\ncamc\service\LoginService.class

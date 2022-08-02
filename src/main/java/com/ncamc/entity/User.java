@@ -9,10 +9,7 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 import java.util.Date;
 
-
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 @TableName(value = "sys_user")
 public class User implements Serializable {
 

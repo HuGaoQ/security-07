@@ -4,7 +4,6 @@ import com.ncamc.config.JwtProperties;
 import com.ncamc.entity.LoginUser;
 import com.ncamc.utils.JwtUtils;
 import com.ncamc.utils.RedisCache;
-import com.ncamc.utils.ServletUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

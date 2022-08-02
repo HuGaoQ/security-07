@@ -1,7 +1,5 @@
 package com.ncamc.utils;
 
-
-
 import com.ncamc.entity.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
