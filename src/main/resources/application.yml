@@ -1,0 +1,34 @@
+server:
+  port: 8081
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://192.168.163.154:3306/demo?useUnicode=true&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&useSSL=false&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://localhost:3306/demo?useUnicode=true&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&useSSL=false&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai
+#    url: jdbc:mysql://mysql:3306/demo?useUnicode=true&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&useSSL=false&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai
+    username: root
+#    password: 123456
+    password: root
+  redis:
+#    host: redis
+    host: localhost
+#    host: 192.168.163.154
+    port: 6379
+
+swagger:
+  # 是否开启swagger
+  enabled: true
+
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+ncamc:
+  jwt:
+    secret: ncamc@Login(Auth}*^31)&ncamcjava% # 登录校验的密钥
+    pubKeyPath: E:\\tmp\\rsa\\rsa.pub # 公钥地址
+    priKeyPath: E:\\tmp\\rsa\\rsa.pri # 私钥地址
+    expire: 30 # 过期时间,单位分钟
+    cookieName: NCAMC_TOKEN
+    cookieMaxAge: 30 #cookie在浏览器上的最大存活时间 单位为分钟
