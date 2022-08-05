@@ -1,6 +1,7 @@
-package com.ncamc.config;
+package com.ncamc.schedule;
 
 import cn.hutool.core.lang.UUID;
+import com.ncamc.config.Config;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;

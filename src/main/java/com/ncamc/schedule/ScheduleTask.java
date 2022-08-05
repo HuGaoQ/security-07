@@ -1,4 +1,4 @@
-package com.ncamc.config;
+package com.ncamc.schedule;
 
 import lombok.extern.slf4j.Slf4j;
 

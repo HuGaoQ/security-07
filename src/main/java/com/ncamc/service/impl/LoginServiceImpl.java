@@ -48,7 +48,7 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements L
         Authentication authenticate = authenticationManager.authenticate(authenticationToken);
         LoginUser loginUser =(LoginUser) authenticate.getPrincipal();
         if (Objects.isNull(loginUser)){
-            throw new RuntimeException("账号或者密码错误");
+           return new ResponseResult(HttpStatus.FOUND.value(),"账号或者密码错误",null);
         }
         User user = loginUser.getUser();
         if ("0".equals(user.getStatus())){
@@ -62,10 +62,10 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements L
             }else {
                 user.setStatus("1");
                 userMapper.updateStatusById(user.getStatus(),user.getId());
-                responseResult = new ResponseResult(HttpStatus.MOVED_PERMANENTLY.value(),"该账户已停用，限登录五次，请联系管理员");
+                responseResult = new ResponseResult(HttpStatus.MOVED_PERMANENTLY.value(),"该账户已停用，限登录五次，请联系管理员",null);
             }
         }else {
-            responseResult = new ResponseResult(HttpStatus.MOVED_PERMANENTLY.value(),"该账户已停用，请联系管理员");
+            responseResult = new ResponseResult(HttpStatus.MOVED_PERMANENTLY.value(),"该账户已停用，请联系管理员",null);
         }
         return responseResult;
     }
