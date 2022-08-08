@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- 页面meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>超市会员积分管理系统</title>
+    <link rel="stylesheet" type="text/css" href="css/admin-all.css"/>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css"/>
+    <script src="plugins/jQuery/jquery-2.2.3.min.js"></script>
+    <script type="text/javascript" src="plugins/jQuery/jquery.spritely-0.6.js"></script>
+    <!-- <script type="text/javascript" src="Scripts/chur.min.js"></script> -->
+    <link rel="stylesheet" type="text/css" href="css/login.css"/>
+    <script src="plugins/adminLTE/js/vue-2.6.10.js"></script>
+    <script src="plugins/adminLTE/js/axios.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $('.login').click(function () {
+                if ($('#uid').val() == "" || $('#pwd').val() == "" || $('#code').val() == "") {
+                    $('.tip').html('用户名或密码不可为空！')
+                    return false;
+                }
+            })
+        })
+    </script>
+    <script type="text/javascript">
+        function reg() {
+            var url = "ForegroundPage/Regist.jsp";
+            window.open(url, "用户注册", "height=500,width=1000");
+        }
+    </script>
+</head>
+<body>
+<div id="app">
+    <div>
+        <img src="img/1.png" width="100%" height="1000">
+        <form @submit.prevent>
+            <div class="row-fluid">
+                <h1><font face="楷体" size="10px">超市会员积分管理系统</font></h1>
+                <p>
+                    <label>帐&nbsp;&nbsp;&nbsp;号：<input v-model="fromdata.username" type="text"/></label>
+                </p>
+                <p>
+                    <label>密&nbsp;&nbsp;&nbsp;码：<input v-model="fromdata.password" type="text"/></label>
+                </p>
+                <hr/>
+                <input value=" 登 录 " class="btn btn-primary btn-large login" @click="login()"/>
+                <br/>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+<script>
+    new Vue({
+        el:"#app",
+        data:{
+            fromdata:{}
+        },
+        methods:{
+            login(){
+                var data = new FormData()
+                data.append('username', this.fromdata.username);
+                data.append('password', this.fromdata.password);
+                let config = {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                }
+                axios.post('/user/login', data,config).then( res => {
+                    if(res.data.code==200){
+                        location.href="admin/index.html"
+                    }else{
+                        alert(res.data.message);
+                    }
+                }).catch( res => {
+                    console.log(res)
+                })
+            }
+        }
+    })
+</script>
+</html>

@@ -21,7 +21,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
  * @CreateTime: 2022-07-05 10:20
  */
 @Configuration
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableGlobalMethodSecurity(prePostEnabled = true)//开启注解权限
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -43,6 +43,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        http.formLogin()
+                .loginPage("/login.html");
         http
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -50,23 +52,30 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(
                         HttpMethod.GET,
-                        "/**",
+                        "/*.html",
+                        "/admin/*.html",
+                        "/css/*.css",
+                        "/img/*.*",
+                        "/img/**",
+                        "/plugins/**",
                         "/user/hello"
                 ).permitAll()
                 .antMatchers("/user/login").anonymous()
                 .antMatchers("/swagger-ui.html").anonymous()
                 .antMatchers("/swagger-resources/**").anonymous()
-                .antMatchers("/webjars/**").anonymous()
-                .antMatchers("/*/api-docs").anonymous()
-                .antMatchers("/druid/**").anonymous()
                 .anyRequest().authenticated();
+        //添加过滤器
         http.addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class);
-
+        //配置异常处理
         http.exceptionHandling()
                 .accessDeniedHandler(authenticationEntryHander)
                 .authenticationEntryPoint(authenticationEntryPoint);
-
+        //退出登录
         http.logout().logoutSuccessHandler(logoutSuccessHandler);
+        //允许跨域
+        http.cors();
+        // 同源头
+        http.headers().frameOptions().sameOrigin();
     }
 
     @Bean
@@ -74,4 +83,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected AuthenticationManager authenticationManager() throws Exception {
         return super.authenticationManager();
     }
+
 }

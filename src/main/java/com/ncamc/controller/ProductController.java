@@ -6,6 +6,7 @@ import com.ncamc.service.ProductService;
 import com.ncamc.utils.RedisCache;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +17,7 @@ import java.util.Map;
  * @Author: hugaoqiang
  * @CreateTime: 2022-07-08 09:44
  */
+@Slf4j
 @Api(description = "产品product接口")
 @RestController
 public class ProductController {
@@ -30,8 +32,8 @@ public class ProductController {
 
     @ApiOperation("查询分页信息")
     @RequestMapping(value = "/list",method = RequestMethod.POST)
-    public ResponseResult list(String current,String size){
-        return productService.listPage(current,size);
+    public ResponseResult list(String pageNo,String pageSize){
+        return productService.listPage(pageNo,pageSize);
     }
 
     @ApiOperation("数据库新增3条记录")

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html xmlns:v-on="http://www.w3.org/1999/xhtml">
+
+<head>
+    <!-- 页面meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>商品信息</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" name="viewport">
+    <link rel="stylesheet" href="../plugins/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../plugins/adminLTE/css/AdminLTE.css">
+    <link rel="stylesheet" href="../plugins/adminLTE/css/skins/_all-skins.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="../plugins/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../plugins/adminLTE/js/vue-2.6.10.js"></script>
+    <script src="../plugins/adminLTE/js/axios.min.js"></script>
+
+</head>
+
+<body class="hold-transition skin-red sidebar-mini">
+<!-- .box-body -->
+
+<div class="box-header with-border">
+    <h3 class="box-title">产品信息</h3>
+</div>
+
+<div id="app">
+    <div class="box-body">
+
+        <!-- 数据表格 -->
+        <div class="table-box">
+
+            <!--工具栏-->
+            <div class="pull-left">
+                <div class="form-group form-inline">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default" title="添加" @click="add()"><i
+                                class="fa fa-file-o"></i> 添加
+                        </button>
+                        <button type="button" class="btn btn-default" title="刷新" onclick="window.location.reload();"><i
+                                class="fa fa-refresh"></i> 刷新
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!--工具栏/-->
+            <div class="box-tools pull-right">
+                <div class="has-feedback">
+                    产品名称：<input placeholder="分类名称" v-model="fname">
+                    <button class="btn btn-default" @click="chaxun()">查询</button>
+                </div>
+            </div>
+            <!--数据列表-->
+            <table id="dataList" class="table table-bordered table-striped table-hover dataTable">
+                <thead>
+                <tr>
+                    <th class="" style="padding-right:0px">
+                        <input id="selall" type="checkbox" class="icheckbox_square-blue">
+                    </th>
+                    <th class="sorting_asc">编号</th>
+                    <th class="sorting_asc">商品名称</th>
+                    <th class="sorting_asc">商品价格</th>
+                    <th class="sorting_asc">状态</th>
+                    <th class="text-center">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="(item,i) in items">
+                    <td><input type="checkbox"></td>
+                    <td>{{i+1}}</td>
+                    <td>{{item.gname}}</td>
+                    <td>{{item.price}}</td>
+                    <td v-if="item.status==1">
+                        已下架
+                    </td>
+                    <td v-if="item.status==0">
+                        已上架
+                    </td>
+                    <td class="text-right">
+                        <a @click="update(item.id)" class="btn btn-w-xs btn-round btn-info">修改</a>
+                        <a @click="del(item.id)" class="btn btn-w-xs btn-round btn-info">删除</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <!--数据列表/-->
+        </div>
+        <!-- 数据表格 /-->
+        <div class="col-lg-4 text-center">
+            <nav>
+                <ul class="pagination">
+                    <li v-on:click="getListPage(pageNo-1)">
+                        <a href="#" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <li v-on:click="getListPage(p)" :class="{active:p==pageNo}" v-for="(p,index) in pages"><a href="#">{{p}}</a>
+                    </li>
+                    <li v-on:click="getListPage(pageNo+1)">
+                        <a href="#" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+<!-- /.box-body -->
+<script>
+    new Vue({
+        el: "#app",
+        data: {
+            pageNo: 1,//当前页
+            pageSize: 3,//当前页条数
+            pageCount: 1,
+            items: []
+        },
+        methods: {
+            getListPage: function (num) {
+                var that = this;
+                that.pageNo = num;
+
+                if (that.pageNo <= 0) {
+                    alert("已经是第一页");
+                    that.pageNo = 1;
+                }
+
+                if (that.pageNo > that.pageCount) {
+                    alert("已经是最后一页");
+                    console.log("=====", that.pageCount);
+                    that.pageNo = that.pageCount;
+                }
+
+                axios.get("/list", {
+                    params: {
+                        fname: this.fname,
+                        pageNo: that.pageNo,
+                        pageSize: that.pageSize
+                    }
+                }).then(function (d) {
+                    console.log(d.data)
+                    that.items = d.data.data.data;
+                    that.pageCount = d.data.data.pageCount;
+                }).catch(function (error) {
+                    console.log("e=", error)
+                });
+            },
+            add: function () {
+                location.href = "product_add.html";
+            },
+            update: function (id) {
+                location.href = "product_update.html?id=" + id;
+            },
+            del: function (val) {
+                axios.get("/goods/del", {
+                    params: {
+                        id: val
+                    }
+                }).then(reg => {
+                    location.href = "product.html";
+                })
+            },
+        },
+        created() {
+            var that = this;
+            axios.get("/list", {
+                params: {
+                    pageNo: that.pageNo,
+                    pageSize: that.pageSize
+                }
+            }).then(function (d) {
+                console.log(d.data)
+                that.items = d.data.data.data;
+                that.pageCount = d.data.data.pageCount;
+            }).catch(function (error) {
+                console.log("e=", error)
+            });
+        },
+        computed: {
+            pages: function () {
+                var list = [];
+                //当前页
+                var pn = this.pageNo;
+                //总页数
+                var pc = this.pageCount;
+
+                if (pc <= 3) {
+                    for (var i = 1; i <= pc; i++) {
+                        list.push(i);
+                    }
+                } else {
+                    if (pn <= 3) {
+                        for (var i = 1; i <= 3; i++) {
+                            list.push(i);
+                        }
+                    } else {
+                        for (var i = pn - 2; i <= pn; i++) {
+                            list.push(i);
+                        }
+                    }
+                }
+                return list;
+            }
+        }
+    })
+</script>
+
+</body>
+
+</html>

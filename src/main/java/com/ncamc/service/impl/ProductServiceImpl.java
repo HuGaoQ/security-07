@@ -31,9 +31,9 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
     private RedisCache redisCache;
 
     @Override
-    public ResponseResult listPage(String currents,String sizes) {
-        Integer current = Integer.parseInt(currents);
-        Integer size = Integer.parseInt(sizes);
+    public ResponseResult listPage(String pageNo,String pageSize) {
+        Integer current = Integer.parseInt(pageNo);
+        Integer size = Integer.parseInt(pageSize);
         Page<Product> page = new Page<>(current,size);
         productMapper.selectPage(page,null);
         List<Object> list = Arrays.asList(page.getPages(),page.getTotal(),page.getRecords());

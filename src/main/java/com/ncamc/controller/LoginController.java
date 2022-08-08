@@ -49,8 +49,8 @@ public class LoginController {
 
     @ApiOperation("登录")
     @RequestMapping(value = "/user/login",method = RequestMethod.POST)
-//    public ResponseResult login(User user){
-    public ResponseResult login(@RequestBody User user){
+    public ResponseResult login(User user){
+//    public ResponseResult login(@RequestBody User user){
         return loginService.login(user);
     }
 

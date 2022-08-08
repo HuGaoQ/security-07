@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- 页面meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>修改商品信息</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" name="viewport">
+
+    <link rel="stylesheet" href="../plugins/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../plugins/adminLTE/css/AdminLTE.css">
+    <link rel="stylesheet" href="../plugins/adminLTE/css/skins/_all-skins.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="../plugins/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../plugins/adminLTE/js/vue-2.6.10.js"></script>
+    <script src="../plugins/adminLTE/js/axios.min.js"></script>
+    <script src="../plugins/adminLTE/js/getParameter.js"></script>
+
+</head>
+
+<body class="hold-transition skin-red sidebar-mini">
+
+<div id="app">
+    <!-- 正文区域 -->
+    <section class="content">
+
+        <div class="box-body">
+
+            <!--tab页-->
+            <div class="nav-tabs-custom">
+
+                <!--tab头-->
+                <ul class="nav nav-tabs">
+
+                    <li class="active">
+                        <a href="#home" data-toggle="tab">修改商品信息</a>
+                    </li>
+                </ul>
+                <!--tab头/-->
+
+                <!--tab内容-->
+                <div class="tab-content">
+
+                    <!--表单内容-->
+                    <div class="tab-pane active" id="home">
+                        <div class="row data-type">
+
+                            <div class="col-md-2 title">商品名称</div>
+                            <div class="col-md-10 data">
+                                <input type="text" class="form-control" v-model="fromdata.gname">
+                            </div>
+
+                            <div class="col-md-2 title">价格</div>
+                            <div class="col-md-10 data">
+                                <input type="text" class="form-control" v-model="fromdata.price">
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <!--tab内容/-->
+                <!--表单内容/-->
+            </div>
+        </div>
+        <div class="btn-toolbar list-toolbar">
+            <button class="btn btn-primary" @click="update()"><i class="fa fa-save"></i>保存</button>
+        </div>
+
+    </section>
+    <!-- 正文区域 /-->
+</div>
+</body>
+<script>
+    var id = getParameter("id");
+    new Vue({
+        el: "#app",
+        data: {
+            fromdata: {},
+            fls: []
+        },
+        methods: {
+            update: function () {
+                axios.post("/goods/update", this.fromdata).then(reg => {
+                    if (reg.data.falg) {
+                        location.href = "product.html";
+                    } else {
+                        alert(reg.data.message)
+                    }
+                })
+            }
+        },
+        created() {
+            axios.get("/goods/findById", {
+                params: {
+                    id: id
+                }
+            }).then(d => {
+                this.fromdata = d.data.data
+            })
+        }
+    })
+</script>
+</html>
