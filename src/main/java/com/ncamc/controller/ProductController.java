@@ -32,8 +32,8 @@ public class ProductController {
 
     @ApiOperation("查询分页信息")
     @RequestMapping(value = "/list",method = RequestMethod.POST)
-    public ResponseResult list(String pageNo,String pageSize){
-        return productService.listPage(pageNo,pageSize);
+    public ResponseResult list(@RequestBody Map<String,Object> map){
+        return productService.listPage(map);
     }
 
     @ApiOperation("数据库新增3条记录")

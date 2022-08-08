@@ -4,10 +4,12 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.ncamc.entity.Product;
 import com.ncamc.entity.ResponseResult;
 
+import java.util.Map;
+
 
 public interface ProductService extends IService<Product> {
 
-    ResponseResult listPage(String current,String size);
+    ResponseResult listPage(Map<String,Object> map);
 
     Product selectByPrimaryKey(Integer id);
 

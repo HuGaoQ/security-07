@@ -15,7 +15,7 @@
     <script src="../plugins/bootstrap/js/bootstrap.min.js"></script>
     <script src="../plugins/adminLTE/js/vue-2.6.10.js"></script>
     <script src="../plugins/adminLTE/js/axios.min.js"></script>
-
+    <script src="../plugins/adminLTE/js/main.js"></script>
 </head>
 
 <body class="hold-transition skin-red sidebar-mini">
@@ -59,9 +59,15 @@
                         <input id="selall" type="checkbox" class="icheckbox_square-blue">
                     </th>
                     <th class="sorting_asc">编号</th>
-                    <th class="sorting_asc">商品名称</th>
-                    <th class="sorting_asc">商品价格</th>
-                    <th class="sorting_asc">状态</th>
+                    <th class="sorting_asc">产品名称</th>
+                    <th class="sorting_asc">产品代码</th>
+                    <th class="sorting_asc">净值</th>
+                    <th class="text-center">份额</th>
+                    <th class="text-center">金额</th>
+                    <th class="text-center">机构名称</th>
+                    <th class="text-center">机构代码</th>
+                    <th class="text-center">日期</th>
+                    <th class="text-center">当前时间</th>
                     <th class="text-center">操作</th>
                 </tr>
                 </thead>
@@ -69,14 +75,15 @@
                 <tr v-for="(item,i) in items">
                     <td><input type="checkbox"></td>
                     <td>{{i+1}}</td>
-                    <td>{{item.gname}}</td>
-                    <td>{{item.price}}</td>
-                    <td v-if="item.status==1">
-                        已下架
-                    </td>
-                    <td v-if="item.status==0">
-                        已上架
-                    </td>
+                    <td>{{item.prdName}}</td>
+                    <td>{{item.prdDm}}</td>
+                    <td>{{item.net}}</td>
+                    <td>{{item.fbalance}}</td>
+                    <td>{{item.favalable}}</td>
+                    <td>{{item.insName}}</td>
+                    <td>{{item.insDm}}</td>
+                    <td>{{item.newDate}}</td>
+                    <td>{{item.newTime}}</td>
                     <td class="text-right">
                         <a @click="update(item.id)" class="btn btn-w-xs btn-round btn-info">修改</a>
                         <a @click="del(item.id)" class="btn btn-w-xs btn-round btn-info">删除</a>
@@ -133,14 +140,10 @@
                     that.pageNo = that.pageCount;
                 }
 
-                axios.get("/list", {
-                    params: {
-                        fname: this.fname,
+                axios.post("/list", {
                         pageNo: that.pageNo,
                         pageSize: that.pageSize
-                    }
                 }).then(function (d) {
-                    console.log(d.data)
                     that.items = d.data.data.data;
                     that.pageCount = d.data.data.pageCount;
                 }).catch(function (error) {
@@ -165,13 +168,10 @@
         },
         created() {
             var that = this;
-            axios.get("/list", {
-                params: {
+            axios.post("/list", {
                     pageNo: that.pageNo,
                     pageSize: that.pageSize
-                }
             }).then(function (d) {
-                console.log(d.data)
                 that.items = d.data.data.data;
                 that.pageCount = d.data.data.pageCount;
             }).catch(function (error) {

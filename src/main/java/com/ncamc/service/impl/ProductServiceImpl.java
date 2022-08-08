@@ -2,6 +2,7 @@ package com.ncamc.service.impl;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ncamc.entity.Pages;
 import com.ncamc.entity.Product;
 import com.ncamc.entity.ResponseResult;
 import com.ncamc.mapper.ProductMapper;
@@ -11,9 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * @Author: hugaoqiang
@@ -31,13 +30,12 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
     private RedisCache redisCache;
 
     @Override
-    public ResponseResult listPage(String pageNo,String pageSize) {
-        Integer current = Integer.parseInt(pageNo);
-        Integer size = Integer.parseInt(pageSize);
-        Page<Product> page = new Page<>(current,size);
+    public ResponseResult listPage(Map<String,Object> map) {
+        Integer pageNo = Integer.parseInt(map.get("pageNo").toString());
+        Integer pageSize = Integer.parseInt(map.get("pageSize").toString());
+        Page<Product> page = new Page<>(pageNo,pageSize);
         productMapper.selectPage(page,null);
-        List<Object> list = Arrays.asList(page.getPages(),page.getTotal(),page.getRecords());
-        return new ResponseResult(HttpStatus.OK.value(),"查询成功",list);
+        return new ResponseResult(HttpStatus.OK.value(),"查询成功",new Pages<>(page.getPages(),page.getTotal(),page.getRecords()));
     }
 
     @Override
