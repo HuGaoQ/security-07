@@ -9,7 +9,7 @@ import java.util.Map;
 
 public interface ProductService extends IService<Product> {
 
-    ResponseResult listPage(Map<String,Object> map);
+    ResponseResult listPage(Map<String,Object> params);
 
     Product selectByPrimaryKey(Integer id);
 

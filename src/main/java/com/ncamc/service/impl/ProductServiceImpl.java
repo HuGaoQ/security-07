@@ -1,5 +1,8 @@
 package com.ncamc.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ncamc.entity.Pages;
@@ -30,12 +33,22 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
     private RedisCache redisCache;
 
     @Override
-    public ResponseResult listPage(Map<String,Object> map) {
-        Integer pageNo = Integer.parseInt(map.get("pageNo").toString());
-        Integer pageSize = Integer.parseInt(map.get("pageSize").toString());
-        Page<Product> page = new Page<>(pageNo,pageSize);
-        productMapper.selectPage(page,null);
-        return new ResponseResult(HttpStatus.OK.value(),"查询成功",new Pages<>(page.getPages(),page.getTotal(),page.getRecords()));
+    public ResponseResult listPage(Map<String,Object> params) {
+        Page<Product> page = null;
+        Integer pageNo = Integer.parseInt(params.get("pageNo").toString());
+        Integer pageSize = Integer.parseInt(params.get("pageSize").toString());
+        if (ObjectUtils.isEmpty(params.get("prdIns").toString())){
+            page = new Page<>(pageNo,pageSize);
+            productMapper.selectPage(page,null);
+            return new ResponseResult(HttpStatus.OK.value(),"查询成功",new Pages<>(page.getPages(),page.getTotal(),page.getRecords()));
+        }else {
+            String prdIns = params.get("prdIns").toString();
+            page = new Page<>(pageNo,pageSize);
+            LambdaQueryWrapper<Product> wrapper = new LambdaQueryWrapper<>();
+            wrapper.like(StringUtils.isNotBlank(prdIns), Product::getPrdName, prdIns).or().like(StringUtils.isNotBlank(prdIns), Product::getInsName, prdIns);
+            productMapper.selectPage(page, wrapper);
+            return new ResponseResult(HttpStatus.OK.value(),"查询成功",new Pages<>(page.getPages(),page.getTotal(),page.getRecords()));
+        }
     }
 
     @Override
@@ -58,4 +71,5 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         }
         return product;
     }
+
 }

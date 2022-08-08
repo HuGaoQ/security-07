@@ -47,8 +47,8 @@
             <!--工具栏/-->
             <div class="box-tools pull-right">
                 <div class="has-feedback">
-                    产品名称：<input placeholder="分类名称" v-model="fname">
-                    <button class="btn btn-default" @click="chaxun()">查询</button>
+                    产品名称：<input placeholder="产品名称/机构名称" v-model="prdIns">
+                    <button class="btn btn-default" @click="getListPage()">查询</button>
                 </div>
             </div>
             <!--数据列表-->
@@ -122,6 +122,7 @@
             pageNo: 1,//当前页
             pageSize: 3,//当前页条数
             pageCount: 1,
+            prdIns:"",
             items: []
         },
         methods: {
@@ -141,6 +142,7 @@
                 }
 
                 axios.post("/list", {
+                        prdIns: that.prdIns,
                         pageNo: that.pageNo,
                         pageSize: that.pageSize
                 }).then(function (d) {
@@ -164,11 +166,12 @@
                 }).then(reg => {
                     location.href = "product.html";
                 })
-            },
+            }
         },
         created() {
             var that = this;
             axios.post("/list", {
+                    prdIns: that.prdIns,
                     pageNo: that.pageNo,
                     pageSize: that.pageSize
             }).then(function (d) {
