@@ -28,42 +28,42 @@ public class LoginController {
     private LoginService loginService;
 
     @ApiOperation("hello")
-    @RequestMapping(value = "/hello",method = RequestMethod.GET)
+    @RequestMapping(value = "/hello", method = RequestMethod.GET)
     @PreAuthorize("hasAuthority('system:dept:list')")
-    public String hello(){
+    public String hello() {
         return "Because live you everyday";
     }
 
     @ApiOperation("hello")
-    @RequestMapping(value = "/user/hello",method = RequestMethod.GET)
-    public String hellos(){
+    @RequestMapping(value = "/user/hello", method = RequestMethod.GET)
+    public String hellos() {
         return "Because live you everyday";
     }
 
     @ApiOperation("查询用户信息")
-    @RequestMapping(value = "/user/list",method = RequestMethod.GET)
-    public ResponseResult list(){
+    @RequestMapping(value = "/user/list", method = RequestMethod.GET)
+    public ResponseResult list() {
         List<User> list = loginService.list();
-        return new ResponseResult(200,"查询成功",list);
+        return new ResponseResult(200, "查询成功", list);
     }
 
     @ApiOperation("登录")
-    @RequestMapping(value = "/user/login",method = RequestMethod.POST)
-    public ResponseResult login(User user){
+    @RequestMapping(value = "/user/login", method = RequestMethod.POST)
+    public ResponseResult login(User user) {
 //    public ResponseResult login(@RequestBody User user){
         return loginService.login(user);
     }
 
     @ApiOperation("查询名称")
-    @RequestMapping(value = "/getUsername",method = RequestMethod.GET)
-    public ResponseResult getUsername(HttpServletRequest request){
+    @RequestMapping(value = "/getUsername", method = RequestMethod.GET)
+    public ResponseResult getUsername(HttpServletRequest request) {
         return loginService.getUsername(request);
     }
 
     @ApiOperation("登出")
-    @RequestMapping(value = "/user/logout",method = RequestMethod.GET)
+    @RequestMapping(value = "/user/logout", method = RequestMethod.GET)
     public ResponseResult exit(HttpServletRequest request) {
-        return  loginService.exit(request);
+        return loginService.exit(request);
     }
 
 }

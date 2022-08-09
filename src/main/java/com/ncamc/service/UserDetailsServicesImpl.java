@@ -30,12 +30,12 @@ public class UserDetailsServicesImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper();
-        queryWrapper.eq(User::getUsername,username);
+        queryWrapper.eq(User::getUsername, username);
         User user = userMapper.selectOne(queryWrapper);
-        if (Objects.isNull(user)){
+        if (Objects.isNull(user)) {
             throw new RuntimeException("账号或者密码错误");
         }
         List<String> list = menusMapperss.SelectParamsByUserId(user.getId());
-        return new LoginUser(user,list);
+        return new LoginUser(user, list);
     }
 }

@@ -12,7 +12,7 @@
     <link rel="stylesheet" type="text/css" href="css/login.css"/>
     <script src="plugins/adminLTE/js/vue-2.6.10.js"></script>
     <script src="plugins/adminLTE/js/axios.min.js"></script>
-<!--    <script src="plugins/adminLTE/js/main.js"></script>-->
+    <!--    <script src="plugins/adminLTE/js/main.js"></script>-->
     <script type="text/javascript">
         $(function () {
             $('.login').click(function () {
@@ -53,12 +53,12 @@
 </body>
 <script>
     new Vue({
-        el:"#app",
-        data:{
-            fromdata:{}
+        el: "#app",
+        data: {
+            fromdata: {}
         },
-        methods:{
-            login(){
+        methods: {
+            login() {
                 var data = new FormData()
                 data.append('username', this.fromdata.username);
                 data.append('password', this.fromdata.password);
@@ -67,14 +67,14 @@
                         'Content-Type': 'multipart/form-data'
                     }
                 }
-                axios.post('/user/login', data,config).then( res => {
-                    if(res.data.code==200){
-                        sessionStorage.setItem("token",res.data.data)
-                        location.href="admin/index.html";
-                    }else{
+                axios.post('/user/login', data, config).then(res => {
+                    if (res.data.code == 200) {
+                        sessionStorage.setItem("token", res.data.data)
+                        location.href = "admin/index.html";
+                    } else {
                         alert(res.data.message);
                     }
-                }).catch( res => {
+                }).catch(res => {
                     console.log(res)
                 })
             }

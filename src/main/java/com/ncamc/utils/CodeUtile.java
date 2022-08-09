@@ -7,7 +7,7 @@ import java.util.UUID;
 
 public class CodeUtile {
 
-    public static String md5Hex(String data, String salt){
+    public static String md5Hex(String data, String salt) {
         if (StringUtils.isBlank(salt))
             salt = data.hashCode() + "";
         return DigestUtils.md5Hex(salt + DigestUtils.md5Hex(data));
@@ -20,7 +20,7 @@ public class CodeUtile {
         return DigestUtils.sha512Hex(salt + DigestUtils.sha512Hex(data));
     }
 
-    public static String generateSalt(){
+    public static String generateSalt() {
         return StringUtils.replace(UUID.randomUUID().toString(), "-", "");
     }
 

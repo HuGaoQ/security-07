@@ -44,28 +44,28 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements L
     @Override
     public ResponseResult login(User users) {
         ResponseResult responseResult = null;
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(users.getUsername(),users.getPassword());
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(users.getUsername(), users.getPassword());
         Authentication authenticate = authenticationManager.authenticate(authenticationToken);
-        LoginUser loginUser =(LoginUser) authenticate.getPrincipal();
-        if (Objects.isNull(loginUser)){
-           return new ResponseResult(HttpStatus.FOUND.value(),"账号或者密码错误",null);
+        LoginUser loginUser = (LoginUser) authenticate.getPrincipal();
+        if (Objects.isNull(loginUser)) {
+            return new ResponseResult(HttpStatus.FOUND.value(), "账号或者密码错误", null);
         }
         User user = loginUser.getUser();
-        if ("0".equals(user.getStatus())){
-            if (user.getNumber() < 5){
-                userMapper.updateNumberById(user.getNumber(),user.getId());
+        if ("0".equals(user.getStatus())) {
+            if (user.getNumber() < 5) {
+                userMapper.updateNumberById(user.getNumber(), user.getId());
                 String uid = loginUser.getUser().getId().toString();
                 String token = JwtUtils.generateToken(uid, jwtProperties.getPrivateKey(), jwtProperties.getExpire());
-                String key = "login:"+uid;
-                redisCache.setCacheObject(key,loginUser);
-                responseResult = new ResponseResult(HttpStatus.OK.value(),"登录成功",token);
-            }else {
+                String key = "login:" + uid;
+                redisCache.setCacheObject(key, loginUser);
+                responseResult = new ResponseResult(HttpStatus.OK.value(), "登录成功", token);
+            } else {
                 user.setStatus("1");
-                userMapper.updateStatusById(user.getStatus(),user.getId());
-                responseResult = new ResponseResult(HttpStatus.MOVED_PERMANENTLY.value(),"该账户已停用，限登录五次，请联系管理员",null);
+                userMapper.updateStatusById(user.getStatus(), user.getId());
+                responseResult = new ResponseResult(HttpStatus.MOVED_PERMANENTLY.value(), "该账户已停用，限登录五次，请联系管理员", null);
             }
-        }else {
-            responseResult = new ResponseResult(HttpStatus.MOVED_PERMANENTLY.value(),"该账户已停用，请联系管理员",null);
+        } else {
+            responseResult = new ResponseResult(HttpStatus.MOVED_PERMANENTLY.value(), "该账户已停用，请联系管理员", null);
         }
         return responseResult;
     }
@@ -74,10 +74,10 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements L
     public ResponseResult getUsername(HttpServletRequest request) {
         String key = ServletUtils.longUid(request);
         LoginUser loginUser = redisCache.getCacheObject(key);
-        if (Objects.isNull(loginUser)){
-            throw  new RuntimeException("没有该用户请从新登录");
+        if (Objects.isNull(loginUser)) {
+            throw new RuntimeException("没有该用户请从新登录");
         }
-        return new ResponseResult(HttpStatus.OK.value(),loginUser.getUser().getUsername());
+        return new ResponseResult(HttpStatus.OK.value(), loginUser.getUser().getUsername());
     }
 
     @Override
@@ -86,7 +86,7 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements L
         try {
             String key = ServletUtils.longUid(request);
             redisCache.deleteObject(key);
-            responseResult = new ResponseResult(HttpStatus.OK.value(),"退出成功");
+            responseResult = new ResponseResult(HttpStatus.OK.value(), "退出成功");
         } catch (Exception e) {
             e.printStackTrace();
         }

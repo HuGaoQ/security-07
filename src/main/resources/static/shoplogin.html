@@ -9,8 +9,8 @@
 
     <link rel="stylesheet" type="text/css" href="css/webbase.css"/>
     <link rel="stylesheet" type="text/css" href="css/pages-shoplogin.css"/>
-	<script src="plugins/adminLTE/js/axios.min.js"></script>
-	<script src="plugins/adminLTE/js/vue-2.6.10.js"></script>
+    <script src="plugins/adminLTE/js/axios.min.js"></script>
+    <script src="plugins/adminLTE/js/vue-2.6.10.js"></script>
 </head>
 
 <body>
@@ -100,23 +100,23 @@
 </div>
 </body>
 <script>
-	new Vue({
-		el:"#app",
-		data:{
-			fromdate:{}
-		},
-		methods:{
-			login:function () {
-				axios.post("/admin/login",this.fromdate).then(reg=>{
-					if (reg.data.falg){
-						location.href="admin/index.html"
-					}else {
-						alert(reg.data.message)
-					}
-				})
-			}
-		}
-	})
+    new Vue({
+        el: "#app",
+        data: {
+            fromdate: {}
+        },
+        methods: {
+            login: function () {
+                axios.post("/admin/login", this.fromdate).then(reg => {
+                    if (reg.data.falg) {
+                        location.href = "admin/index.html"
+                    } else {
+                        alert(reg.data.message)
+                    }
+                })
+            }
+        }
+    })
 </script>
 
 </html>

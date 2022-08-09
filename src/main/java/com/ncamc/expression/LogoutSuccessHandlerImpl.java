@@ -1,9 +1,5 @@
 package com.ncamc.expression;
 
-/**
- * @Author: hugaoqiang
- * @CreateTime: 2022-07-07 16:53
- */
 import com.alibaba.fastjson.JSON;
 import com.ncamc.entity.LoginUser;
 import com.ncamc.entity.ResponseResult;
@@ -22,6 +18,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * @Author: hugaoqiang
+ * @CreateTime: 2022-07-07 16:53
+ */
 @Configuration
 public class LogoutSuccessHandlerImpl implements LogoutSuccessHandler {
 
@@ -33,7 +33,7 @@ public class LogoutSuccessHandlerImpl implements LogoutSuccessHandler {
         LoginServiceImpl loginService = new LoginServiceImpl();
         String key = ServletUtils.longUid(request);
         LoginUser loginUser = redisCache.getCacheObject(key);
-        if (StringUtils.isEmpty(loginUser)){
+        if (StringUtils.isEmpty(loginUser)) {
             // 删除用户缓存记录
             redisCache.deleteObject(key);
         }

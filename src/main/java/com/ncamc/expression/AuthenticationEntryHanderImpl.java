@@ -23,6 +23,6 @@ public class AuthenticationEntryHanderImpl implements AccessDeniedHandler {
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
         ResponseResult result = new ResponseResult(HttpStatus.FORBIDDEN.value(), "您的权限不足");
         String json = JSON.toJSONString(result);
-        ServletUtils.renderString(response,json);
+        ServletUtils.renderString(response, json);
     }
 }

@@ -14,7 +14,7 @@ public class JwtUtils {
 
     /**
      * 私钥加密token
-     * @param user      载荷中的数据
+     * @param user          载荷中的数据
      * @param privateKey    私钥
      * @param expireMinutes 过期时间，单位秒
      * @return
@@ -31,7 +31,7 @@ public class JwtUtils {
 
     /**
      * 私钥加密token
-     * @param id      载荷中的数据
+     * @param id            载荷中的数据
      * @param privateKey    私钥
      * @param expireMinutes 过期时间，单位秒
      * @return
@@ -39,7 +39,7 @@ public class JwtUtils {
      */
     public static String generateToken(String id, PrivateKey privateKey, int expireMinutes) throws Exception {
         return Jwts.builder()
-                .claim(JwtConstans.JWT_KEY_ID,id)
+                .claim(JwtConstans.JWT_KEY_ID, id)
                 .setExpiration(DateTime.now().plusMinutes(expireMinutes).toDate())
                 .signWith(SignatureAlgorithm.RS256, privateKey)
                 .compact();
@@ -47,7 +47,7 @@ public class JwtUtils {
 
     /**
      * 私钥加密token
-     * @param user      载荷中的数据
+     * @param user          载荷中的数据
      * @param privateKey    私钥字节数组
      * @param expireMinutes 过期时间，单位秒
      * @return

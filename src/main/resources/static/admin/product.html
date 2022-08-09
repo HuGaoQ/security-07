@@ -122,7 +122,7 @@
             pageNo: 1,//当前页
             pageSize: 3,//当前页条数
             pageCount: 1,
-            prdIns:"",
+            prdIns: "",
             items: []
         },
         methods: {
@@ -141,13 +141,19 @@
                     that.pageNo = that.pageCount;
                 }
 
-                axios.post("/list", {
-                        prdIns: that.prdIns,
-                        pageNo: that.pageNo,
-                        pageSize: that.pageSize
+                axios.post("/product/list", {
+                    prdIns: that.prdIns,
+                    pageNo: that.pageNo,
+                    pageSize: that.pageSize
                 }).then(function (d) {
-                    that.items = d.data.data.data;
-                    that.pageCount = d.data.data.pageCount;
+                    if (d.data.code == 401) {
+                        alert(d.data.data)
+                    } else if (d.data.code == 403) {
+                        alert(d.data.data)
+                    } else {
+                        that.items = d.data.data.data;
+                        that.pageCount = d.data.data.pageCount;
+                    }
                 }).catch(function (error) {
                     console.log("e=", error)
                 });
@@ -159,7 +165,7 @@
                 location.href = "product_update.html?id=" + id;
             },
             del: function (val) {
-                axios.get("/goods/del", {
+                axios.get("/product/del", {
                     params: {
                         id: val
                     }
@@ -170,13 +176,19 @@
         },
         created() {
             var that = this;
-            axios.post("/list", {
-                    prdIns: that.prdIns,
-                    pageNo: that.pageNo,
-                    pageSize: that.pageSize
+            axios.post("/product/list", {
+                prdIns: that.prdIns,
+                pageNo: that.pageNo,
+                pageSize: that.pageSize
             }).then(function (d) {
-                that.items = d.data.data.data;
-                that.pageCount = d.data.data.pageCount;
+                if (d.data.code == 401) {
+                    alert(d.data.data)
+                } else if (d.data.code == 403) {
+                    alert(d.data.data)
+                } else {
+                    that.items = d.data.data.data;
+                    that.pageCount = d.data.data.pageCount;
+                }
             }).catch(function (error) {
                 console.log("e=", error)
             });

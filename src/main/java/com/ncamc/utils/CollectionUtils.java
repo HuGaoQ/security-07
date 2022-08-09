@@ -16,7 +16,7 @@ public class CollectionUtils {
             Collection<T> difference = new ArrayList();
             Iterator i = c1.iterator();
 
-            while(i.hasNext()) {
+            while (i.hasNext()) {
                 T item = (T) i.next();
                 if (!c2.contains(item)) {
                     difference.add(item);

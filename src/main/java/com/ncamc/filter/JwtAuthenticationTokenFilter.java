@@ -34,8 +34,8 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String token = request.getHeader("token");
-        if (!StringUtils.hasText(token)){
-            filterChain.doFilter(request,response);
+        if (!StringUtils.hasText(token)) {
+            filterChain.doFilter(request, response);
             return;
         }
         Long uid = null;
@@ -45,13 +45,13 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             e.printStackTrace();
             throw new RuntimeException("token非法");
         }
-        String key = "login:"+uid;
+        String key = "login:" + uid;
         LoginUser loginUser = redisCache.getCacheObject(key);
-        if (Objects.isNull(loginUser)){
-            throw  new RuntimeException("没有该用户请从新登录");
+        if (Objects.isNull(loginUser)) {
+            throw new RuntimeException("没有该用户请从新登录");
         }
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginUser, null, loginUser.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-        filterChain.doFilter(request,response);
+        filterChain.doFilter(request, response);
     }
 }

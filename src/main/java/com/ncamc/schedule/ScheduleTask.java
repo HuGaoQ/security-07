@@ -7,7 +7,7 @@ import lombok.extern.slf4j.Slf4j;
  * @CreateTime: 2022-08-04 11:13
  */
 @Slf4j
-public class ScheduleTask implements Runnable{
+public class ScheduleTask implements Runnable {
     @Override
     public void run() {
         System.out.println("我是一个定时任务");

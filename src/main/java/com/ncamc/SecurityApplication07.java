@@ -16,6 +16,6 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableScheduling
 public class SecurityApplication07 {
     public static void main(String[] args) {
-        SpringApplication.run(SecurityApplication07.class,args);
+        SpringApplication.run(SecurityApplication07.class, args);
     }
 }

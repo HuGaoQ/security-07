@@ -29,7 +29,7 @@ public class LoginUser implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        if (authorities != null){
+        if (authorities != null) {
             return authorities;
         }
         authorities = permission.stream()

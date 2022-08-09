@@ -10,7 +10,7 @@ import java.util.List;
 @Component("H")
 public class HExpressionRoot {
 
-    public boolean hasAuthority(String authority){
+    public boolean hasAuthority(String authority) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         LoginUser loginUser = (LoginUser) authentication.getPrincipal();
         List<String> permission = loginUser.getPermission();

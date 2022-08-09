@@ -46,8 +46,8 @@ public class Scheduleds {
         ScheduleTask();
     }
 
-//    @Scheduled(cron = "0/10 * * * * ?")
-    public void ScheduleTask(){
+    //    @Scheduled(cron = "0/10 * * * * ?")
+    public void ScheduleTask() {
         ScheduledFuture scheduledFuture = threadPoolTaskScheduler.schedule(new ScheduleTask(), new CronTrigger(config.getScheduletask()));
         map.put(UUID.randomUUID().toString(Boolean.TRUE), scheduledFuture);
     }

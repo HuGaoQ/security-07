@@ -16,20 +16,16 @@ public class ServletUtils {
     /**
      * 将字符串渲染到客户端
      * @param response 渲染对象
-     * @param string 待渲染的字符串
+     * @param string   待渲染的字符串
      * @return null
      */
-    public static String renderString(HttpServletResponse response, String string)
-    {
-        try
-        {
+    public static String renderString(HttpServletResponse response, String string) {
+        try {
             response.setStatus(200);
             response.setContentType("application/json");
             response.setCharacterEncoding("utf-8");
             response.getWriter().print(string);
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return null;
@@ -40,9 +36,9 @@ public class ServletUtils {
      * @param request
      * @return
      */
-    public static String  longUid(HttpServletRequest request){
+    public static String longUid(HttpServletRequest request) {
         String token = request.getHeader("token");
-        if (!StringUtils.hasText(token)){
+        if (!StringUtils.hasText(token)) {
             throw new RuntimeException("认证失败");
         }
         Long uid = null;
@@ -52,7 +48,7 @@ public class ServletUtils {
             e.printStackTrace();
             throw new RuntimeException("token非法");
         }
-        String key = "login:"+uid;
+        String key = "login:" + uid;
         return key;
     }
 

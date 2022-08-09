@@ -16,6 +16,7 @@
     <script src="../plugins/bootstrap/js/bootstrap.min.js"></script>
     <script src="../plugins/adminLTE/js/vue-2.6.10.js"></script>
     <script src="../plugins/adminLTE/js/axios.min.js"></script>
+    <script src="../plugins/adminLTE/js/main.js"></script>
 
 </head>
 
@@ -34,7 +35,7 @@
                 <ul class="nav nav-tabs">
 
                     <li class="active">
-                        <a href="#home" data-toggle="tab">添加商品信息</a>
+                        <a href="#home" data-toggle="tab">添加产品信息</a>
                     </li>
                 </ul>
                 <!--tab头/-->
@@ -46,14 +47,50 @@
                     <div class="tab-pane active" id="home">
                         <div class="row data-type">
 
-                            <div class="col-md-2 title">商品名称</div>
+                            <div class="col-md-2 title">产品名称</div>
                             <div class="col-md-10 data">
-                                <input type="text" class="form-control" placeholder="商品名称" v-model="fromdata.gname">
+                                <input type="text" class="form-control" placeholder="产品名称" v-model="fromdata.prdName">
                             </div>
 
-                            <div class="col-md-2 title">价格</div>
+                            <div class="col-md-2 title">产品代码</div>
                             <div class="col-md-10 data">
-                                <input type="text" class="form-control" placeholder="价格" v-model="fromdata.price">
+                                <input type="text" class="form-control" placeholder="产品代码" v-model="fromdata.prdDm">
+                            </div>
+
+                            <div class="col-md-2 title">净值</div>
+                            <div class="col-md-10 data">
+                                <input type="text" class="form-control" placeholder="净值" v-model="fromdata.net">
+                            </div>
+
+                            <div class="col-md-2 title">份额</div>
+                            <div class="col-md-10 data">
+                                <input type="text" class="form-control" placeholder="份额" v-model="fromdata.fbalance">
+                            </div>
+
+                            <div class="col-md-2 title">金额</div>
+                            <div class="col-md-10 data">
+                                <input type="text" class="form-control" placeholder="金额" v-model="fromdata.favalable">
+                            </div>
+
+                            <div class="col-md-2 title">机构名称</div>
+                            <div class="col-md-10 data">
+                                <input type="text" class="form-control" placeholder="机构名称" v-model="fromdata.insName">
+                            </div>
+
+                            <div class="col-md-2 title">机构代码</div>
+                            <div class="col-md-10 data">
+                                <input type="text" class="form-control" placeholder="机构代码" v-model="fromdata.insDm">
+                            </div>
+
+                            <div class="col-md-2 title">日期</div>
+                            <div class="col-md-10 data">
+                                <input type="date" class="form-control" placeholder="日期" v-model="fromdata.newDate">
+                            </div>
+
+                            <div class="col-md-2 title">当前时间</div>
+                            <div class="col-md-10 data">
+                                <input type="datetime-local" class="form-control" placeholder="当前时间"
+                                       v-model="fromdata.newTime">
                             </div>
 
                         </div>
@@ -79,11 +116,16 @@
         },
         methods: {
             add: function () {
-                axios.post("/goods/add", this.fromdata).then(reg =>{
-                    if (reg.data.falg){
-                        location.href = "goods_list.html";
-                    }else {
-                        alert(reg.data.message)
+                axios.post("/product/add", this.fromdata).then(res => {
+                    console.log(res.data.code)
+                    if (res.data.code == 401) {
+                        alert(res.data.data)
+                    } else if (res.data.code == 403) {
+                        alert(res.data.data)
+                    } else if (res.data.code == 200) {
+                        location.href = "product.html";
+                    } else {
+                        alert(res.data.message)
                     }
                 })
             }

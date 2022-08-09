@@ -33,21 +33,21 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
     private RedisCache redisCache;
 
     @Override
-    public ResponseResult listPage(Map<String,Object> params) {
+    public ResponseResult listPage(Map<String, Object> params) {
         Page<Product> page = null;
         Integer pageNo = Integer.parseInt(params.get("pageNo").toString());
         Integer pageSize = Integer.parseInt(params.get("pageSize").toString());
-        if (ObjectUtils.isEmpty(params.get("prdIns").toString())){
-            page = new Page<>(pageNo,pageSize);
-            productMapper.selectPage(page,null);
-            return new ResponseResult(HttpStatus.OK.value(),"查询成功",new Pages<>(page.getPages(),page.getTotal(),page.getRecords()));
-        }else {
+        if (ObjectUtils.isEmpty(params.get("prdIns").toString())) {
+            page = new Page<>(pageNo, pageSize);
+            productMapper.selectPage(page, null);
+            return new ResponseResult(HttpStatus.OK.value(), "查询成功", new Pages<>(page.getPages(), page.getTotal(), page.getRecords()));
+        } else {
             String prdIns = params.get("prdIns").toString();
-            page = new Page<>(pageNo,pageSize);
+            page = new Page<>(pageNo, pageSize);
             LambdaQueryWrapper<Product> wrapper = new LambdaQueryWrapper<>();
             wrapper.like(StringUtils.isNotBlank(prdIns), Product::getPrdName, prdIns).or().like(StringUtils.isNotBlank(prdIns), Product::getInsName, prdIns);
             productMapper.selectPage(page, wrapper);
-            return new ResponseResult(HttpStatus.OK.value(),"查询成功",new Pages<>(page.getPages(),page.getTotal(),page.getRecords()));
+            return new ResponseResult(HttpStatus.OK.value(), "查询成功", new Pages<>(page.getPages(), page.getTotal(), page.getRecords()));
         }
     }
 
@@ -61,12 +61,12 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         Product product = null;
         String key = CACHE_KEY_USER + id;
         product = redisCache.getCacheObject(key);
-        if (Objects.isNull(product)){
+        if (Objects.isNull(product)) {
             product = productMapper.selectById(id);
-            if (Objects.isNull(product)){
+            if (Objects.isNull(product)) {
                 return product;
-            }else {
-                redisCache.setCacheObject(key,product);
+            } else {
+                redisCache.setCacheObject(key, product);
             }
         }
         return product;
