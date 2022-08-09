@@ -121,7 +121,7 @@
                     console.log(res.data.code)
                     if (res.data.code == 401) {
                         alert(res.data.data)
-                        location.href = "http://localhost:8080/login.html";
+                        location.href = "/login.html";
                     } else if (res.data.code == 403) {
                         alert(res.data.data)
                     } else if (res.data.code == 200) {

@@ -19,49 +19,43 @@ import java.util.List;
  * An unhandled exception occurred while precessing the request.Exception:
  * Throw ExceptionKFC Crazy Thursday need $50.
  */
+@Slf4j
 @Api("用户user接口")
 @RestController
-@Slf4j
+@RequestMapping("/user")
 public class LoginController {
 
     @Autowired
     private LoginService loginService;
 
     @ApiOperation("hello")
-    @RequestMapping(value = "/hello", method = RequestMethod.GET)
+    @GetMapping("/hello")
     @PreAuthorize("hasAuthority('system:dept:list')")
     public String hello() {
         return "Because live you everyday";
     }
 
-    @ApiOperation("hello")
-    @RequestMapping(value = "/user/hello", method = RequestMethod.GET)
-    public String hellos() {
-        return "Because live you everyday";
-    }
-
     @ApiOperation("查询用户信息")
-    @RequestMapping(value = "/user/list", method = RequestMethod.GET)
+    @GetMapping("/list")
     public ResponseResult list() {
         List<User> list = loginService.list();
         return new ResponseResult(200, "查询成功", list);
     }
 
     @ApiOperation("登录")
-    @RequestMapping(value = "/user/login", method = RequestMethod.POST)
+    @PostMapping("/login")
     public ResponseResult login(User user) {
-//    public ResponseResult login(@RequestBody User user){
         return loginService.login(user);
     }
 
     @ApiOperation("查询名称")
-    @RequestMapping(value = "/getUsername", method = RequestMethod.GET)
+    @GetMapping("/getUsername")
     public ResponseResult getUsername(HttpServletRequest request) {
         return loginService.getUsername(request);
     }
 
     @ApiOperation("登出")
-    @RequestMapping(value = "/user/logout", method = RequestMethod.GET)
+    @GetMapping(value = "/logout")
     public ResponseResult exit(HttpServletRequest request) {
         return loginService.exit(request);
     }

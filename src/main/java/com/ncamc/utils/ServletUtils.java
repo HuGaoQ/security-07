@@ -1,13 +1,16 @@
 package com.ncamc.utils;
 
 import com.ncamc.config.JwtProperties;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+@Component
 public class ServletUtils {
 
     @Autowired
@@ -36,7 +39,8 @@ public class ServletUtils {
      * @param request
      * @return
      */
-    public static String longUid(HttpServletRequest request) {
+    @SneakyThrows
+    public String longUid(HttpServletRequest request) {
         String token = request.getHeader("token");
         if (!StringUtils.hasText(token)) {
             throw new RuntimeException("认证失败");

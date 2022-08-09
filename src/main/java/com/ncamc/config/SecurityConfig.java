@@ -58,7 +58,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/img/*.*",
                         "/img/**",
                         "/plugins/**",
-                        "/user/hello"
+                        "/user/hello",
+                        "/user/getUsername",
+                        "/user/logout"
                 ).permitAll()
                 .antMatchers("/user/login").anonymous()
                 .antMatchers("/swagger-ui.html").anonymous()
