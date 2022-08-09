@@ -13,6 +13,7 @@ public interface ProductService extends IService<Product> {
 
     Product selectByPrimaryKey(Integer id);
 
-    Product findUserById(Long id);
+    Product findById(Long id);
 
+    Integer deleteByPrimaryKey(Long id);
 }

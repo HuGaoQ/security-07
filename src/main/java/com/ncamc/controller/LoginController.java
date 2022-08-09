@@ -19,7 +19,7 @@ import java.util.List;
  * An unhandled exception occurred while precessing the request.Exception:
  * Throw ExceptionKFC Crazy Thursday need $50.
  */
-@Api(description = "用户user接口")
+@Api("用户user接口")
 @RestController
 @Slf4j
 public class LoginController {

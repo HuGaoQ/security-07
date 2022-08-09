@@ -1,5 +1,6 @@
 package com.ncamc.controller;
 
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.ncamc.entity.Product;
 import com.ncamc.entity.ResponseResult;
 import com.ncamc.service.ProductService;
@@ -23,7 +24,7 @@ import java.util.Map;
  * @CreateTime: 2022-07-08 09:44
  */
 @Slf4j
-@Api(description = "产品product接口")
+@Api("产品product接口")
 @RestController
 @RequestMapping("/product")
 public class ProductController {
@@ -65,18 +66,41 @@ public class ProductController {
     }
 
     @ApiOperation("查询1条记录")
-    @RequestMapping(value = "/order/findUserById/{id}", method = RequestMethod.GET)
-    public Product select(@PathVariable Long id) {
-        return productService.findUserById(id);
+    @GetMapping("/findById")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "ID", required = true, dataTypeClass = Integer.class, example = "ID")
+    })
+    public ResponseResult select(Long id) {
+        return new ResponseResult(HttpStatus.OK.value(),productService.findById(id));
     }
 
-    @PostMapping("jieshou")
-    @ApiOperation("接收数据")
-    public Map<String, Object> select(@RequestBody Map<String, Object> map) {
-        System.out.println(map.get("name"));
-        System.out.println(map.get("age"));
-        System.out.println(map.get("sex"));
-        return map;
+    @ApiOperation("数据库新增记录")
+    @PostMapping("/update")
+    @PreAuthorize("hasAuthority('system:dept:list')")
+    public ResponseResult update(@RequestBody Product product) {
+        try {
+            UpdateWrapper wrapper = new UpdateWrapper<>();
+            wrapper.eq("id",product.getId());
+            boolean b = productService.update(product,wrapper);
+            if (b) {
+                product = productService.selectByPrimaryKey(product.getId());
+                redisCache.deleteObject(CACHE_KEY_USER+product.getId());
+                redisCache.setCacheObject(CACHE_KEY_USER + product.getId(), product);
+            }
+            return new ResponseResult(HttpStatus.OK.value(),"修改成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseResult(HttpStatus.INTERNAL_SERVER_ERROR.value(),"修改失败");
+        }
+    }
+
+    @ApiOperation("删除1条记录")
+    @GetMapping("/del")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "ID", required = true, dataTypeClass = Integer.class, example = "ID")
+    })
+    public ResponseResult del(Long id) {
+        return new ResponseResult(HttpStatus.OK.value(),"删除成功",productService.deleteByPrimaryKey(id));
     }
 
 }

@@ -169,8 +169,17 @@
                     params: {
                         id: val
                     }
-                }).then(reg => {
-                    location.href = "product.html";
+                }).then(res => {
+                    if (res.data.code == 401) {
+                        alert(res.data.data)
+                        location.href = "http://localhost:8080/login.html";
+                    } else if (res.data.code == 403) {
+                        alert(res.data.data)
+                    } else if (res.data.code == 200) {
+                        location.href = "product.html";
+                    } else {
+                        alert(res.data.message)
+                    }
                 })
             }
         },
@@ -183,6 +192,7 @@
             }).then(function (d) {
                 if (d.data.code == 401) {
                     alert(d.data.data)
+                    location.href = "http://localhost:8080/login.html"
                 } else if (d.data.code == 403) {
                     alert(d.data.data)
                 } else {

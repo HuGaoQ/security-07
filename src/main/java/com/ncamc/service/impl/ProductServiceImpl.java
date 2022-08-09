@@ -11,6 +11,7 @@ import com.ncamc.entity.ResponseResult;
 import com.ncamc.mapper.ProductMapper;
 import com.ncamc.service.ProductService;
 import com.ncamc.utils.RedisCache;
+import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -57,7 +58,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
     }
 
     @Override
-    public Product findUserById(Long id) {
+    public Product findById(Long id) {
         Product product = null;
         String key = CACHE_KEY_USER + id;
         product = redisCache.getCacheObject(key);
@@ -70,6 +71,14 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
             }
         }
         return product;
+    }
+
+    @Override
+    public Integer deleteByPrimaryKey(Long id) {
+        if (id != null){
+            return productMapper.deleteById(id);
+        }
+        return 0;
     }
 
 }

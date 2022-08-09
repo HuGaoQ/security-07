@@ -17,6 +17,7 @@
     <script src="../plugins/adminLTE/js/vue-2.6.10.js"></script>
     <script src="../plugins/adminLTE/js/axios.min.js"></script>
     <script src="../plugins/adminLTE/js/getParameter.js"></script>
+    <script src="../plugins/adminLTE/js/main.js"></script>
 
 </head>
 
@@ -47,14 +48,49 @@
                     <div class="tab-pane active" id="home">
                         <div class="row data-type">
 
-                            <div class="col-md-2 title">商品名称</div>
+                            <div class="col-md-2 title">产品名称</div>
                             <div class="col-md-10 data">
-                                <input type="text" class="form-control" v-model="fromdata.gname">
+                                <input type="text" class="form-control" placeholder="产品名称" v-model="fromdata.prdName">
                             </div>
 
-                            <div class="col-md-2 title">价格</div>
+                            <div class="col-md-2 title">产品代码</div>
                             <div class="col-md-10 data">
-                                <input type="text" class="form-control" v-model="fromdata.price">
+                                <input type="text" class="form-control" readonly placeholder="产品代码" v-model="fromdata.prdDm">
+                            </div>
+
+                            <div class="col-md-2 title">净值</div>
+                            <div class="col-md-10 data">
+                                <input type="text" class="form-control" readonly placeholder="净值" v-model="fromdata.net">
+                            </div>
+
+                            <div class="col-md-2 title">份额</div>
+                            <div class="col-md-10 data">
+                                <input type="text" class="form-control" readonly placeholder="份额" v-model="fromdata.fbalance">
+                            </div>
+
+                            <div class="col-md-2 title">金额</div>
+                            <div class="col-md-10 data">
+                                <input type="text" class="form-control" readonly placeholder="金额" v-model="fromdata.favalable">
+                            </div>
+
+                            <div class="col-md-2 title">机构名称</div>
+                            <div class="col-md-10 data">
+                                <input type="text" class="form-control" placeholder="机构名称" v-model="fromdata.insName">
+                            </div>
+
+                            <div class="col-md-2 title">机构代码</div>
+                            <div class="col-md-10 data">
+                                <input type="text" class="form-control" readonly placeholder="机构代码" v-model="fromdata.insDm">
+                            </div>
+
+                            <div class="col-md-2 title">日期</div>
+                            <div class="col-md-10 data">
+                                <input type="date" class="form-control" readonly placeholder="日期" v-model="fromdata.newDate">
+                            </div>
+
+                            <div class="col-md-2 title">当前时间</div>
+                            <div class="col-md-10 data">
+                                <input type="datetime-local" class="form-control" readonly placeholder="当前时间" v-model="fromdata.newTime">
                             </div>
 
                         </div>
@@ -78,21 +114,26 @@
         el: "#app",
         data: {
             fromdata: {},
-            fls: []
         },
         methods: {
             update: function () {
-                axios.post("/goods/update", this.fromdata).then(reg => {
-                    if (reg.data.falg) {
+                axios.post("/product/update", this.fromdata).then(res => {
+                    console.log(res.data.code)
+                    if (res.data.code == 401) {
+                        alert(res.data.data)
+                        location.href = "http://localhost:8080/login.html";
+                    } else if (res.data.code == 403) {
+                        alert(res.data.data)
+                    } else if (res.data.code == 200) {
                         location.href = "product.html";
                     } else {
-                        alert(reg.data.message)
+                        alert(res.data.message)
                     }
                 })
             }
         },
         created() {
-            axios.get("/goods/findById", {
+            axios.get("/product/findById", {
                 params: {
                     id: id
                 }
