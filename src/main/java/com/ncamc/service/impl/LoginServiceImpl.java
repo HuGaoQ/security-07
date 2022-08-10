@@ -73,7 +73,7 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements L
 
     @Override
     public ResponseResult getUsername(HttpServletRequest request) {
-        String token = "eyJhbGciOiJSUzI1NiJ9.eyJpZCI6IjIiLCJleHAiOjE2NjAwMzYwMjJ9.kMl2tps9ZlE93wovktWfcYLSLJ-65yTUKy74NXXs8TTEY6Uw5w-6oMn-8zZvR7oNHOL7LSbG7_ENN9sbztl3FwWMy2Qdm_1Gk12NeOl7r7URmQCGSBoz-KKzMpOjcY4wWzFjY9tav6c4-7UFNMKyls6QCCGobbXviSdT0UMuOvw";
+        String token = "eyJhbGciOiJSUzI1NiJ9.eyJpZCI6IjIiLCJleHAiOjE2NjAwOTYzNTN9.QBt7_TUV_92HJRUj-pMmMZhYfVUZg4DZdSRaQb5gpnK7V1_G4xxF6gN0uNQr_Y_LmjU3rquF7J97qfPH3nepAD6vL0lDZ0OfVsu6QNkJo2nVuYCf-JIzpYUvIZGe6WkeSJAG5qdXocjLw9TgXGHxQOx69hlkM1uVWkLrt5f9Qe8";
         if (!StringUtils.hasText(token)) {
             throw new RuntimeException("认证失败");
         }
@@ -85,7 +85,6 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements L
             throw new RuntimeException("token非法");
         }
         String key = "login:" + uid;
-//        String key = ServletUtils.longUid(request);
         LoginUser loginUser = redisCache.getCacheObject(key);
         if (Objects.isNull(loginUser)) {
             throw new RuntimeException("没有该用户请从新登录");
@@ -97,7 +96,7 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements L
     public ResponseResult exit(HttpServletRequest request) {
         ResponseResult responseResult = null;
         try {
-            String token = "eyJhbGciOiJSUzI1NiJ9.eyJpZCI6IjIiLCJleHAiOjE2NjAwMzYwMjJ9.kMl2tps9ZlE93wovktWfcYLSLJ-65yTUKy74NXXs8TTEY6Uw5w-6oMn-8zZvR7oNHOL7LSbG7_ENN9sbztl3FwWMy2Qdm_1Gk12NeOl7r7URmQCGSBoz-KKzMpOjcY4wWzFjY9tav6c4-7UFNMKyls6QCCGobbXviSdT0UMuOvw";
+            String token = "eyJhbGciOiJSUzI1NiJ9.eyJpZCI6IjIiLCJleHAiOjE2NjAwOTYzNTN9.QBt7_TUV_92HJRUj-pMmMZhYfVUZg4DZdSRaQb5gpnK7V1_G4xxF6gN0uNQr_Y_LmjU3rquF7J97qfPH3nepAD6vL0lDZ0OfVsu6QNkJo2nVuYCf-JIzpYUvIZGe6WkeSJAG5qdXocjLw9TgXGHxQOx69hlkM1uVWkLrt5f9Qe8";
             if (!StringUtils.hasText(token)) {
                 throw new RuntimeException("认证失败");
             }
@@ -109,7 +108,6 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements L
                 throw new RuntimeException("token非法");
             }
             String key = "login:" + uid;
-//            String key = ServletUtils.longUid(request);
             redisCache.deleteObject(key);
             responseResult = new ResponseResult(HttpStatus.OK.value(), "退出成功");
         } catch (Exception e) {

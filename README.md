@@ -1,3 +1,7 @@
+### 存在的bug:
+#    newTime:日期转换合适不正确
+#    token:存放不到index.html页面
+
 ### 架构: SpringBoot+security+mybatisPlus+redis+mysql5.7+jwt
 ### jdk: 1.8
 ### 技术: lombok-swagger2-Dockerfile
