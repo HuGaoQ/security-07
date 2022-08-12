@@ -1,6 +1,7 @@
 ### 存在的bug:
 #    newTime:日期转换合适不正确
-#    token:存放不到index.html页面
+#    token:1.存放不到index.html页面
+#          2.user/getUsername和user/exit两个接口需要去SessionStorage中去拿
 #    修改用户:后台查询结果无恙，前台接收错误（id）
 
 ### 架构: SpringBoot+security+mybatisPlus+redis+mysql5.7+jwt
