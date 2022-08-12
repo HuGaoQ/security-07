@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSON;
 import com.ncamc.config.JwtProperties;
 import com.ncamc.entity.LoginUser;
 import com.ncamc.entity.ResponseResult;
-import com.ncamc.service.impl.LoginServiceImpl;
 import com.ncamc.utils.JwtUtils;
 import com.ncamc.utils.RedisCache;
 import com.ncamc.utils.ServletUtils;

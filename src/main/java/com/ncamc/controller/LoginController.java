@@ -1,12 +1,9 @@
 package com.ncamc.controller;
 
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
-import com.ncamc.config.JwtProperties;
-import com.ncamc.entity.Product;
 import com.ncamc.entity.ResponseResult;
 import com.ncamc.entity.User;
 import com.ncamc.service.LoginService;
-import com.ncamc.utils.JwtUtils;
 import com.ncamc.utils.RedisCache;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;

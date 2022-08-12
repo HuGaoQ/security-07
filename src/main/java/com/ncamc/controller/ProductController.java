@@ -9,14 +9,12 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.models.auth.In;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
 import java.util.Map;
 
 /**
@@ -57,10 +55,10 @@ public class ProductController {
                 product = productService.selectByPrimaryKey(product.getId());
                 redisCache.setCacheObject(CACHE_KEY_USER + product.getId(), product);
             }
-            return new ResponseResult(HttpStatus.OK.value(),"添加成功");
+            return new ResponseResult(HttpStatus.OK.value(), "添加成功");
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseResult(HttpStatus.INTERNAL_SERVER_ERROR.value(),"添加失败");
+            return new ResponseResult(HttpStatus.INTERNAL_SERVER_ERROR.value(), "添加失败");
         }
     }
 
@@ -70,7 +68,7 @@ public class ProductController {
             @ApiImplicitParam(name = "id", value = "ID", required = true, dataTypeClass = Integer.class, example = "ID")
     })
     public ResponseResult select(Long id) {
-        return new ResponseResult(HttpStatus.OK.value(),productService.findById(id));
+        return new ResponseResult(HttpStatus.OK.value(), productService.findById(id));
     }
 
     @ApiOperation("修改产品信息")
@@ -78,16 +76,16 @@ public class ProductController {
     public ResponseResult update(@RequestBody Product product) {
         try {
             UpdateWrapper wrapper = new UpdateWrapper<>();
-            wrapper.eq("id",product.getId());
-            boolean b = productService.update(product,wrapper);
+            wrapper.eq("id", product.getId());
+            boolean b = productService.update(product, wrapper);
             if (b) {
-                redisCache.deleteObject(CACHE_KEY_USER+product.getId());
+                redisCache.deleteObject(CACHE_KEY_USER + product.getId());
                 redisCache.setCacheObject(CACHE_KEY_USER + product.getId(), product);
             }
-            return new ResponseResult(HttpStatus.OK.value(),"修改成功");
+            return new ResponseResult(HttpStatus.OK.value(), "修改成功");
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseResult(HttpStatus.INTERNAL_SERVER_ERROR.value(),"修改失败");
+            return new ResponseResult(HttpStatus.INTERNAL_SERVER_ERROR.value(), "修改失败");
         }
     }
 
@@ -98,7 +96,7 @@ public class ProductController {
             @ApiImplicitParam(name = "id", value = "ID", required = true, dataTypeClass = Integer.class, example = "ID")
     })
     public ResponseResult del(Long id) {
-        return new ResponseResult(HttpStatus.OK.value(),"删除成功",productService.deleteByPrimaryKey(id));
+        return new ResponseResult(HttpStatus.OK.value(), "删除成功", productService.deleteByPrimaryKey(id));
     }
 
 }

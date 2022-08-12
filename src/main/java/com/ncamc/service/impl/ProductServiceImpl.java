@@ -74,7 +74,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
 
     @Override
     public Integer deleteByPrimaryKey(Long id) {
-        if (id != null){
+        if (id != null) {
             return productMapper.deleteById(id);
         }
         return 0;
