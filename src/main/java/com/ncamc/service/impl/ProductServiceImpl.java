@@ -11,7 +11,6 @@ import com.ncamc.entity.ResponseResult;
 import com.ncamc.mapper.ProductMapper;
 import com.ncamc.service.ProductService;
 import com.ncamc.utils.RedisCache;
-import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;

@@ -12,7 +12,6 @@
     <link rel="stylesheet" type="text/css" href="css/login.css"/>
     <script src="plugins/adminLTE/js/vue-2.6.10.js"></script>
     <script src="plugins/adminLTE/js/axios.min.js"></script>
-    <!--    <script src="plugins/adminLTE/js/main.js"></script>-->
     <script type="text/javascript">
         $(function () {
             $('.login').click(function () {
@@ -33,10 +32,10 @@
 <body>
 <div id="app">
     <div>
-        <img src="img/1.png" width="100%" height="1000">
+<!--        <img src="img/1.png" width="100%" height="1000">-->
         <form @submit.prevent>
             <div class="row-fluid">
-                <h1><font face="楷体" size="10px">超市会员积分管理系统</font></h1>
+                <h1><font face="楷体" size="10px">产品权管理系统</font></h1>
                 <p>
                     <label>帐&nbsp;&nbsp;&nbsp;号：<input v-model="fromdata.username" type="text"/></label>
                 </p>
@@ -45,6 +44,7 @@
                 </p>
                 <hr/>
                 <input value=" 登 录 " class="btn btn-primary btn-large login" @click="login()"/>
+                <span class="go">没有账号?<a href="register.html" target="_blank">注册</a></span>
                 <br/>
             </div>
         </form>

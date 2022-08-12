@@ -50,7 +50,6 @@ public class ProductController {
 
     @ApiOperation("数据库新增记录")
     @PostMapping("/add")
-    @PreAuthorize("hasAuthority('system:dept:list')")
     public ResponseResult add(@RequestBody Product product) {
         try {
             boolean b = productService.save(product);
@@ -74,16 +73,14 @@ public class ProductController {
         return new ResponseResult(HttpStatus.OK.value(),productService.findById(id));
     }
 
-    @ApiOperation("数据库新增记录")
+    @ApiOperation("修改产品信息")
     @PostMapping("/update")
-    @PreAuthorize("hasAuthority('system:dept:list')")
     public ResponseResult update(@RequestBody Product product) {
         try {
             UpdateWrapper wrapper = new UpdateWrapper<>();
             wrapper.eq("id",product.getId());
             boolean b = productService.update(product,wrapper);
             if (b) {
-                product = productService.selectByPrimaryKey(product.getId());
                 redisCache.deleteObject(CACHE_KEY_USER+product.getId());
                 redisCache.setCacheObject(CACHE_KEY_USER + product.getId(), product);
             }
@@ -96,6 +93,7 @@ public class ProductController {
 
     @ApiOperation("删除1条记录")
     @GetMapping("/del")
+    @PreAuthorize("hasAuthority('system:dept:list')")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "ID", required = true, dataTypeClass = Integer.class, example = "ID")
     })

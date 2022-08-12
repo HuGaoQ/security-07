@@ -1,10 +1,11 @@
 package com.ncamc.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ncamc.config.JwtProperties;
-import com.ncamc.entity.LoginUser;
-import com.ncamc.entity.ResponseResult;
-import com.ncamc.entity.User;
+import com.ncamc.entity.*;
 import com.ncamc.mapper.UserMapper;
 import com.ncamc.service.LoginService;
 import com.ncamc.utils.JwtUtils;
@@ -16,10 +17,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -40,6 +44,29 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements L
 
     @Autowired
     private RedisCache redisCache;
+
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
+
+    @Override
+    public ResponseResult register(User user) {
+        ResponseResult responseResult = null;
+        try {
+            responseResult = null;
+            if (!StringUtils.isEmpty(user)) {
+                user.setPassword(passwordEncoder.encode(user.getPassword()));
+                user.setCreateTime(new Date());
+                user.setLoginTime(new Date());
+                userMapper.insert(user);
+                responseResult = new ResponseResult(HttpStatus.OK.value(), "添加成功");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseResult = new ResponseResult(HttpStatus.INTERNAL_SERVER_ERROR.value(), "添加失败", null);
+        }
+
+        return responseResult;
+    }
 
     @SneakyThrows
     @Override
@@ -73,7 +100,8 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements L
 
     @Override
     public ResponseResult getUsername(HttpServletRequest request) {
-        String token = "eyJhbGciOiJSUzI1NiJ9.eyJpZCI6IjIiLCJleHAiOjE2NjAwOTYzNTN9.QBt7_TUV_92HJRUj-pMmMZhYfVUZg4DZdSRaQb5gpnK7V1_G4xxF6gN0uNQr_Y_LmjU3rquF7J97qfPH3nepAD6vL0lDZ0OfVsu6QNkJo2nVuYCf-JIzpYUvIZGe6WkeSJAG5qdXocjLw9TgXGHxQOx69hlkM1uVWkLrt5f9Qe8";
+//        String token = request.getHeader("token");
+        String token = "eyJhbGciOiJSUzI1NiJ9.eyJpZCI6IjIiLCJleHAiOjE2NjAyNzMzMDd9.DooHGb0umAw6D6-3DWVdnMgnuAiDwPehaw-4l8NHhPgO2k-QTAc-Jld92JLI56Pkea5lulnLohSf1_9WTfKMGFj4N-rJiSZCNcIqmJinteorTrsnmxLC513kDfbq81mrgc636up2QqTtkAiRiHUS5YeMeryZE3VlAb3Trizw1YU";
         if (!StringUtils.hasText(token)) {
             throw new RuntimeException("认证失败");
         }
@@ -89,17 +117,55 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements L
         if (Objects.isNull(loginUser)) {
             throw new RuntimeException("没有该用户请从新登录");
         }
-        return new ResponseResult(HttpStatus.OK.value(), loginUser.getUser().getUsername());
+        return new ResponseResult(HttpStatus.OK.value(), "查询成功", loginUser.getUser().getUsername());
+    }
+
+    @Override
+    public User selectById(Long id) {
+        return userMapper.selectById(id);
+    }
+
+    @Override
+    public ResponseResult listPage(Map<String, Object> params) {
+        Page<User> page = null;
+        Integer pageNo = Integer.parseInt(params.get("pageNo").toString());
+        Integer pageSize = Integer.parseInt(params.get("pageSize").toString());
+        if (ObjectUtils.isEmpty(params.get("username").toString())) {
+            page = new Page<>(pageNo, pageSize);
+            userMapper.selectPage(page, null);
+            return new ResponseResult(HttpStatus.OK.value(), "查询成功", new Pages<>(page.getPages(), page.getTotal(), page.getRecords()));
+        } else {
+            String username = params.get("username").toString();
+            page = new Page<>(pageNo, pageSize);
+            LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
+            wrapper.like(StringUtils.isEmpty(username), User::getUsername, username).or().like(StringUtils.isEmpty(username), User::getUsername, username);
+            userMapper.selectPage(page, wrapper);
+            return new ResponseResult(HttpStatus.OK.value(), "查询成功", new Pages<>(page.getPages(), page.getTotal(), page.getRecords()));
+        }
+    }
+
+    @Override
+    public Object findById(Long id) {
+        return userMapper.selectById(id);
+    }
+
+    @Override
+    public Object deleteByPrimaryKey(Long id) {
+        if (id != null) {
+            return userMapper.deleteById(id);
+        }
+        return 0;
     }
 
     @Override
     public ResponseResult exit(HttpServletRequest request) {
         ResponseResult responseResult = null;
+//        String token = request.getHeader("token");
+        String token = "eyJhbGciOiJSUzI1NiJ9.eyJpZCI6IjIiLCJleHAiOjE2NjAyNzMzMDd9.DooHGb0umAw6D6-3DWVdnMgnuAiDwPehaw-4l8NHhPgO2k-QTAc-Jld92JLI56Pkea5lulnLohSf1_9WTfKMGFj4N-rJiSZCNcIqmJinteorTrsnmxLC513kDfbq81mrgc636up2QqTtkAiRiHUS5YeMeryZE3VlAb3Trizw1YU";
+        if (!StringUtils.hasText(token)) {
+            throw new RuntimeException("认证失败");
+        }
         try {
-            String token = "eyJhbGciOiJSUzI1NiJ9.eyJpZCI6IjIiLCJleHAiOjE2NjAwOTYzNTN9.QBt7_TUV_92HJRUj-pMmMZhYfVUZg4DZdSRaQb5gpnK7V1_G4xxF6gN0uNQr_Y_LmjU3rquF7J97qfPH3nepAD6vL0lDZ0OfVsu6QNkJo2nVuYCf-JIzpYUvIZGe6WkeSJAG5qdXocjLw9TgXGHxQOx69hlkM1uVWkLrt5f9Qe8";
-            if (!StringUtils.hasText(token)) {
-                throw new RuntimeException("认证失败");
-            }
             Long uid = null;
             try {
                 uid = JwtUtils.getInfoFromId(token, jwtProperties.getPublicKey());

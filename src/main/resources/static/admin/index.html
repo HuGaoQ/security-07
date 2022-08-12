@@ -20,7 +20,6 @@
     <script src="../plugins/adminLTE/js/main.js"></script>
     <script src="../plugins/adminLTE/js/vue-2.6.10.js"></script>
     <script src="../plugins/adminLTE/js/axios.min.js"></script>
-    <script src="../plugins/adminLTE/js/jquery-2.1.0.min.js"></script>
 
     <script type="text/javascript">
         function SetIFrameHeight() {
@@ -325,13 +324,30 @@
                     <li class="treeview">
                         <a href="#">
                             <i class="fa fa-folder"></i>
-                            <span>产品管理</span>
+                            <span>用户管理</span>
                             <span class="pull-right-container">
 				       			<i class="fa fa-angle-left pull-right"></i>
 				   		 	</span>
                         </a>
                         <ul class="treeview-menu">
                             <li id="type-user">
+                                <a href="user.html" target="iframe">
+                                    <i class="fa fa-circle-o"></i> 用户列表
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li class="treeview">
+                        <a href="#">
+                            <i class="fa fa-folder"></i>
+                            <span>产品管理</span>
+                            <span class="pull-right-container">
+				       			<i class="fa fa-angle-left pull-right"></i>
+				   		 	</span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li id="type-product">
                                 <a href="product.html" target="iframe">
                                     <i class="fa fa-circle-o"></i> 产品列表
                                 </a>
@@ -379,6 +395,7 @@
         },
         created() {
             axios.get("/user/getUsername").then(res => {
+                alert(res.data.data)
                 $("#name").html(res.data.data)
                 $("#names").html(res.data.data)
                 $("#namess").html(res.data.data)
