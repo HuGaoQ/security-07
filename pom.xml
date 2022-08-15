@@ -13,7 +13,7 @@
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.1.5.RELEASE</version>
     </parent>
-
+    <!--下载doc地址-->
     <repositories>
         <repository>
             <id>com.e-iceblue</id>
