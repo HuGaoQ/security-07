@@ -1,3 +1,9 @@
+### 存在的bug:
+#    newTime:日期转换格式不正确
+#    token:1.存放不到index.html页面
+#          2.user/getUsername和user/exit两个接口的token获取不到需要手动写入(去SessionStorage中去拿)
+#    修改用户:后台查询结果无恙，前台接收错误（id）
+
 ### 架构: SpringBoot+security+mybatisPlus+redis+mysql5.7+jwt
 ### jdk: 1.8
 ### 技术: lombok-swagger2-Dockerfile
