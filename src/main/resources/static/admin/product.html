@@ -16,6 +16,10 @@
     <script src="../plugins/adminLTE/js/vue-2.6.10.js"></script>
     <script src="../plugins/adminLTE/js/axios.min.js"></script>
     <script src="../plugins/adminLTE/js/main.js"></script>
+    <script type="text/javascript" src="../plugins/adminLTE/js/element-ui-index.js"></script>
+    <script type="text/javascript" src="../plugins/adminLTE/js/browser.min.js"></script>
+    <script type="text/javascript" src="../plugins/adminLTE/js/polyfill.min.js"></script>
+    <script type="text/javascript" src="../plugins/adminLTE/js/config.js"></script>
 </head>
 
 <body class="hold-transition skin-red sidebar-mini">
@@ -40,6 +44,9 @@
                         </button>
                         <button type="button" class="btn btn-default" title="刷新" onclick="window.location.reload();"><i
                                 class="fa fa-refresh"></i> 刷新
+                        </button>
+                        <button type="button" class="btn btn-default" title="导出" @click="loader()"><i
+                                class="fa fa-file-o"></i> 导出
                         </button>
                     </div>
                 </div>
@@ -158,12 +165,44 @@
                     console.log("e=", error)
                 });
             },
-            add: function () {
+            //导出
+            loader() {
+                axios.get("/product/exprot",{responseType:'blob'},{headers:{'Content-Type':'application/json'}})
+                    .then(function (data) {
+                        console.log(data.data)
+                        const blob = new Blob([data.data], {
+                            type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                        });
+                        // 2.获取请求返回的response对象中的blob 设置文件类型，这里以excel为例
+                        if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+                            window.navigator.msSaveOrOpenBlob(blob, '产品_' + timeFormat(new Date(), "yyyyMMddHHmmss") + ".xlsx");
+                        } else {
+                            var url = window.URL.createObjectURL(blob);
+                            // 3.创建一个临时的url指向blob对象
+                            var fileName = '产品_' + timeFormat(new Date(), "yyyyM    MddHHmmss") + ".xlsx";
+                            // 4.创建url之后可以模拟对此文件对象的一系列操作，例如：预览、下载
+                            const a = document.createElement('a');
+                            a.href = url;
+                            a.download = fileName;
+                            a.click();
+                            // 5.释放这个临时的对象url
+                            window.URL.revokeObjectURL(url);
+                            this.$message({
+                                message: '导出成功',
+                                type: 'success'
+                            });
+                        }
+                    });
+            },
+            //添加
+            add() {
                 location.href = "product_add.html";
             },
+            //修改
             update: function (id) {
                 location.href = "product_update.html?id=" + id;
             },
+            //删除
             del: function (val) {
                 axios.get("/product/del", {
                     params: {

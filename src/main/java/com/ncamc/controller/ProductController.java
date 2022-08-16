@@ -5,16 +5,39 @@ import com.ncamc.entity.Product;
 import com.ncamc.entity.ResponseResult;
 import com.ncamc.service.ProductService;
 import com.ncamc.utils.RedisCache;
+import com.spire.doc.Document;
+import com.spire.doc.FileFormat;
+import com.spire.doc.Section;
+import com.spire.doc.documents.HorizontalAlignment;
+import com.spire.doc.documents.Paragraph;
+import com.spire.doc.documents.TextSelection;
+import com.spire.doc.documents.TextWrappingStyle;
+import com.spire.doc.fields.DocPicture;
+import com.wisdge.web.springframework.WebUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.awt.*;
+import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -97,6 +120,124 @@ public class ProductController {
     })
     public ResponseResult del(Long id) {
         return new ResponseResult(HttpStatus.OK.value(), "删除成功", productService.deleteByPrimaryKey(id));
+    }
+
+    @GetMapping("/doc")
+    public String doc() throws IOException {
+        //通过流加载WPS文字文档
+        FileInputStream inputStream = new FileInputStream("F:/L/东京奥运会.wps");
+        Document document = new Document();
+        document.loadFromStream(inputStream, FileFormat.Doc);
+
+        //查找所有“北京冬奥会”文本
+        TextSelection[] textSelections = document.findAllString("国", false, false);
+        //设置文本高亮色、加粗
+        for (TextSelection selection : textSelections)
+        {
+            selection.getAsOneRange().getCharacterFormat().setHighlightColor(Color.YELLOW);
+            selection.getAsOneRange().getCharacterFormat().setBold(true);
+        }
+
+        //获取文档的第一个节
+        Section section = document.getSections().get(0);
+
+        //获取第2段，设置段落背景色
+        Paragraph paragraph1 = section.getParagraphs().get(1);
+        paragraph1.getFormat().setBackColor(new Color(176,224,230));
+        paragraph1.getStyle().getParagraphFormat().setHorizontalAlignment(HorizontalAlignment.Center);
+
+        //获取第3段，添加图片到段落
+        Paragraph paragraph2 = section.getParagraphs().get(2);
+        DocPicture picture = paragraph2.appendPicture("F:/PNG/shouye1.png");
+        picture.setWidth(200f);
+        picture.setHeight(250f);
+        picture.setTextWrappingStyle(TextWrappingStyle.Through);
+
+
+        //将结果文档保存到流
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        document.saveToStream(bos, FileFormat.Doc);
+        //将流写入WPS文档
+        FileOutputStream fos = new FileOutputStream("Output.wps");
+        fos.write(bos.toByteArray());
+        //关闭流
+        bos.close();
+        fos.close();
+        return "success";
+    }
+
+    @ApiOperation("导出产品信息")
+    @GetMapping("/exprot")
+    public void exprot(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        String fileName = String.format("Product_%s.xlsx", new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()));
+        List<Product> list = productService.list();
+        System.out.println(list);
+        if (list == null){
+            return;
+        }
+
+        byte[] reviewBytes = generatorProductProspectRecordFile(list);
+        WebUtils.out(request, response, reviewBytes, fileName, Boolean.TRUE);
+
+    }
+
+    public static byte[] generatorProductProspectRecordFile(List<Product> resultList) throws Exception {
+        XSSFWorkbook wk = new XSSFWorkbook();
+        XSSFSheet sheet = wk.createSheet();
+
+        XSSFRow row = sheet.createRow(0);
+        XSSFCell cell1 = row.createCell(0);
+        cell1.setCellValue("Id");
+        XSSFCell cell2 = row.createCell(1);
+        cell2.setCellValue("产品名称");
+        XSSFCell cell3 = row.createCell(2);
+        cell3.setCellValue("产品代码");
+        XSSFCell cell4 = row.createCell(3);
+        cell4.setCellValue("净值");
+        XSSFCell cell5 = row.createCell(4);
+        cell5.setCellValue("份额");
+        XSSFCell cell6 = row.createCell(5);
+        cell6.setCellValue("金额");
+        XSSFCell cell7 = row.createCell(6);
+        cell7.setCellValue("机构名称");
+        XSSFCell cell8 = row.createCell(7);
+        cell8.setCellValue("机构代码");
+        XSSFCell cell9 = row.createCell(8);
+        cell9.setCellValue("日期");
+        XSSFCell cell10 = row.createCell(9);
+        cell10.setCellValue("当前时间");
+
+        for (int i = 0; i < resultList.size(); i++) {
+            Product product = resultList.get(i);
+            XSSFRow curRow = sheet.createRow(i+1);
+            // ID
+            curRow.createCell(0).setCellValue(product.getId());
+            //产品名称
+            curRow.createCell(1).setCellValue(product.getPrdName());
+            // 产品代码
+            curRow.createCell(2).setCellValue(product.getPrdDm());
+            // 净值
+            curRow.createCell(3).setCellValue(product.getNet());
+            // 份额
+            curRow.createCell(4).setCellValue(product.getFbalance());
+            // 金额
+            curRow.createCell(5).setCellValue(product.getFavalable());
+            // 机构名称
+            curRow.createCell(6).setCellValue(product.getInsName());
+            //机构代码
+            curRow.createCell(7).setCellValue(product.getInsDm());
+            //日期
+            curRow.createCell(8).setCellValue(product.getNewDate());
+            //当前时间
+            curRow.createCell(9).setCellValue(product.getNewTime());
+        }
+
+        // 更新excel公式，自动计算
+        wk.getCreationHelper().createFormulaEvaluator().evaluateAll();
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        wk.write(outputStream);
+        wk.close();
+        return outputStream.toByteArray();
     }
 
 }
