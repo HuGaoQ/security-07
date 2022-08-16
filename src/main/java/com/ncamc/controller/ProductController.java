@@ -124,8 +124,9 @@ public class ProductController {
         return new ResponseResult(HttpStatus.OK.value(), "删除成功", productService.deleteByPrimaryKey(id));
     }
 
-    @GetMapping("/doc")
-    public String doc() throws IOException {
+    @ApiOperation("修改对应WPS文件")
+    @GetMapping("/wps")
+    public String wps() throws IOException {
         //通过流加载WPS文字文档
         FileInputStream inputStream = new FileInputStream("F:/L/东京奥运会.wps");
         Document document = new Document();
