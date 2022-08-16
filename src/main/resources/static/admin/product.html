@@ -179,7 +179,7 @@
                         } else {
                             var url = window.URL.createObjectURL(blob);
                             // 3.创建一个临时的url指向blob对象
-                            var fileName = '产品_' + timeFormat(new Date(), "yyyyM    MddHHmmss") + ".xlsx";
+                            var fileName = '产品_' + timeFormat(new Date(), "yyyyMMddHHmmss") + ".xlsx";
                             // 4.创建url之后可以模拟对此文件对象的一系列操作，例如：预览、下载
                             const a = document.createElement('a');
                             a.href = url;

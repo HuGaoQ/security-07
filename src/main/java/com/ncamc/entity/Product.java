@@ -58,16 +58,17 @@ public class Product implements Serializable {
     /**
      * 日期
      */
+
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
-    private String newDate;
+    private Date newDate;
 
     /**
      * 当前时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "GMT+8")
-    private String newTime;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    private Date newTime;
 
-    public Product(Integer id, String prdName, String prdDm, String net, String fbalance, String favalable, String insName, String insDm, String newDate, String newTime) {
+    public Product(Integer id, String prdName, String prdDm, String net, String fbalance, String favalable, String insName, String insDm, Date newDate, Date newTime) {
         this.id = id;
         this.prdName = prdName;
         this.prdDm = prdDm;

@@ -73,6 +73,8 @@ public class ProductController {
     @PostMapping("/add")
     public ResponseResult add(@RequestBody Product product) {
         try {
+            product.setNewDate(new Date());
+            product.setNewTime(new Date());
             boolean b = productService.save(product);
             if (b) {
                 product = productService.selectByPrimaryKey(product.getId());
@@ -178,7 +180,6 @@ public class ProductController {
 
         byte[] reviewBytes = generatorProductProspectRecordFile(list);
         WebUtils.out(request, response, reviewBytes, fileName, Boolean.TRUE);
-
     }
 
     public static byte[] generatorProductProspectRecordFile(List<Product> resultList) throws Exception {
