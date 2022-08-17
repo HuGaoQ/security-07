@@ -22,11 +22,6 @@
     </repositories>
 
     <dependencies>
-<!--        <dependency>-->
-<!--            <groupId>e-iceblue</groupId>-->
-<!--            <artifactId>spire.xls</artifactId>-->
-<!--            <version>4.2.0</version>-->
-<!--        </dependency>-->
         <!--Spire.Doc-->
         <dependency>
             <groupId>e-iceblue</groupId>
