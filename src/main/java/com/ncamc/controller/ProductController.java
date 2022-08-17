@@ -339,7 +339,7 @@ public class ProductController {
         style.setFont(titleFont);
 
         //set background color
-        style.setFillBackgroundColor(new XSSFColor(Color.GRAY));
+//        style.setFillBackgroundColor(new XSSFColor(Color.GRAY));
         return style;
     }
 
@@ -368,8 +368,9 @@ public class ProductController {
         style.setBottomBorderColor(new XSSFColor(Color.BLACK));
         style.setLeftBorderColor(new XSSFColor(Color.BLACK));
         style.setRightBorderColor(new XSSFColor(Color.BLACK));
+
         //set background color
-        style.setFillBackgroundColor(new XSSFColor(Color.LIGHT_GRAY));
+//        style.setFillBackgroundColor(new XSSFColor(Color.LIGHT_GRAY));
 
         return style;
     }
