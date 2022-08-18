@@ -73,8 +73,12 @@ public class ProductController {
     @PostMapping("/add")
     public ResponseResult add(@RequestBody Product product) {
         try {
-            product.setNewDate(new Date());
-            product.setNewTime(new Date());
+            SimpleDateFormat newDate = new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat newTime = new SimpleDateFormat("HH:mm:ss");
+            List<Product> products =  productService.list();
+            product.setId(products.size()+1);
+            product.setNewDate(newDate.format(new Date()));
+            product.setNewTime(newTime.format(new Date()));
             boolean b = productService.save(product);
             if (b) {
                 product = productService.selectByPrimaryKey(product.getId());

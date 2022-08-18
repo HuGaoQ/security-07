@@ -10,6 +10,7 @@ import com.ncamc.mapper.UserMapper;
 import com.ncamc.service.LoginService;
 import com.ncamc.utils.JwtUtils;
 import com.ncamc.utils.RedisCache;
+import io.swagger.models.auth.In;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,7 +22,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -53,15 +56,19 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements L
         try {
             responseResult = null;
             if (!StringUtils.isEmpty(user)) {
+                SimpleDateFormat createTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                SimpleDateFormat loginTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                List<User> users = userMapper.selectList(null);
                 user.setPassword(passwordEncoder.encode(user.getPassword()));
-                user.setCreateTime(new Date());
-                user.setLoginTime(new Date());
+                user.setCreateTime(createTime.format(new Date()));
+                user.setLoginTime(loginTime.format(new Date()));
+                user.setId(Long.parseLong(String.valueOf(users.size()+1)));
                 userMapper.insert(user);
-                responseResult = new ResponseResult(HttpStatus.OK.value(), "添加成功");
+                responseResult = new ResponseResult(HttpStatus.OK.value(), "入住成功");
             }
         } catch (Exception e) {
             e.printStackTrace();
-            responseResult = new ResponseResult(HttpStatus.INTERNAL_SERVER_ERROR.value(), "添加失败", null);
+            responseResult = new ResponseResult(HttpStatus.INTERNAL_SERVER_ERROR.value(), "入住失败", null);
         }
 
         return responseResult;

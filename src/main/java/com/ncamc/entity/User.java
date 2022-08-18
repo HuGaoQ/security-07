@@ -23,11 +23,9 @@ public class User implements Serializable {
 
     private String password;
 
-    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
-    private Date createTime;
+    private String createTime;
 
-    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
-    private Date loginTime;
+    private String loginTime;
 
     private Integer number;
 
