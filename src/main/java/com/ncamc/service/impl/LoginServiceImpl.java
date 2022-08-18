@@ -55,6 +55,7 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements L
         try {
             responseResult = null;
             if (!StringUtils.isEmpty(user)) {
+                new SimpleDateFormat();
                 SimpleDateFormat createTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 SimpleDateFormat loginTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 List<User> users = userMapper.selectList(null);
