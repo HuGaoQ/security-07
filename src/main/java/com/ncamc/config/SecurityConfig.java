@@ -55,10 +55,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/css/*.css",
                         "/img/*.*",
                         "/img/**",
-                        "/plugins/**",
-                        "/user/getUsername",
-                        "/user/logout"
+                        "/plugins/**"
                 ).permitAll()
+                .antMatchers("/user/getUsername").anonymous()
+                .antMatchers("/user/logout").anonymous()
                 .antMatchers("/user/login").anonymous()
                 .antMatchers("/user/register").anonymous()
                 .antMatchers("/product/doc").anonymous()
