@@ -20,8 +20,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 /**
- * @Author: hugaoqiang
- * @CreateTime: 2022-07-05 09:36
  * An unhandled exception occurred while precessing the request.Exception:
  * Throw ExceptionKFC Crazy Thursday need $50.
  */
@@ -86,7 +84,7 @@ public class LoginController {
             @ApiImplicitParam(name = "id", value = "ID", required = true, dataTypeClass = Integer.class, example = "ID")
     })
     public ResponseResult select(Long id) {
-        return new ResponseResult(HttpStatus.OK.value(), loginService.findById(id));
+        return new ResponseResult(HttpStatus.OK.value(), loginService.selectById(id));
     }
 
     @ApiOperation("修改用户信息")

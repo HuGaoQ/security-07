@@ -3,8 +3,7 @@ package com.ncamc.schedule;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * @Author: hugaoqiang
- * @CreateTime: 2022-08-04 11:13
+ * 测试启动定时任务
  */
 @Slf4j
 public class ScheduleTask implements Runnable {

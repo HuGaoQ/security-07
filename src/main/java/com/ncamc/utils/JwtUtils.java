@@ -10,6 +10,9 @@ import org.joda.time.DateTime;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 
+/**
+ * Jwt 工具类
+ */
 public class JwtUtils {
 
     /**

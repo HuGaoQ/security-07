@@ -11,6 +11,9 @@ import java.io.File;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 
+/**
+ * 生成公钥撕咬
+ */
 @Component
 @ConfigurationProperties(prefix = "ncamc.jwt")
 public class JwtProperties {

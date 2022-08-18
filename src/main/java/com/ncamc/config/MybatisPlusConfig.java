@@ -8,6 +8,9 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * Mybatis配置
+ */
 @Configuration
 @MapperScan("com.ncamc.mapper")
 public class MybatisPlusConfig {

@@ -5,6 +5,9 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.UUID;
 
+/**
+ * Md5 工具类
+ */
 public class CodeUtile {
 
     public static String md5Hex(String data, String salt) {

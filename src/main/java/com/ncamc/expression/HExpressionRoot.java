@@ -7,6 +7,9 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+/**
+ * 自定义权限
+ */
 @Component("H")
 public class HExpressionRoot {
 

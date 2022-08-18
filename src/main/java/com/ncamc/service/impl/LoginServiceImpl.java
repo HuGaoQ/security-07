@@ -49,13 +49,17 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements L
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
+    /**
+     * 注册用户
+     * @param user
+     * @return
+     */
     @Override
     public ResponseResult register(User user) {
         ResponseResult responseResult = null;
         try {
             responseResult = null;
             if (!StringUtils.isEmpty(user)) {
-                new SimpleDateFormat();
                 SimpleDateFormat createTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 SimpleDateFormat loginTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 List<User> users = userMapper.selectList(null);
@@ -74,6 +78,11 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements L
         return responseResult;
     }
 
+    /**
+     * 登录
+     * @param users
+     * @return
+     */
     @SneakyThrows
     @Override
     public ResponseResult login(User users) {
@@ -104,6 +113,11 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements L
         return responseResult;
     }
 
+    /**
+     * 获取用户名称
+     * @param request
+     * @return
+     */
     @Override
     public ResponseResult getUsername(HttpServletRequest request) {
 //        String token = request.getHeader("token");
@@ -126,11 +140,11 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements L
         return new ResponseResult(HttpStatus.OK.value(), "查询成功", loginUser.getUser().getUsername());
     }
 
-    @Override
-    public User selectById(Long id) {
-        return userMapper.selectById(id);
-    }
-
+    /**
+     * 分页查询用户
+     * @param params
+     * @return
+     */
     @Override
     public ResponseResult listPage(Map<String, Object> params) {
         Page<User> page = null;
@@ -150,11 +164,21 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements L
         }
     }
 
+    /**
+     * 根据ID查询该用户
+     * @param id
+     * @return
+     */
     @Override
-    public Object findById(Long id) {
+    public User selectById(Long id) {
         return userMapper.selectById(id);
     }
 
+    /**
+     * 根据ID删除该条数据
+     * @param id
+     * @return
+     */
     @Override
     public Object deleteByPrimaryKey(Long id) {
         if (id != null) {
@@ -163,6 +187,11 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements L
         return 0;
     }
 
+    /**
+     * 退出
+     * @param request
+     * @return
+     */
     @Override
     public ResponseResult exit(HttpServletRequest request) {
         ResponseResult responseResult = null;

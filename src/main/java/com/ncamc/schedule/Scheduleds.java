@@ -14,8 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ScheduledFuture;
 
 /**
- * @Author: hugaoqiang
- * @CreateTime: 2022-08-04 10:40
+ * 开启定时任务
  */
 @Slf4j
 @Component

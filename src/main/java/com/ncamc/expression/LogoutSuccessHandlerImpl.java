@@ -20,8 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * @Author: hugaoqiang
- * @CreateTime: 2022-07-07 16:53
+ * 自定义退出处理类
  */
 @Configuration
 public class LogoutSuccessHandlerImpl implements LogoutSuccessHandler {

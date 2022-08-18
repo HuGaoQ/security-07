@@ -15,8 +15,7 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * @Author: hugaoqiang
- * @CreateTime: 2022-07-05 10:38
+ * 自定义用户登录
  */
 @Service
 public class UserDetailsServicesImpl implements UserDetailsService {

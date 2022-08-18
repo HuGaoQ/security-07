@@ -32,6 +32,11 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
     @Autowired
     private RedisCache redisCache;
 
+    /**
+     * 查询分页信息
+     * @param params
+     * @return
+     */
     @Override
     public ResponseResult listPage(Map<String, Object> params) {
         Page<Product> page = null;
@@ -51,11 +56,21 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         }
     }
 
+    /**
+     * 根据ID查询该产品信息
+     * @param id
+     * @return
+     */
     @Override
     public Product selectByPrimaryKey(Integer id) {
         return productMapper.selectById(id);
     }
 
+    /**
+     * 根据ID查询该产品信息
+     * @param id
+     * @return
+     */
     @Override
     public Product findById(Long id) {
         Product product = null;
@@ -72,6 +87,11 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         return product;
     }
 
+    /**
+     * 根据ID删除该产品
+     * @param id
+     * @return
+     */
     @Override
     public Integer deleteByPrimaryKey(Long id) {
         if (id != null) {

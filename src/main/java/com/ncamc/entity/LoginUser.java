@@ -9,10 +9,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * @Author: hugaoqiang
- * @CreateTime: 2022-07-05 10:31
- */
 @Data
 public class LoginUser implements UserDetails {
 

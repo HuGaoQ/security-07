@@ -5,8 +5,7 @@ import java.util.Collection;
 import java.util.Iterator;
 
 /**
- * @Author: hugaoqiang
- * @CreateTime: 2022-07-18 16:16
+ * Collection 工具类
  */
 public class CollectionUtils {
 
@@ -22,7 +21,6 @@ public class CollectionUtils {
                     difference.add(item);
                 }
             }
-
             return difference;
         } else {
             return c1;
