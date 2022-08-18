@@ -338,8 +338,6 @@ public class ProductController {
         titleFont.setFontHeightInPoints((short) 15);
         style.setFont(titleFont);
 
-        //set background color
-//        style.setFillBackgroundColor(new XSSFColor(Color.GRAY));
         return style;
     }
 
@@ -368,9 +366,6 @@ public class ProductController {
         style.setBottomBorderColor(new XSSFColor(Color.BLACK));
         style.setLeftBorderColor(new XSSFColor(Color.BLACK));
         style.setRightBorderColor(new XSSFColor(Color.BLACK));
-
-        //set background color
-//        style.setFillBackgroundColor(new XSSFColor(Color.LIGHT_GRAY));
 
         return style;
     }
