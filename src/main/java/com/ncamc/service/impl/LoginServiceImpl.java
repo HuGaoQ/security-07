@@ -10,7 +10,6 @@ import com.ncamc.mapper.UserMapper;
 import com.ncamc.service.LoginService;
 import com.ncamc.utils.JwtUtils;
 import com.ncamc.utils.RedisCache;
-import io.swagger.models.auth.In;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
