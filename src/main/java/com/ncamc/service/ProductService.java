@@ -10,6 +10,13 @@ import java.util.Map;
 public interface ProductService extends IService<Product> {
 
     /**
+     * 多表分页模糊条件查询
+     * @param params
+     * @return
+     */
+    ResponseResult getProductList(Map<String, Object> params);
+
+    /**
      * 查询分页信息
      * @param params
      * @return

@@ -58,6 +58,18 @@ public class ProductController {
 
     public static final String CACHE_KEY_USER = "user:";
 
+    @ApiOperation("多表分页模糊条件查询")
+    @PostMapping("/list")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "pageNo", value = "当前页", required = true, dataTypeClass = Integer.class, example = "当前页"),
+            @ApiImplicitParam(name = "pageSize", value = "当前页条数", required = true, dataTypeClass = Integer.class, example = "当前页条数"),
+            @ApiImplicitParam(name = "username", value = "用户名", defaultValue = "", dataTypeClass = String.class, example = "用户名"),
+            @ApiImplicitParam(name = "id", value = "ID", defaultValue = "", dataTypeClass = Integer.class, example = "ID")
+    })
+    public ResponseResult getProductList(@RequestBody Map<String, Object> params){
+        return productService.getProductList(params);
+    }
+
     @ApiOperation("查询分页信息")
     @PostMapping("/list")
     @ApiImplicitParams({
