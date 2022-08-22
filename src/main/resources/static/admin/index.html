@@ -395,7 +395,6 @@
         },
         created() {
             axios.get("/user/getUsername").then(res => {
-                alert(res.data.data)
                 $("#name").html(res.data.data)
                 $("#names").html(res.data.data)
                 $("#namess").html(res.data.data)

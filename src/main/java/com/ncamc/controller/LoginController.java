@@ -49,7 +49,6 @@ public class LoginController {
 
     @ApiOperation("注册")
     @PostMapping("/register")
-//    @PreAuthorize("hasAuthority('system:dept:list')")
     public ResponseResult register(User user) {
         return loginService.register(user);
     }

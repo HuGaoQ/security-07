@@ -5,6 +5,7 @@ import com.ncamc.entity.LoginUser;
 import com.ncamc.entity.User;
 import com.ncamc.mapper.MenusMapperss;
 import com.ncamc.mapper.UserMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -17,6 +18,7 @@ import java.util.Objects;
 /**
  * 自定义用户登录
  */
+@Slf4j
 @Service
 public class UserDetailsServicesImpl implements UserDetailsService {
 

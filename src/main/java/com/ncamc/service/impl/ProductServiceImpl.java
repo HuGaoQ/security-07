@@ -13,6 +13,7 @@ import com.ncamc.entity.User;
 import com.ncamc.mapper.ProductMapper;
 import com.ncamc.service.ProductService;
 import com.ncamc.utils.RedisCache;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,6 +25,7 @@ import java.util.*;
  * @Author: hugaoqiang
  * @CreateTime: 2022-07-08 09:55
  */
+@Slf4j
 @Service
 public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> implements ProductService {
 

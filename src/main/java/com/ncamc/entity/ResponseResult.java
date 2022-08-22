@@ -7,10 +7,19 @@ import org.springframework.http.HttpStatus;
 @Data
 public class ResponseResult {
 
+    /**
+     * 状态码
+     */
     private Integer code;
 
+    /**
+     * 错误信息
+     */
     private String message;
 
+    /**
+     * 数据
+     */
     private Object data;
 
     public ResponseResult() {

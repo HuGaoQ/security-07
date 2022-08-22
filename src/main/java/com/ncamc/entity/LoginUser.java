@@ -12,10 +12,19 @@ import java.util.stream.Collectors;
 @Data
 public class LoginUser implements UserDetails {
 
+    /**
+     * 用户信息
+     */
     private User user;
 
+    /**
+     * 权限
+     */
     private List<String> permission;
 
+    /**
+     * 权限
+     */
     private List<SimpleGrantedAuthority> authorities;
 
     public LoginUser(User user, List<String> permission) {

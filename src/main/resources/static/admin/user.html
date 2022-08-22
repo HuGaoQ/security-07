@@ -59,8 +59,8 @@
                         <input id="selall" type="checkbox" class="icheckbox_square-blue">
                     </th>
                     <th class="sorting_asc">编号</th>
-                    <th class="sorting_asc">用户</th>
                     <th class="sorting_asc">用户名</th>
+                    <th class="sorting_asc">用户</th>
                     <th class="sorting_asc">创建时间</th>
                     <th class="text-center">登陆时间</th>
                     <th class="text-center">登录次数</th>
@@ -137,9 +137,9 @@
                 }
 
                 axios.post("/user/list", {
-                    username: that.username,
                     pageNo: that.pageNo,
-                    pageSize: that.pageSize
+                    pageSize: that.pageSize,
+                    username: that.username
                 }).then(function (d) {
                     if (d.data.code == 401) {
                         alert(d.data.message)

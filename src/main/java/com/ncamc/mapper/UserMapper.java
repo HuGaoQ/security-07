@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ncamc.entity.User;
 
 public interface UserMapper extends BaseMapper<User> {
-
     /**
      * 修改登录次数
      * @param number

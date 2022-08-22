@@ -155,6 +155,7 @@
                 }).then(function (d) {
                     if (d.data.code == 401) {
                         alert(d.data.message)
+                        location.href = "/login.html"
                     } else if (d.data.code == 403) {
                         alert(d.data.message)
                     } else {

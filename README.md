@@ -1,6 +1,8 @@
 ### 存在的bug:
 #    token:1.存放不到index.html页面
 #          2.user/getUsername和user/exit两个接口的token获取不到需要手动写入(去SessionStorage中去拿)
+#    user.html:点击查询pageNo传不到后台(可以先手动设置pageNo进行测试但是查询只会查询pageNo设置的当前页)
+#    product.html:点击查询pageNo传不到后台(可以先手动设置pageNo进行测试但是查询只会查询pageNo设置的当前页)
 
 ### 架构: SpringBoot+security+mybatisPlus+redis+mysql5.7+jwt
 ### jdk: 1.8

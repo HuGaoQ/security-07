@@ -59,7 +59,7 @@ public class ProductController {
     public static final String CACHE_KEY_USER = "user:";
 
     @ApiOperation("多表分页模糊条件查询")
-    @PostMapping("/list")
+    @PostMapping("/lists")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "pageNo", value = "当前页", required = true, dataTypeClass = Integer.class, example = "当前页"),
             @ApiImplicitParam(name = "pageSize", value = "当前页条数", required = true, dataTypeClass = Integer.class, example = "当前页条数"),

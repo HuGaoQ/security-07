@@ -11,6 +11,8 @@ import com.ncamc.service.LoginService;
 import com.ncamc.utils.JwtUtils;
 import com.ncamc.utils.RedisCache;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -31,6 +33,7 @@ import java.util.Objects;
  * @Author: hugaoqiang
  * @CreateTime: 2022-07-05 10:26
  */
+@Slf4j
 @Service
 public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements LoginService {
 
@@ -121,7 +124,7 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements L
     @Override
     public ResponseResult getUsername(HttpServletRequest request) {
 //        String token = request.getHeader("token");
-        String token = "eyJhbGciOiJSUzI1NiJ9.eyJpZCI6IjIiLCJleHAiOjE2NjAyNzMzMDd9.DooHGb0umAw6D6-3DWVdnMgnuAiDwPehaw-4l8NHhPgO2k-QTAc-Jld92JLI56Pkea5lulnLohSf1_9WTfKMGFj4N-rJiSZCNcIqmJinteorTrsnmxLC513kDfbq81mrgc636up2QqTtkAiRiHUS5YeMeryZE3VlAb3Trizw1YU";
+        String token = "eyJhbGciOiJSUzI1NiJ9.eyJpZCI6IjIiLCJleHAiOjE2NjExMzUzNTh9.b0-ftYrb5AkCbDFC3Uf7VcQX4I6C1mTdVr6rVd4aENsb9h19rlwphU9KW5YBH5rwRh-lDU0Q2_7fpO65pxeRE65Amy-Fv8Wv5LHx7A4IRsXgqkhSGCZwDT3FWvlOEaZGYNWFYWC7MF88YSQ5m3nSzh9ijqq0IsPGkNsiU8bCiOs";
         if (!StringUtils.hasText(token)) {
             throw new RuntimeException("认证失败");
         }
@@ -148,6 +151,7 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements L
     @Override
     public ResponseResult listPage(Map<String, Object> params) {
         Page<User> page = null;
+//        Integer pageNo = 1;
         Integer pageNo = Integer.parseInt(params.get("pageNo").toString());
         Integer pageSize = Integer.parseInt(params.get("pageSize").toString());
         if (ObjectUtils.isEmpty(params.get("username").toString())) {
@@ -158,7 +162,7 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements L
             String username = params.get("username").toString();
             page = new Page<>(pageNo, pageSize);
             LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
-            wrapper.like(StringUtils.isEmpty(username), User::getUsername, username).or().like(StringUtils.isEmpty(username), User::getUsername, username);
+            wrapper.like(User::getUsername, username);
             userMapper.selectPage(page, wrapper);
             return new ResponseResult(HttpStatus.OK.value(), "查询成功", new Pages<>(page.getPages(), page.getTotal(), page.getRecords()));
         }
@@ -196,7 +200,7 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements L
     public ResponseResult exit(HttpServletRequest request) {
         ResponseResult responseResult = null;
 //        String token = request.getHeader("token");
-        String token = "eyJhbGciOiJSUzI1NiJ9.eyJpZCI6IjIiLCJleHAiOjE2NjAyNzMzMDd9.DooHGb0umAw6D6-3DWVdnMgnuAiDwPehaw-4l8NHhPgO2k-QTAc-Jld92JLI56Pkea5lulnLohSf1_9WTfKMGFj4N-rJiSZCNcIqmJinteorTrsnmxLC513kDfbq81mrgc636up2QqTtkAiRiHUS5YeMeryZE3VlAb3Trizw1YU";
+        String token = "eyJhbGciOiJSUzI1NiJ9.eyJpZCI6IjIiLCJleHAiOjE2NjExMzUzNTh9.b0-ftYrb5AkCbDFC3Uf7VcQX4I6C1mTdVr6rVd4aENsb9h19rlwphU9KW5YBH5rwRh-lDU0Q2_7fpO65pxeRE65Amy-Fv8Wv5LHx7A4IRsXgqkhSGCZwDT3FWvlOEaZGYNWFYWC7MF88YSQ5m3nSzh9ijqq0IsPGkNsiU8bCiOs";
         if (!StringUtils.hasText(token)) {
             throw new RuntimeException("认证失败");
         }
