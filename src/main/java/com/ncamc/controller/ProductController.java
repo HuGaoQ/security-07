@@ -199,8 +199,6 @@ public class ProductController {
     }
 
     public static byte[] generatorProductProspectRecordFile(List<Product> resultList) throws Exception {
-        SimpleDateFormat newDate = new SimpleDateFormat("yyyy-MM-dd");
-        SimpleDateFormat newTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         //创建工作薄
         XSSFWorkbook wk = new XSSFWorkbook();
         //创建表单
@@ -303,11 +301,11 @@ public class ProductController {
             curCell7.setCellStyle(contextStyle);
             //日期
             XSSFCell curCell8 = curRow.createCell(8);
-            curCell8.setCellValue(newDate.format(product.getNewDate()));
+            curCell8.setCellValue(product.getNewDate());
             curCell8.setCellStyle(contextStyle);
             //当前时间
             XSSFCell curCell9 = curRow.createCell(9);
-            curCell9.setCellValue(newTime.format(product.getNewTime()));
+            curCell9.setCellValue(product.getNewTime());
             curCell9.setCellStyle(contextStyle);
         }
 

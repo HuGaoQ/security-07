@@ -30,6 +30,8 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     @Autowired
     private RedisCache redisCache;
 
+    public static final String LOGIN_USER = "login_user:";
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String token = request.getHeader("token");
@@ -44,7 +46,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             e.printStackTrace();
             throw new RuntimeException("token非法");
         }
-        String key = "login:" + uid;
+        String key = LOGIN_USER + uid;
         LoginUser loginUser = redisCache.getCacheObject(key);
         if (Objects.isNull(loginUser)) {
             throw new RuntimeException("没有该用户请从新登录");

@@ -52,6 +52,9 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements L
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
+    public static final String LOGIN_TOKEN = "login_token:";
+    public static final String LOGIN_USER = "login_user:";
+
     /**
      * 注册用户
      * @param user
@@ -102,8 +105,9 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements L
                 userMapper.updateNumberById(user.getNumber(), user.getId());
                 String uid = loginUser.getUser().getId().toString();
                 String token = JwtUtils.generateToken(uid, jwtProperties.getPrivateKey(), jwtProperties.getExpire());
-                String key = "login:" + uid;
+                String key = LOGIN_USER+uid;
                 redisCache.setCacheObject(key, loginUser);
+                redisCache.setCacheObject(LOGIN_TOKEN, token);
                 responseResult = new ResponseResult(HttpStatus.OK.value(), "登录成功", token);
             } else {
                 user.setStatus("1");
@@ -123,8 +127,7 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements L
      */
     @Override
     public ResponseResult getUsername(HttpServletRequest request) {
-//        String token = request.getHeader("token");
-        String token = "eyJhbGciOiJSUzI1NiJ9.eyJpZCI6IjIiLCJleHAiOjE2NjExMzUzNTh9.b0-ftYrb5AkCbDFC3Uf7VcQX4I6C1mTdVr6rVd4aENsb9h19rlwphU9KW5YBH5rwRh-lDU0Q2_7fpO65pxeRE65Amy-Fv8Wv5LHx7A4IRsXgqkhSGCZwDT3FWvlOEaZGYNWFYWC7MF88YSQ5m3nSzh9ijqq0IsPGkNsiU8bCiOs";
+        String token = redisCache.getCacheObject(LOGIN_TOKEN);
         if (!StringUtils.hasText(token)) {
             throw new RuntimeException("认证失败");
         }
@@ -135,7 +138,7 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements L
             e.printStackTrace();
             throw new RuntimeException("token非法");
         }
-        String key = "login:" + uid;
+        String key = LOGIN_USER + uid;
         LoginUser loginUser = redisCache.getCacheObject(key);
         if (Objects.isNull(loginUser)) {
             throw new RuntimeException("没有该用户请从新登录");
@@ -199,8 +202,7 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements L
     @Override
     public ResponseResult exit(HttpServletRequest request) {
         ResponseResult responseResult = null;
-//        String token = request.getHeader("token");
-        String token = "eyJhbGciOiJSUzI1NiJ9.eyJpZCI6IjIiLCJleHAiOjE2NjExMzUzNTh9.b0-ftYrb5AkCbDFC3Uf7VcQX4I6C1mTdVr6rVd4aENsb9h19rlwphU9KW5YBH5rwRh-lDU0Q2_7fpO65pxeRE65Amy-Fv8Wv5LHx7A4IRsXgqkhSGCZwDT3FWvlOEaZGYNWFYWC7MF88YSQ5m3nSzh9ijqq0IsPGkNsiU8bCiOs";
+        String token = redisCache.getCacheObject(LOGIN_TOKEN);
         if (!StringUtils.hasText(token)) {
             throw new RuntimeException("认证失败");
         }
@@ -212,7 +214,7 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements L
                 e.printStackTrace();
                 throw new RuntimeException("token非法");
             }
-            String key = "login:" + uid;
+            String key = LOGIN_USER + uid;
             redisCache.deleteObject(key);
             responseResult = new ResponseResult(HttpStatus.OK.value(), "退出成功");
         } catch (Exception e) {

@@ -1,6 +1,5 @@
 ### 存在的bug:
-#    token:1.存放不到index.html页面
-#          2.user/getUsername和user/exit两个接口的token获取不到需要手动写入(去SessionStorage中去拿)
+#    token:user/getUsername和user/exit两个接口的token是从redis中去取的
 #    user.html:点击查询pageNo传不到后台(可以先手动设置pageNo进行测试但是查询只会查询pageNo设置的当前页)
 #    product.html:点击查询pageNo传不到后台(可以先手动设置pageNo进行测试但是查询只会查询pageNo设置的当前页)
 
