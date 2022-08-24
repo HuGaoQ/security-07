@@ -86,7 +86,7 @@ public class ProductController {
     public ResponseResult add(@RequestBody Product product) {
         try {
             SimpleDateFormat newDate = new SimpleDateFormat("yyyy-MM-dd");
-            SimpleDateFormat newTime = new SimpleDateFormat("HH:mm:ss");
+            SimpleDateFormat newTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             List<Product> products =  productService.list();
             product.setId(products.size()+1);
             product.setNewDate(newDate.format(new Date()));

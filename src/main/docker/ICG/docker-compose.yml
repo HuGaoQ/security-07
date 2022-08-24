@@ -30,7 +30,6 @@ services:
       - /var/lib/docker/:/var/lib/docker:ro
 
   grafana:
-    user: "104"
     image: grafana/grafana
     user: "104"
     restart: always
