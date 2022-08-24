@@ -17,6 +17,7 @@
     <script src="../plugins/adminLTE/js/vue-2.6.10.js"></script>
     <script src="../plugins/adminLTE/js/axios.min.js"></script>
     <script src="../plugins/adminLTE/js/main.js"></script>
+    <script src="../plugins/adminLTE/js/jquery-2.1.0.min.js"></script>
 
 </head>
 
@@ -47,51 +48,82 @@
                     <div class="tab-pane active" id="home">
                         <div class="row data-type">
 
-                            <div class="col-md-2 title">产品名称</div>
+                            <div class="col-md-2 title"><font color="red">*</font>产品名称</div>
                             <div class="col-md-10 data">
-                                <input type="text" class="form-control" placeholder="产品名称" v-model="fromdata.prdName">
+                                <input type="text" class="form-control" placeholder="产品名称" v-model="fromdata.prdName"
+                                       @blur="prdName()" id="prdName">
                             </div>
 
-                            <div class="col-md-2 title">产品代码</div>
+                            <div class="col-md-2 title"></div>
                             <div class="col-md-10 data">
-                                <input type="text" class="form-control" placeholder="产品代码" v-model="fromdata.prdDm">
+                                <span><font color="red" id="spanPrdName"></font></span>
                             </div>
 
-                            <div class="col-md-2 title">净值</div>
+                            <div class="col-md-2 title"><font color="red">*</font>产品代码</div>
                             <div class="col-md-10 data">
-                                <input type="text" class="form-control" placeholder="净值" v-model="fromdata.net">
+                                <input type="text" class="form-control" placeholder="产品代码" v-model="fromdata.prdDm"
+                                       @blur="prdDm()" id="prdDm">
                             </div>
 
-                            <div class="col-md-2 title">份额</div>
+                            <div class="col-md-2 title"></div>
                             <div class="col-md-10 data">
-                                <input type="text" class="form-control" placeholder="份额" v-model="fromdata.fbalance">
+                                <span><font color="red" id="spanPrdDm"></font></span>
                             </div>
 
-                            <div class="col-md-2 title">金额</div>
+                            <div class="col-md-2 title"><font color="red">*</font>净值</div>
                             <div class="col-md-10 data">
-                                <input type="text" class="form-control" placeholder="金额" v-model="fromdata.favalable">
+                                <input type="text" class="form-control" placeholder="净值" v-model="fromdata.net"
+                                       @blur="net()" id="net">
                             </div>
 
-                            <div class="col-md-2 title">机构名称</div>
+                            <div class="col-md-2 title"></div>
                             <div class="col-md-10 data">
-                                <input type="text" class="form-control" placeholder="机构名称" v-model="fromdata.insName">
+                                <span><font color="red" id="spanNet"></font></span>
                             </div>
 
-                            <div class="col-md-2 title">机构代码</div>
+                            <div class="col-md-2 title"><font color="red">*</font>份额</div>
                             <div class="col-md-10 data">
-                                <input type="text" class="form-control" placeholder="机构代码" v-model="fromdata.insDm">
+                                <input type="text" class="form-control" placeholder="份额" v-model="fromdata.fbalance"
+                                       @blur="fbalance()" id="fbalance">
                             </div>
 
-<!--                            <div class="col-md-2 title">日期</div>-->
-<!--                            <div class="col-md-10 data">-->
-<!--                                <input type="date" class="form-control" placeholder="日期" v-model="fromdata.newDate">-->
-<!--                            </div>-->
+                            <div class="col-md-2 title"></div>
+                            <div class="col-md-10 data">
+                                <span><font color="red" id="spanFbalance"></font></span>
+                            </div>
 
-<!--                            <div class="col-md-2 title">当前时间</div>-->
-<!--                            <div class="col-md-10 data">-->
-<!--                                <input type="datetime-local" class="form-control" placeholder="当前时间"-->
-<!--                                       v-model="fromdata.newTime">-->
-<!--                            </div>-->
+                            <div class="col-md-2 title"><font color="red">*</font>金额</div>
+                            <div class="col-md-10 data">
+                                <input type="text" class="form-control" placeholder="金额" v-model="fromdata.favalable"
+                                       @blur="favalable()" id="favalable">
+                            </div>
+
+                            <div class="col-md-2 title"></div>
+                            <div class="col-md-10 data">
+                                <span><font color="red" id="spanFavalable"></font></span>
+                            </div>
+
+                            <div class="col-md-2 title"><font color="red">*</font>机构名称</div>
+                            <div class="col-md-10 data">
+                                <input type="text" class="form-control" placeholder="机构名称" v-model="fromdata.insName"
+                                       @blur="insName()" id="insName">
+                            </div>
+
+                            <div class="col-md-2 title"></div>
+                            <div class="col-md-10 data">
+                                <span><font color="red" id="spanInsName"></font></span>
+                            </div>
+
+                            <div class="col-md-2 title"><font color="red">*</font>机构代码</div>
+                            <div class="col-md-10 data">
+                                <input type="text" class="form-control" placeholder="机构代码" v-model="fromdata.insDm"
+                                       @blur="insDm()" id="insDm">
+                            </div>
+
+                            <div class="col-md-2 title"></div>
+                            <div class="col-md-10 data">
+                                <span><font color="red" id="spanInsDm"></font></span>
+                            </div>
 
                         </div>
                     </div>
@@ -115,7 +147,77 @@
             fromdata: {},
         },
         methods: {
-            add: function () {
+            prdName() {
+                var prdName = $("#prdName").val();
+                if (prdName.length > 0) {
+                    $("#prdName").css("border-color", "green")
+                    $("#spanPrdName").html("")
+                } else {
+                    $("#prdName").css("border-color", "red")
+                    $("#spanPrdName").html("该产品名称不能为空")
+                }
+            },
+            prdDm() {
+                var prdDm = $("#prdDm").val();
+                if (prdDm.length > 0) {
+                    $("#prdDm").css("border-color", "green")
+                    $("#spanPrdDm").html("")
+                } else {
+                    $("#prdDm").css("border-color", "red")
+                    $("#spanPrdDm").html("该产品代码不能为空")
+                }
+            },
+            net() {
+                var net = $("#net").val();
+                if (net.length > 0) {
+                    $("#net").css("border-color", "green")
+                    $("#spanNet").html("")
+                } else {
+                    $("#net").css("border-color", "red")
+                    $("#spanNet").html("该净值不能为空")
+                }
+            },
+            fbalance() {
+                var fbalance = $("#fbalance").val();
+                if (fbalance.length > 0) {
+                    $("#fbalance").css("border-color", "green")
+                    $("#spanFbalance").html("")
+                } else {
+                    $("#fbalance").css("border-color", "red")
+                    $("#spanFbalance").html("该份额不能为空")
+                }
+            },
+            favalable() {
+                var favalable = $("#favalable").val();
+                if (favalable.length > 0) {
+                    $("#favalable").css("border-color", "green")
+                    $("#spanFavalable").html("")
+                } else {
+                    $("#favalable").css("border-color", "red")
+                    $("#spanFavalable").html("该金额不能为空")
+                }
+            },
+            insName() {
+                var insName = $("#insName").val();
+                if (insName.length > 0) {
+                    $("#insName").css("border-color", "green")
+                    $("#spanInsName").html("")
+                } else {
+                    $("#insName").css("border-color", "red")
+                    $("#spanInsName").html("该机构名称不能为空")
+                }
+            },
+            insDm() {
+                var insDm = $("#insDm").val();
+                if (insDm.length > 0) {
+                    $("#insDm").css("border-color", "green")
+                    $("#spanInsDm").html("")
+                } else {
+                    $("#insDm").css("border-color", "red")
+                    $("#spanInsDm").html("该机构代码不能为空")
+                }
+            },
+            add() {
                 axios.post("/product/add", this.fromdata).then(res => {
                     console.log(res.data.code)
                     if (res.data.code == 401) {
