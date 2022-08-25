@@ -381,7 +381,10 @@ public class ProductController {
         style.setLeftBorderColor(new XSSFColor(Color.BLACK));
         style.setRightBorderColor(new XSSFColor(Color.BLACK));
 
+        XSSFFont xssfFont = workbook.createFont();
+        xssfFont.setFontName("Calibri");
+        style.setFont(xssfFont);
+
         return style;
     }
-
 }
