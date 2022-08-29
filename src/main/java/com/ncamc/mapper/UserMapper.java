@@ -22,4 +22,19 @@ public interface UserMapper extends BaseMapper<User> {
      */
     int updateStatusById(@Param("status") String status, @Param("id") Long id);
 
+    /**
+     * 修改登录次数
+     * @param number
+     * @param id
+     * @return
+     */
+    int chongZhiNumberById(@Param("number") Integer number, @Param("id") Long id);
+
+    /**
+     * 修改密码
+     * @param password
+     * @param id
+     */
+    void updatePasswordById(@Param("password") String password,@Param("id") Long id);
+
 }
