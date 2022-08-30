@@ -3,19 +3,18 @@ package com.ncamc.schedule;
 import com.ncamc.config.ApplicationContextProvider;
 import com.ncamc.entity.User;
 import com.ncamc.mapper.UserMapper;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 /**
- * 测试启动定时任务
+ * 自动检测用户是否被锁定
  */
 @Slf4j
-@Component
-public class ScheduleTask implements Runnable {
+public class Automatically implements Runnable {
 
     @Autowired
     private UserMapper userMapper;
@@ -26,11 +25,12 @@ public class ScheduleTask implements Runnable {
     /**
      * 获取Bean实例
      */
-    public ScheduleTask(){
+    public Automatically(){
         userMapper = ApplicationContextProvider.getBean(UserMapper.class);
         passwordEncoder = ApplicationContextProvider.getBean(PasswordEncoder.class);
     }
 
+    @SneakyThrows
     @Override
     public void run() {
         System.out.println("我是一个定时任务");

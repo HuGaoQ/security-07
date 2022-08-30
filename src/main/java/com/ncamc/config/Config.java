@@ -12,7 +12,9 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "scheduleinfo")
 public class Config {
 
-    //Test 定时任务
-    private String scheduletask;
+    /**
+     * 自动检测用户是否被锁定
+     */
+    private String Automatically;
 
 }
