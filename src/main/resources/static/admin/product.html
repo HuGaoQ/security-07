@@ -62,13 +62,13 @@
             <table id="dataList" class="table table-bordered table-striped table-hover dataTable">
                 <thead>
                 <tr>
-                    <th class="" style="padding-right:0px">
-                        <input id="selall" type="checkbox" class="icheckbox_square-blue">
+                    <th class="text-center" style="padding-right:0px">
+                        <input id="selall" type="checkbox" class="icheckbox_square-blue">全选
                     </th>
-                    <th class="sorting_asc">编号</th>
-                    <th class="sorting_asc">产品名称</th>
-                    <th class="sorting_asc">产品代码</th>
-                    <th class="sorting_asc">净值</th>
+                    <th class="text-center">编号</th>
+                    <th class="text-center">产品名称</th>
+                    <th class="text-center">产品代码</th>
+                    <th class="text-center">净值</th>
                     <th class="text-center">份额</th>
                     <th class="text-center">金额</th>
                     <th class="text-center">机构名称</th>
@@ -80,18 +80,18 @@
                 </thead>
                 <tbody>
                 <tr v-for="(item,i) in items">
-                    <td><input type="checkbox"></td>
-                    <td>{{i+1}}</td>
-                    <td>{{item.prdName}}</td>
-                    <td>{{item.prdDm}}</td>
-                    <td>{{item.net}}</td>
-                    <td>{{item.fbalance}}</td>
-                    <td>{{item.favalable}}</td>
-                    <td>{{item.insName}}</td>
-                    <td>{{item.insDm}}</td>
-                    <td>{{item.newDate}}</td>
-                    <td>{{item.newTime}}</td>
-                    <td class="text-right">
+                    <td class="text-center"><input type="checkbox"></td>
+                    <td class="text-center">{{i+1}}</td>
+                    <td class="text-center">{{item.prdName}}</td>
+                    <td class="text-center">{{item.prdDm}}</td>
+                    <td class="text-center">{{item.net}}</td>
+                    <td class="text-center">{{item.fbalance}}</td>
+                    <td class="text-center">{{item.favalable}}</td>
+                    <td class="text-center">{{item.insName}}</td>
+                    <td class="text-center">{{item.insDm}}</td>
+                    <td class="text-center">{{item.newDate}}</td>
+                    <td class="text-center">{{item.newTime}}</td>
+                    <td class="text-center">
                         <a @click="update(item.id)" class="btn btn-w-xs btn-round btn-info">修改</a>
                         <a @click="del(item.id)" class="btn btn-w-xs btn-round btn-info">删除</a>
                     </td>
