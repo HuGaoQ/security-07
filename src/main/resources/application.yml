@@ -1,5 +1,5 @@
 server:
-  port: 6001
+  port: 80
 
 spring:
   datasource:
@@ -15,6 +15,9 @@ spring:
 #    host: 192.168.163.131
 #    host: redis
     port: 6379
+  devtools:
+    restart:
+      enabled: true
 
 swagger:
   # 是否开启swagger
