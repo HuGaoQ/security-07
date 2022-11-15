@@ -21,11 +21,11 @@ public class ServletUtils {
 
     /**
      * 将字符串渲染到客户端
+     *
      * @param response 渲染对象
      * @param string   待渲染的字符串
-     * @return null
      */
-    public static String renderString(HttpServletResponse response, String string) {
+    public static void renderString(HttpServletResponse response, String string) {
         try {
             response.setStatus(200);
             response.setContentType("application/json");
@@ -34,7 +34,6 @@ public class ServletUtils {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return null;
     }
 
     /**
@@ -55,8 +54,7 @@ public class ServletUtils {
             e.printStackTrace();
             throw new RuntimeException("token非法");
         }
-        String key = "login:" + uid;
-        return key;
+        return "login:" + uid;
     }
 
 }

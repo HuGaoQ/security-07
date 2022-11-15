@@ -14,10 +14,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.util.StringUtils;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 /**
  * 自定义退出处理类
@@ -32,7 +30,7 @@ public class LogoutSuccessHandlerImpl implements LogoutSuccessHandler {
     private JwtProperties jwtProperties;
 
     @Override
-    public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+    public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
         String token = "eyJhbGciOiJSUzI1NiJ9.eyJpZCI6IjIiLCJleHAiOjE2NjAwMzYwMjJ9.kMl2tps9ZlE93wovktWfcYLSLJ-65yTUKy74NXXs8TTEY6Uw5w-6oMn-8zZvR7oNHOL7LSbG7_ENN9sbztl3FwWMy2Qdm_1Gk12NeOl7r7URmQCGSBoz-KKzMpOjcY4wWzFjY9tav6c4-7UFNMKyls6QCCGobbXviSdT0UMuOvw";
         if (!StringUtils.hasText(token)) {
             throw new RuntimeException("认证失败");

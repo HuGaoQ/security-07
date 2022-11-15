@@ -34,7 +34,6 @@ public class Automatically implements Runnable {
     @Override
     public void run() {
         try {
-            System.out.println("我是一个定时任务");
             List<User> users = userMapper.selectList(null);
             for (User user : users) {
                 String status = user.getStatus();

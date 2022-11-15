@@ -77,10 +77,11 @@ public class RedisCache {
 
     /**
      * 删除单个对象
+     *
      * @param key
      */
-    public boolean deleteObject(final String key) {
-        return redisTemplate.delete(key);
+    public void deleteObject(final String key) {
+        redisTemplate.delete(key);
     }
 
     /**

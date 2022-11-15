@@ -49,10 +49,9 @@ public class UserTest {
 
     /**
      * 生成token&&解析token
-     * @throws Exception
      */
     @Test
-    public void test3() throws Exception {
+    public void test3() {
         String token = JwtUtils.generateToken("1", jwtProperties.getPrivateKey(), jwtProperties.getExpire());
         Long id = JwtUtils.getInfoFromId(token, jwtProperties.getPublicKey());
         System.out.println(id);
@@ -68,14 +67,12 @@ public class UserTest {
 
     @Test
     public void test5() {
-        List<String> 当前部门 = new ArrayList<>();
         List<String> list1 = new ArrayList<>();
         list1.add("1");
         list1.add("2");
         list1.add("3");
         list1.add("4");
         list1.add("9");
-        List<String> 需要修改的部门 = new ArrayList<>();
         List<String> list2 = new ArrayList<>();
         list2.add("3");
         list2.add("4");

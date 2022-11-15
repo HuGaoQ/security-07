@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="">
 
 <head>
     <!-- 页面meta -->
@@ -50,47 +50,65 @@
 
                             <div class="col-md-2 title">产品名称</div>
                             <div class="col-md-10 data">
-                                <input type="text" class="form-control" placeholder="产品名称" v-model="fromdata.prdName">
+                                <label>
+                                    <input type="text" class="form-control" placeholder="产品名称" v-model="fromdata.prdName">
+                                </label>
                             </div>
 
                             <div class="col-md-2 title">产品代码</div>
                             <div class="col-md-10 data">
-                                <input type="text" class="form-control" readonly placeholder="产品代码" v-model="fromdata.prdDm">
+                                <label>
+                                    <input type="text" class="form-control" readonly placeholder="产品代码" v-model="fromdata.prdDm">
+                                </label>
                             </div>
 
                             <div class="col-md-2 title">净值</div>
                             <div class="col-md-10 data">
-                                <input type="text" class="form-control" readonly placeholder="净值" v-model="fromdata.net">
+                                <label>
+                                    <input type="text" class="form-control" readonly placeholder="净值" v-model="fromdata.net">
+                                </label>
                             </div>
 
                             <div class="col-md-2 title">份额</div>
                             <div class="col-md-10 data">
-                                <input type="text" class="form-control" readonly placeholder="份额" v-model="fromdata.fbalance">
+                                <label>
+                                    <input type="text" class="form-control" readonly placeholder="份额" v-model="fromdata.fbalance">
+                                </label>
                             </div>
 
                             <div class="col-md-2 title">金额</div>
                             <div class="col-md-10 data">
-                                <input type="text" class="form-control" readonly placeholder="金额" v-model="fromdata.favalable">
+                                <label>
+                                    <input type="text" class="form-control" readonly placeholder="金额" v-model="fromdata.favalable">
+                                </label>
                             </div>
 
                             <div class="col-md-2 title">机构名称</div>
                             <div class="col-md-10 data">
-                                <input type="text" class="form-control" placeholder="机构名称" v-model="fromdata.insName">
+                                <label>
+                                    <input type="text" class="form-control" placeholder="机构名称" v-model="fromdata.insName">
+                                </label>
                             </div>
 
                             <div class="col-md-2 title">机构代码</div>
                             <div class="col-md-10 data">
-                                <input type="text" class="form-control" readonly placeholder="机构代码" v-model="fromdata.insDm">
+                                <label>
+                                    <input type="text" class="form-control" readonly placeholder="机构代码" v-model="fromdata.insDm">
+                                </label>
                             </div>
 
                             <div class="col-md-2 title">日期</div>
                             <div class="col-md-10 data">
-                                <input type="date" class="form-control" readonly placeholder="日期" v-model="fromdata.newDate">
+                                <label>
+                                    <input type="date" class="form-control" readonly placeholder="日期" v-model="fromdata.newDate">
+                                </label>
                             </div>
 
                             <div class="col-md-2 title">当前时间</div>
                             <div class="col-md-10 data">
-                                <input type="datetime-local" class="form-control" readonly placeholder="当前时间" v-model="fromdata.newTime">
+                                <label>
+                                    <input type="datetime-local" class="form-control" readonly placeholder="当前时间" v-model="fromdata.newTime">
+                                </label>
                             </div>
 
                         </div>
@@ -109,7 +127,7 @@
 </div>
 </body>
 <script>
-    var id = getParameter("id");
+    let id = getParameter("id");
     new Vue({
         el: "#app",
         data: {
@@ -118,12 +136,12 @@
         methods: {
             update: function () {
                 axios.post("/product/update", this.fromdata).then(res => {
-                    if (res.data.code == 401) {
+                    if (res.data.code === 401) {
                         alert(res.data.data)
                         location.href = "/login.html";
-                    } else if (res.data.code == 403) {
+                    } else if (res.data.code === 403) {
                         alert(res.data.data)
-                    } else if (res.data.code == 200) {
+                    } else if (res.data.code === 200) {
                         location.href = "product.html";
                     } else {
                         alert(res.data.message)
@@ -138,9 +156,9 @@
                 }
             }).then(d => {
                 console.log(d)
-                 if (d.data.code == 403) {
+                 if (d.data.code === 403) {
                     alert(d.data.data)
-                } else if (d.data.code == 200) {
+                } else if (d.data.code === 200) {
                     this.fromdata = d.data.data
                 }
             })

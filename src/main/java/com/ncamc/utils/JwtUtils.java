@@ -21,9 +21,8 @@ public class JwtUtils {
      * @param privateKey    私钥
      * @param expireMinutes 过期时间，单位秒
      * @return
-     * @throws Exception
      */
-    public static String generateToken(User user, PrivateKey privateKey, int expireMinutes) throws Exception {
+    public static String generateToken(User user, PrivateKey privateKey, int expireMinutes) {
         return Jwts.builder()
                 .claim(JwtConstans.JWT_KEY_ID, user.getId())
                 .claim(JwtConstans.JWT_KEY_USER_NAME, user.getUsername())
@@ -38,9 +37,8 @@ public class JwtUtils {
      * @param privateKey    私钥
      * @param expireMinutes 过期时间，单位秒
      * @return
-     * @throws Exception
      */
-    public static String generateToken(String id, PrivateKey privateKey, int expireMinutes) throws Exception {
+    public static String generateToken(String id, PrivateKey privateKey, int expireMinutes) {
         return Jwts.builder()
                 .claim(JwtConstans.JWT_KEY_ID, id)
                 .setExpiration(DateTime.now().plusMinutes(expireMinutes).toDate())
@@ -93,9 +91,8 @@ public class JwtUtils {
      * @param token     用户请求中的令牌
      * @param publicKey 公钥
      * @return 用户信息
-     * @throws Exception
      */
-    public static User getInfoFromToken(String token, PublicKey publicKey) throws Exception {
+    public static User getInfoFromToken(String token, PublicKey publicKey) {
         Jws<Claims> claimsJws = parserToken(token, publicKey);
         Claims body = claimsJws.getBody();
         return new User(
@@ -109,9 +106,8 @@ public class JwtUtils {
      * @param token     用户请求中的令牌
      * @param publicKey 公钥
      * @return 用户信息
-     * @throws Exception
      */
-    public static Long getInfoFromId(String token, PublicKey publicKey) throws Exception {
+    public static Long getInfoFromId(String token, PublicKey publicKey) {
         Jws<Claims> claimsJws = parserToken(token, publicKey);
         Claims body = claimsJws.getBody();
         return ObjectUtils.toLong(body.get(JwtConstans.JWT_KEY_ID));

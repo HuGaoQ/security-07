@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="">
 
 <head>
     <!-- 页面meta -->
@@ -50,30 +50,40 @@
 
                             <div class="col-md-2 title">用户</div>
                             <div class="col-md-10 data">
-                                <input type="text" class="form-control" readonly placeholder="用户"
-                                       v-model="fromdata.nickName">
+                                <label>
+                                    <input type="text" class="form-control" readonly placeholder="用户"
+                                           v-model="fromdata.nickName">
+                                </label>
                             </div>
 
                             <div class="col-md-2 title">用户名</div>
                             <div class="col-md-10 data">
-                                <input type="text" class="form-control" readonly placeholder="用户名"
-                                       v-model="fromdata.username">
+                                <label>
+                                    <input type="text" class="form-control" readonly placeholder="用户名"
+                                           v-model="fromdata.username">
+                                </label>
                             </div>
 
                             <div class="col-md-2 title">密码</div>
                             <div class="col-md-10 data">
-                                <input type="password" class="form-control" placeholder="密码"
-                                       v-model="fromdata.password">
+                                <label>
+                                    <input type="password" class="form-control" placeholder="密码"
+                                           v-model="fromdata.password">
+                                </label>
                             </div>
 
                             <div class="col-md-2 title">登录次数</div>
                             <div class="col-md-10 data">
-                                <input type="text" class="form-control" placeholder="登录次数" v-model="fromdata.number">
+                                <label>
+                                    <input type="text" class="form-control" placeholder="登录次数" v-model="fromdata.number">
+                                </label>
                             </div>
 
                             <div class="col-md-2 title">状态</div>
                             <div class="col-md-10 data">
-                                <input type="text" class="form-control" placeholder="状态" v-model="fromdata.status">
+                                <label>
+                                    <input type="text" class="form-control" placeholder="状态" v-model="fromdata.status">
+                                </label>
                             </div>
 
                         </div>
@@ -92,7 +102,7 @@
 </div>
 </body>
 <script>
-    var id = getParameter("id");
+    let id = getParameter("id");
     new Vue({
         el: "#app",
         data: {
@@ -102,12 +112,12 @@
             update: function () {
                 axios.post("/user/update", this.fromdata).then(res => {
                     console.log(res.data.code)
-                    if (res.data.code == 401) {
+                    if (res.data.code === 401) {
                         alert(res.data.data)
                         location.href = "/login.html";
-                    } else if (res.data.code == 403) {
+                    } else if (res.data.code === 403) {
                         alert(res.data.data)
-                    } else if (res.data.code == 200) {
+                    } else if (res.data.code === 200) {
                         location.href = "user.html";
                     } else {
                         alert(res.data.message)
@@ -121,7 +131,7 @@
                     id: id
                 }
             }).then(d => {
-                if (d.data.code == 200) {
+                if (d.data.code === 200) {
                     this.fromdata = d.data.data
                 }else {
                     alert(d.data.message)

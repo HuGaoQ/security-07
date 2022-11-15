@@ -39,14 +39,12 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
 
     /**
      * 多表分页模糊条件查询
-     * @param params
-     * @return
      */
     @Override
     public ResponseResult getProductList(Map<String, Object> params) {
         Page<Product> res = null;
-        Integer pageNo = Integer.parseInt(params.get("pageNo").toString());
-        Integer pageSize = Integer.parseInt(params.get("pageSize").toString());
+        int pageNo = Integer.parseInt(params.get("pageNo").toString());
+        int pageSize = Integer.parseInt(params.get("pageSize").toString());
         String username = params.get("username").toString();
         Integer id = Integer.parseInt(params.get("id").toString());
 
@@ -74,32 +72,27 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
 
     /**
      * 查询分页信息
-     * @param params
-     * @return
      */
     @Override
     public ResponseResult listPage(Map<String, Object> params) {
         Page<Product> page = null;
-        Integer pageNo = Integer.parseInt(params.get("pageNo").toString());
-        Integer pageSize = Integer.parseInt(params.get("pageSize").toString());
+        int pageNo = Integer.parseInt(params.get("pageNo").toString());
+        int pageSize = Integer.parseInt(params.get("pageSize").toString());
         if (ObjectUtils.isEmpty(params.get("prdIns").toString())) {
             page = new Page<>(pageNo, pageSize);
             productMapper.selectPage(page, null);
-            return new ResponseResult(HttpStatus.OK.value(), "查询成功", new Pages<>(page.getPages(), page.getTotal(), page.getRecords()));
         } else {
             String prdIns = params.get("prdIns").toString();
             page = new Page<>(pageNo, pageSize);
             LambdaQueryWrapper<Product> wrapper = new LambdaQueryWrapper<>();
             wrapper.like(StringUtils.isNotBlank(prdIns), Product::getPrdName, prdIns).or().like(StringUtils.isNotBlank(prdIns), Product::getInsName, prdIns);
             productMapper.selectPage(page, wrapper);
-            return new ResponseResult(HttpStatus.OK.value(), "查询成功", new Pages<>(page.getPages(), page.getTotal(), page.getRecords()));
         }
+        return new ResponseResult(HttpStatus.OK.value(), "查询成功", new Pages<>(page.getPages(), page.getTotal(), page.getRecords()));
     }
 
     /**
      * 根据ID查询该产品信息
-     * @param id
-     * @return
      */
     @Override
     public Product selectByPrimaryKey(Integer id) {
@@ -108,8 +101,6 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
 
     /**
      * 根据ID查询该产品信息
-     * @param id
-     * @return
      */
     @Override
     public Product findById(Long id) {
@@ -119,7 +110,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         if (Objects.isNull(product)) {
             product = productMapper.selectById(id);
             if (Objects.isNull(product)) {
-                return product;
+                return null;
             } else {
                 redisCache.setCacheObject(key, product);
             }
@@ -129,8 +120,6 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
 
     /**
      * 根据ID删除该产品
-     * @param id
-     * @return
      */
     @Override
     public Integer deleteByPrimaryKey(Long id) {

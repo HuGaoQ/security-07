@@ -4,6 +4,7 @@ import com.ncamc.config.JwtProperties;
 import com.ncamc.entity.LoginUser;
 import com.ncamc.utils.JwtUtils;
 import com.ncamc.utils.RedisCache;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -33,7 +34,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     public static final String LOGIN_USER = "login_user:";
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull FilterChain filterChain) throws ServletException, IOException {
         String token = request.getHeader("token");
         if (!StringUtils.hasText(token)) {
             filterChain.doFilter(request, response);

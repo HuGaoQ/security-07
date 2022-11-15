@@ -70,7 +70,7 @@ public class LoginController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "pageNo", value = "当前页", required = true, dataTypeClass = Integer.class, example = "当前页"),
             @ApiImplicitParam(name = "pageSize", value = "当前页条数", required = true, dataTypeClass = Integer.class, example = "当前页条数"),
-            @ApiImplicitParam(name = "username", value = "用户名", defaultValue = "", dataTypeClass = String.class, example = "用户名")
+            @ApiImplicitParam(name = "username", value = "用户名", dataTypeClass = String.class, example = "用户名")
     })
     public ResponseResult list(@RequestBody Map<String, Object> params) {
         return loginService.listPage(params);

@@ -5,14 +5,16 @@ import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ncamc.config.JwtProperties;
-import com.ncamc.entity.*;
+import com.ncamc.entity.LoginUser;
+import com.ncamc.entity.Pages;
+import com.ncamc.entity.ResponseResult;
+import com.ncamc.entity.User;
 import com.ncamc.mapper.UserMapper;
 import com.ncamc.service.LoginService;
 import com.ncamc.utils.JwtUtils;
 import com.ncamc.utils.RedisCache;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -57,14 +59,11 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements L
 
     /**
      * 注册用户
-     * @param user
-     * @return
      */
     @Override
     public ResponseResult register(User user) {
         ResponseResult responseResult = null;
         try {
-            responseResult = null;
             if (!StringUtils.isEmpty(user)) {
                 SimpleDateFormat createTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 SimpleDateFormat loginTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -86,8 +85,6 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements L
 
     /**
      * 登录
-     * @param users
-     * @return
      */
     @SneakyThrows
     @Override
@@ -122,8 +119,6 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements L
 
     /**
      * 获取用户名称
-     * @param request
-     * @return
      */
     @Override
     public ResponseResult getUsername(HttpServletRequest request) {
@@ -148,33 +143,28 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements L
 
     /**
      * 分页查询用户
-     * @param params
-     * @return
      */
     @Override
     public ResponseResult listPage(Map<String, Object> params) {
         Page<User> page = null;
-//        Integer pageNo = 1;
-        Integer pageNo = Integer.parseInt(params.get("pageNo").toString());
-        Integer pageSize = Integer.parseInt(params.get("pageSize").toString());
+//        int pageNo = Integer.parseInt(params.get("pageNo").toString());
+        int pageNo = 1;
+        int pageSize = Integer.parseInt(params.get("pageSize").toString());
         if (ObjectUtils.isEmpty(params.get("username").toString())) {
             page = new Page<>(pageNo, pageSize);
             userMapper.selectPage(page, null);
-            return new ResponseResult(HttpStatus.OK.value(), "查询成功", new Pages<>(page.getPages(), page.getTotal(), page.getRecords()));
         } else {
             String username = params.get("username").toString();
             page = new Page<>(pageNo, pageSize);
             LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
             wrapper.like(User::getUsername, username);
             userMapper.selectPage(page, wrapper);
-            return new ResponseResult(HttpStatus.OK.value(), "查询成功", new Pages<>(page.getPages(), page.getTotal(), page.getRecords()));
         }
+        return new ResponseResult(HttpStatus.OK.value(), "查询成功", new Pages<>(page.getPages(), page.getTotal(), page.getRecords()));
     }
 
     /**
      * 根据ID查询该用户
-     * @param id
-     * @return
      */
     @Override
     public User selectById(Long id) {
@@ -183,8 +173,6 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements L
 
     /**
      * 根据ID删除该条数据
-     * @param id
-     * @return
      */
     @Override
     public Object deleteByPrimaryKey(Long id) {
@@ -196,8 +184,6 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements L
 
     /**
      * 退出
-     * @param request
-     * @return
      */
     @Override
     public ResponseResult exit(HttpServletRequest request) {

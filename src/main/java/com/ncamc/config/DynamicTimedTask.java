@@ -51,6 +51,7 @@ public class DynamicTimedTask {
     //    @Scheduled(cron = "0/10 * * * * ?")
     public void Automatically() {
         ScheduledFuture scheduledFuture = threadPoolTaskScheduler.schedule(new Automatically(), new CronTrigger(config.getAutomatically()));
+        assert scheduledFuture != null;
         map.put(UUID.randomUUID().toString(Boolean.TRUE), scheduledFuture);
     }
 

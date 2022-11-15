@@ -63,8 +63,8 @@ public class ProductController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "pageNo", value = "当前页", required = true, dataTypeClass = Integer.class, example = "当前页"),
             @ApiImplicitParam(name = "pageSize", value = "当前页条数", required = true, dataTypeClass = Integer.class, example = "当前页条数"),
-            @ApiImplicitParam(name = "username", value = "用户名", defaultValue = "", dataTypeClass = String.class, example = "用户名"),
-            @ApiImplicitParam(name = "id", value = "ID", defaultValue = "", dataTypeClass = Integer.class, example = "ID")
+            @ApiImplicitParam(name = "username", value = "用户名", dataTypeClass = String.class, example = "用户名"),
+            @ApiImplicitParam(name = "id", value = "ID", dataTypeClass = Integer.class, example = "ID")
     })
     public ResponseResult getProductList(@RequestBody Map<String, Object> params){
         return productService.getProductList(params);
@@ -75,7 +75,7 @@ public class ProductController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "pageNo", value = "当前页", required = true, dataTypeClass = Integer.class, example = "当前页"),
             @ApiImplicitParam(name = "pageSize", value = "当前页条数", required = true, dataTypeClass = Integer.class, example = "当前页条数"),
-            @ApiImplicitParam(name = "prdIns", value = "产品名称", defaultValue = "", dataTypeClass = String.class, example = "机构名称")
+            @ApiImplicitParam(name = "prdIns", value = "产品名称", dataTypeClass = String.class, example = "机构名称")
     })
     public ResponseResult list(@RequestBody Map<String, Object> params) {
         return productService.listPage(params);
@@ -376,10 +376,10 @@ public class ProductController {
         style.setBorderRight(BorderStyle.THIN);
         style.setBorderTop(BorderStyle.THIN);
         //set border color
-        style.setTopBorderColor(new XSSFColor(Color.BLACK));//设置文本边框颜色
-        style.setBottomBorderColor(new XSSFColor(Color.BLACK));
-        style.setLeftBorderColor(new XSSFColor(Color.BLACK));
-        style.setRightBorderColor(new XSSFColor(Color.BLACK));
+        style.setTopBorderColor(new XSSFColor((IndexedColorMap) Color.BLACK));//设置文本边框颜色
+        style.setBottomBorderColor(new XSSFColor((IndexedColorMap) Color.BLACK));
+        style.setLeftBorderColor(new XSSFColor((IndexedColorMap) Color.BLACK));
+        style.setRightBorderColor(new XSSFColor((IndexedColorMap) Color.BLACK));
         //set font
         XSSFFont xssfFont = workbook.createFont();
         xssfFont.setFontName("Calibri");

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:v-on="http://www.w3.org/1999/xhtml">
+<html xmlns:v-on="http://www.w3.org/1999/xhtml" lang="">
 
 <head>
     <!-- 页面meta -->
@@ -16,12 +16,6 @@
     <script src="../plugins/adminLTE/js/vue-2.6.10.js"></script>
     <script src="../plugins/adminLTE/js/axios.min.js"></script>
     <script src="../plugins/adminLTE/js/main.js"></script>
-
-    <style>
-        .bg {
-            background-color: #a7cbff;
-        }
-    </style>
 </head>
 
 <body class="hold-transition skin-red sidebar-mini">
@@ -54,7 +48,10 @@
             <!--工具栏/-->
             <div class="box-tools pull-right">
                 <div class="has-feedback">
-                    用户名：<input placeholder="用户名" v-model="username">
+                    <label>
+                        用户名：
+                        <input placeholder="用户名" v-model="username">
+                    </label>
                     <button class="btn btn-default" @click="getListPage()">查询</button>
                 </div>
             </div>
@@ -62,8 +59,9 @@
             <table id="dataList" class="table table-bordered table-striped table-hover dataTable">
                 <thead>
                 <tr>
-                    <th class="text-center" style="padding-right:0px">
-                        <input @click="selall()" id="a_All" type="checkbox" class="icheckbox_square-blue">全选
+                    <th class="text-center" style="padding-right:0">
+                        <input @click="selall()" id="a_All" type="checkbox" class="icheckbox_square-blue"><label
+                            for="a_All">全选</label>
                     </th>
                     <!--sorting_asc-->
                     <th class="text-center">编号</th>
@@ -78,7 +76,7 @@
                 </thead>
                 <tbody>
                 <tr v-for="(item,i) in items">
-                    <td class="text-center"><input type="checkbox" id="checkOne"></td>
+                    <td class="text-center"><label for="checkOne"></label><input type="checkbox" id="checkOne"></td>
                     <td class="text-center">{{i + 1}}</td>
                     <td class="text-center">{{item.nickName}}</td>
                     <td class="text-center">{{item.username}}</td>
@@ -130,19 +128,18 @@
         },
         methods: {
             selall: function () {
-                var allCheck = document.getElementById('a_All');
-                var oneChecks = document.querySelector('tbody').querySelectorAll('input');
+                let allCheck = document.getElementById('a_All');
+                let oneChecks = document.querySelector('tbody').querySelectorAll('input');
 
                 //全选点击事件，单选跟随全选
                 allCheck.onclick = function () {
-                    for (var i = 0; i < oneChecks.length; i++) {
+                    for (let i = 0; i < oneChecks.length; i++) {
                         oneChecks[i].checked = this.checked;
-                        // oneChecks[i].checked = true;
                     }
                 }
             },
             getListPage: function (num) {
-                var that = this;
+                let that = this;
                 that.pageNo = num;
 
                 if (that.pageNo <= 0) {
@@ -161,9 +158,9 @@
                     pageSize: that.pageSize,
                     username: that.username
                 }).then(function (d) {
-                    if (d.data.code == 401) {
+                    if (d.data.code === 401) {
                         alert(d.data.message)
-                    } else if (d.data.code == 403) {
+                    } else if (d.data.code === 403) {
                         alert(d.data.message)
                     } else {
                         that.items = d.data.data.data;
@@ -185,12 +182,12 @@
                         id: val
                     }
                 }).then(res => {
-                    if (res.data.code == 401) {
+                    if (res.data.code === 401) {
                         alert(res.data.message)
                         location.href = "/login.html";
-                    } else if (res.data.code == 403) {
+                    } else if (res.data.code === 403) {
                         alert(res.data.message)
-                    } else if (res.data.code == 200) {
+                    } else if (res.data.code === 200) {
                         location.href = "user.html";
                     } else {
                         alert(res.data.message)
@@ -199,16 +196,16 @@
             }
         },
         created() {
-            var that = this;
+            let that = this;
             axios.post("/user/list", {
-                username: that.username,
                 pageNo: that.pageNo,
-                pageSize: that.pageSize
+                pageSize: that.pageSize,
+                username: that.username
             }).then(function (d) {
-                if (d.data.code == 401) {
+                if (d.data.code === 401) {
                     alert(d.data.message)
                     location.href = "/login.html"
-                } else if (d.data.code == 403) {
+                } else if (d.data.code === 403) {
                     alert(d.data.message)
                 } else {
                     that.items = d.data.data.data;
@@ -223,23 +220,24 @@
         },
         computed: {
             pages: function () {
-                var list = [];
+                let i;
+                let list = [];
                 //当前页
-                var pn = this.pageNo;
+                let pn = this.pageNo;
                 //总页数
-                var pc = this.pageCount;
+                let pc = this.pageCount;
 
                 if (pc <= 3) {
-                    for (var i = 1; i <= pc; i++) {
+                    for (let i = 1; i <= pc; i++) {
                         list.push(i);
                     }
                 } else {
                     if (pn <= 3) {
-                        for (var i = 1; i <= 3; i++) {
+                        for (i = 1; i <= 3; i++) {
                             list.push(i);
                         }
                     } else {
-                        for (var i = pn - 2; i <= pn; i++) {
+                        for (let i = pn - 2; i <= pn; i++) {
                             list.push(i);
                         }
                     }

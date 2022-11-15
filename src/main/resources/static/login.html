@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="">
 
 <head>
     <meta charset="UTF-8">
@@ -40,17 +40,21 @@
                         <div class="tab-content tab-wraped">
                             <div id="index" class="tab-pane">
                                 <p>二维码登录，暂为官网二维码</p>
-                                <img src="img/wx_cz.jpg"/>
+                                <img src="img/wx_cz.jpg" alt=""/>
                             </div>
                             <div id="profile" class="tab-pane  active">
                                 <form class="sui-form">
                                     <div class="input-prepend"><span class="add-on loginname"></span>
-                                        <input type="text" placeholder="邮箱/用户名/手机号" v-model="fromdata.username"
-                                               class="span2 input-xfat">
+                                        <label>
+                                            <input type="text" placeholder="邮箱/用户名/手机号" v-model="fromdata.username"
+                                                   class="span2 input-xfat">
+                                        </label>
                                     </div>
                                     <div class="input-prepend"><span class="add-on loginpwd"></span>
-                                        <input type="password" placeholder="请输入密码" v-model="fromdata.password"
-                                               class="span2 input-xfat">
+                                        <label>
+                                            <input type="password" placeholder="请输入密码" v-model="fromdata.password"
+                                                   class="span2 input-xfat">
+                                        </label>
                                     </div>
                                     <div class="setting">
                                         <label class="checkbox inline"><input name="m1" type="checkbox" value="2"
@@ -65,10 +69,10 @@
                                 <div class="otherlogin">
                                     <div class="types">
                                         <ul>
-                                            <li><img src="img/qq.png" width="35px" height="35px"/></li>
-                                            <li><img src="img/sina.png"/></li>
-                                            <li><img src="img/ali.png"/></li>
-                                            <li><img src="img/weixin.png"/></li>
+                                            <li><img src="img/qq.png" width="35px" height="35px" alt=""/></li>
+                                            <li><img src="img/sina.png" alt=""/></li>
+                                            <li><img src="img/ali.png" alt=""/></li>
+                                            <li><img src="img/weixin.png" alt=""/></li>
                                         </ul>
                                     </div>
                                     <span class="register"><a href="register.html" target="_blank">立即注册</a></span>
@@ -91,7 +95,7 @@
         },
         methods: {
             login() {
-                var data = new FormData()
+                let data = new FormData();
                 data.append('username', this.fromdata.username);
                 data.append('password', this.fromdata.password);
                 let config = {
@@ -100,7 +104,7 @@
                     }
                 }
                 axios.post('/user/login', data, config).then(res => {
-                    if (res.data.code == 200) {
+                    if (res.data.code === 200) {
                         sessionStorage.setItem("token", res.data.data)
                         location.href = "admin/index.html";
                     } else {

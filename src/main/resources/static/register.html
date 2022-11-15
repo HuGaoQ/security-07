@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="">
 
 <head>
     <meta charset="UTF-8">
@@ -26,34 +26,36 @@
                     <div class="control-group">
                         <label class="control-label">登陆名：</label>
                         <div class="controls">
-                            <input type="text" placeholder="登陆名" class="input-xfat input-xlarge" v-model="fromdata.nickName"
-                                   @blur="nickName()" id="nickName">
-                            <span><font color="red" id="spanNickName"></font></span>
+                            <label for="nickName"></label><input type="text" placeholder="登陆名" class="input-xfat input-xlarge" v-model="fromdata.nickName"
+                                                                 @blur="nickName()" id="nickName">
+                            <span><span id="spanNickName" style="color: red; "></span></span>
                         </div>
                     </div>
 
                     <div class="control-group">
                         <label class="control-label">账号：</label>
                         <div class="controls">
-                            <input type="text" placeholder="账号" class="input-xfat input-xlarge" v-model="fromdata.username"
-                                   @blur="username()" id="username">
-                            <span><font color="red" id="spanUsername"></font></span>
+                            <label for="username"></label><input type="text" placeholder="账号" class="input-xfat input-xlarge" v-model="fromdata.username"
+                                                                 @blur="username()" id="username">
+                            <span><span id="spanUsername" style="color: red; "></span></span>
                         </div>
                     </div>
 
                     <div class="control-group">
                         <label class="control-label">密码：</label>
                         <div class="controls">
-                            <input type="password" placeholder="登陆密码" class="input-xfat input-xlarge" v-model="fromdata.password"
-                                   @blur="password()" id="password">
-                            <span><font color="red" id="spanPassword"></font></span>
+                            <label for="password"></label><input type="password" placeholder="登陆密码" class="input-xfat input-xlarge" v-model="fromdata.password"
+                                                                 @blur="password()" id="password">
+                            <span><span id="spanPassword" style="color: red; "></span></span>
                         </div>
                     </div>
 
                     <div class="control-group">
                         <label class="control-label"></label>
                         <div class="controls btn-reg">
-                            <input value="申请入驻" class="sui-btn btn-block btn-xlarge btn-danger" @click="register()"/>
+                            <label>
+                                <input value="申请入驻" class="sui-btn btn-block btn-xlarge btn-danger" @click="register()"/>
+                            </label>
                         </div>
                     </div>
                 </form>
@@ -92,7 +94,7 @@
         },
         methods: {
             nickName() {
-                var nickName = $("#nickName").val();
+                let nickName = $("#nickName").val();
                 if (nickName.length > 0) {
                     $("#nickName").css("border-color", "green")
                     $("#spanNickName").html("")
@@ -102,7 +104,7 @@
                 }
             },
             username() {
-                var username = $("#username").val();
+                let username = $("#username").val();
                 if (username.length > 0) {
                     $("#username").css("border-color", "green")
                     $("#spanUsername").html("")
@@ -112,7 +114,7 @@
                 }
             },
             password() {
-                var password = $("#password").val();
+                let password = $("#password").val();
                 if (password.length > 0) {
                     $("#password").css("border-color", "green")
                     $("#spanPassword").html("")
@@ -122,7 +124,7 @@
                 }
             },
             register() {
-                var data = new FormData()
+                let data = new FormData()
                 data.append('username', this.fromdata.username);
                 data.append('password', this.fromdata.password);
                 data.append('nickName', this.fromdata.nickName);
@@ -133,7 +135,7 @@
                 }
                 axios.post('/user/register', data, config).then(res => {
                     console.log(res.data)
-                    if (res.data.code == 200) {
+                    if (res.data.code === 200) {
                         location.href = "admin/user.html";
                     } else {
                         alert(res.data.message);

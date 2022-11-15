@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="">
 
 <head>
     <!-- 页面meta -->
@@ -23,7 +23,7 @@
 
     <script type="text/javascript">
         function SetIFrameHeight() {
-            var iframeid = document.getElementById("iframe"); //iframe id
+            let iframeid = document.getElementById("iframe"); //iframe id
             if (document.getElementById) {
                 iframeid.height = document.documentElement.clientHeight;
             }
@@ -373,7 +373,7 @@
             <div class="pull-right hidden-xs">
                 <b>Version</b> 1.0.8
             </div>
-            <strong>Copyright &copy; 2014-2017 <a href="http://www.murphy.com">研究院研发部</a>.</strong> All rights reserved.
+            <strong>Copyright &copy; 2014-2017 <a href="https://www.murphy.com">研究院研发部</a>.</strong> All rights reserved.
         </footer>
         <!-- 底部导航 /-->
 
@@ -385,7 +385,7 @@
         methods:{
             exit: function(){
                 axios.get("/user/logout").then(res => {
-                    if (res.data.code == 200){
+                    if (res.data.code === 200){
                         location.href = "/login.html";
                     }else {
                         alert(res.data.data)
@@ -395,9 +395,9 @@
         },
         created() {
             axios.get("/user/getUsername").then(res => {
-                $("#name").html(res.data.data)
-                $("#names").html(res.data.data)
-                $("#namess").html(res.data.data)
+                res("#name").html(res.data.data)
+                res("#names").html(res.data.data)
+                res("#namess").html(res.data.data)
             });
         }
     })
