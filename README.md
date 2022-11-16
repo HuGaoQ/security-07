@@ -3,7 +3,7 @@
 #    user.html:点击查询pageNo传不到后台(可以先手动设置pageNo进行测试但是查询只会查询pageNo设置的当前页)
 #    product.html:点击查询pageNo传不到后台(可以先手动设置pageNo进行测试但是查询只会查询pageNo设置的当前页)
 
-### 架构: SpringBoot+security+mybatisPlus+
+### 架构: SpringBoot+security+mybatisPlus
 ### jdk: 1.8
 ### 技术: lombok、swagger2、Dockerfile、redis、mysql5.7、jwt
 

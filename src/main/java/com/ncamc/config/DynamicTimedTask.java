@@ -15,7 +15,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ScheduledFuture;
 
 /***
- *  功能描述：定时任务调度类
+ * 功能描述：定时任务调度类
  */
 @Slf4j
 @Component
@@ -33,7 +33,7 @@ public class DynamicTimedTask {
     @Resource
     private ThreadPoolTaskScheduler threadPoolTaskScheduler;
 
-    // 线程池任务调度类,自定义的ThreadPoolTaskScheduler
+    //线程池任务调度类,自定义的ThreadPoolTaskScheduler
     @Bean
     public ThreadPoolTaskScheduler threadPoolTaskScheduler() {
         ThreadPoolTaskScheduler executor = new ThreadPoolTaskScheduler();
@@ -48,7 +48,7 @@ public class DynamicTimedTask {
         log.info("**************自动检测用户是否被锁定初始化完毕**************");
     }
 
-    //    @Scheduled(cron = "0/10 * * * * ?")
+    //@Scheduled(cron = "0/10 * * * * ?")
     public void Automatically() {
         ScheduledFuture scheduledFuture = threadPoolTaskScheduler.schedule(new Automatically(), new CronTrigger(config.getAutomatically()));
         assert scheduledFuture != null;
