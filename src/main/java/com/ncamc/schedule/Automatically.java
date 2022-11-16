@@ -39,31 +39,31 @@ public class Automatically implements Runnable {
                 String status = user.getStatus();
                 Integer number = user.getNumber();
                 if (status.equals("0")){
-                    System.out.println(user.getUsername()+"账户没有被锁定");
+                    log.info(user.getUsername()+"账户没有被锁定");
                 }
                 if (status.equals("1") || number == 5) {
-                    System.out.println(user.getUsername()+"账户被锁定");
-                    System.out.println("正在自动解锁该账户");
+                    log.info(user.getUsername()+"账户被锁定");
+                    log.info("正在自动解锁该账户");
                     Thread.sleep(2000);
-                    System.out.println("重置状态中");
+                    log.info("重置状态中");
                     Thread.sleep(2000);
                     user.setStatus("0");
                     userMapper.updateStatusById(user.getStatus(),user.getId());
-                    System.out.println("状态重置完成");
+                    log.info("状态重置完成");
                     Thread.sleep(2000);
-                    System.out.println("重置登陆次数中");
+                    log.info("重置登陆次数中");
                     Thread.sleep(2000);
                     user.setNumber(0);
                     userMapper.chongZhiNumberById(user.getNumber(),user.getId());
-                    System.out.println("登录次数重置完成");
+                    log.info("登录次数重置完成");
                     Thread.sleep(2000);
-                    System.out.println("重置密码中");
+                    log.info("重置密码中");
                     Thread.sleep(2000);
                     user.setPassword(passwordEncoder.encode("123"));
                     userMapper.updatePasswordById(user.getPassword(),user.getId());
-                    System.out.println("密码重置完成");
+                    log.info("密码重置完成");
                     Thread.sleep(2000);
-                    System.out.println(user.getUsername()+"账户重置成功，欢迎再次使用");
+                    log.info(user.getUsername()+"账户重置成功，欢迎再次使用");
                 }
             }
         } catch (Exception e) {
