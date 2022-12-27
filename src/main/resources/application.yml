@@ -41,4 +41,4 @@ ncamc:
     cookieMaxAge: 30 #cookie在浏览器上的最大存活时间 单位为分钟
 
 scheduleinfo:
-  Automatically: 0/15 * * * * ?
+  Automatically: 0 1 * * * ?

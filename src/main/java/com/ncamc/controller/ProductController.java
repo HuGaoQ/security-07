@@ -376,10 +376,10 @@ public class ProductController {
         style.setBorderRight(BorderStyle.THIN);
         style.setBorderTop(BorderStyle.THIN);
         //set border color
-        style.setTopBorderColor(new XSSFColor((IndexedColorMap) Color.BLACK));//设置文本边框颜色
-        style.setBottomBorderColor(new XSSFColor((IndexedColorMap) Color.BLACK));
-        style.setLeftBorderColor(new XSSFColor((IndexedColorMap) Color.BLACK));
-        style.setRightBorderColor(new XSSFColor((IndexedColorMap) Color.BLACK));
+//        style.setTopBorderColor(new XSSFColor((IndexedColorMap) Color.BLACK));//设置文本边框颜色
+//        style.setBottomBorderColor(new XSSFColor((IndexedColorMap) Color.BLACK));
+//        style.setLeftBorderColor(new XSSFColor((IndexedColorMap) Color.BLACK));
+//        style.setRightBorderColor(new XSSFColor((IndexedColorMap) Color.BLACK));
         //set font
         XSSFFont xssfFont = workbook.createFont();
         xssfFont.setFontName("Calibri");
