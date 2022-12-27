@@ -18,6 +18,13 @@ spring:
   devtools:
     restart:
       enabled: true
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: hugaoqiang
+    password: 123
+    publisher-confirm-type: correlated #消息确认方式,通过 correlated 来确认(将来的消息中才会带 correlation_id,只有通过 correlation_id 我们才能将发送的消息和返回值之间关联起来)
+    publisher-returns: true #开启发送失败退回
 
 swagger:
   # 是否开启swagger
@@ -36,7 +43,7 @@ ncamc:
     secret: ncamc@Login(Auth}*^31)&ncamcjava% # 登录校验的密钥
     pubKeyPath: E:\\tmp\\rsa\\rsa.pub # 公钥地址
     priKeyPath: E:\\tmp\\rsa\\rsa.pri # 私钥地址
-    expire: 30 # 过期时间,单位分钟
+    expire: 60 # 过期时间,单位分钟
     cookieName: NCAMC_TOKEN
     cookieMaxAge: 30 #cookie在浏览器上的最大存活时间 单位为分钟
 
