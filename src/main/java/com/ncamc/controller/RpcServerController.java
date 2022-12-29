@@ -11,7 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.UnsupportedEncodingException;
- 
+import java.nio.charset.StandardCharsets;
+
 /**
  * @author ：jerry
  * @date ：Created in 2021/12/29 14:04
@@ -27,7 +28,7 @@ public class RpcServerController {
  
     @RabbitListener(queues = RabbitConfig.RPC_QUEUE1)
     public void process(Message msg) throws UnsupportedEncodingException {
-        String message=new String(msg.getBody(),"UTF-8");
+        String message=new String(msg.getBody(), StandardCharsets.UTF_8);
  
         log.info("消费者消费消息的消息体：{}----->>>>>"+message);
         Message response = MessageBuilder.withBody(("i'm receive:"+new String(msg.getBody())).getBytes()).build();

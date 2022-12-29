@@ -5,6 +5,8 @@ import org.apache.ibatis.annotations.Param;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ncamc.entity.User;
 
+import java.util.List;
+
 public interface UserMapper extends BaseMapper<User> {
     /**
      * 修改登录次数
@@ -26,4 +28,8 @@ public interface UserMapper extends BaseMapper<User> {
      */
     void updatePasswordById(@Param("password") String password,@Param("id") Long id);
 
+    /**
+     * 查询所有用户
+     */
+    List<User> FindAll();
 }

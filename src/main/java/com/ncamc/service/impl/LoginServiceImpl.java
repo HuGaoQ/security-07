@@ -67,7 +67,7 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements L
             if (!StringUtils.isEmpty(user)) {
                 SimpleDateFormat createTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 SimpleDateFormat loginTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                List<User> users = userMapper.selectList(null);
+                List<User> users = userMapper.FindAll();
                 user.setPassword(passwordEncoder.encode(user.getPassword()));
                 user.setCreateTime(createTime.format(new Date()));
                 user.setLoginTime(loginTime.format(new Date()));
@@ -147,8 +147,7 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements L
     @Override
     public ResponseResult listPage(Map<String, Object> params) {
         Page<User> page = null;
-//        int pageNo = Integer.parseInt(params.get("pageNo").toString());
-        int pageNo = 1;
+        int pageNo = Integer.parseInt(params.get("pageNo").toString());
         int pageSize = Integer.parseInt(params.get("pageSize").toString());
         if (ObjectUtils.isEmpty(params.get("username").toString())) {
             page = new Page<>(pageNo, pageSize);
