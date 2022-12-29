@@ -87,6 +87,7 @@
                     <td class="text-center">
                         <a @click="update(item.id)" class="btn btn-w-xs btn-round btn-info">修改</a>
                         <a @click="del(item.id)" class="btn btn-w-xs btn-round btn-info">删除</a>
+                        <a @click="send(item.id)" class="btn btn-w-xs btn-round btn-info">发送</a>
                     </td>
                 </tr>
                 </tbody>
@@ -192,6 +193,20 @@
                     } else {
                         alert(res.data.message)
                     }
+                })
+            },
+            send: function (val) {
+                axios.get("/send",{
+                    params: {
+                        id: val,
+                        message: "听闻广陵不知寒,大雪龙骑下江南听闻广陵不知寒,大雪龙骑下江南"
+                    }
+                }).then(res => {
+                    // if (res.data.code === 200){
+                    //     alert("发送成功")
+                    // }else {
+                    //     alert("发送失败")
+                    // }
                 })
             }
         },
