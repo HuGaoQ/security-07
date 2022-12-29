@@ -6,7 +6,7 @@
 
 ### 架构: SpringBoot+security+mybatisPlus
 ### jdk: 1.8
-### 技术: lombok、swagger2、Dockerfile、redis、mysql5.7、jwt
+### 技术: lombok、swagger2、Dockerfile、redis、mysql5.7、jwt、RabbitMQ
 
 ### sql:
 ##### sys_user: 密码：123
