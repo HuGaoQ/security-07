@@ -1,9 +1,7 @@
 package com.ncamc.controller;
 
-import com.ncamc.config.JwtProperties;
 import com.ncamc.config.RabbitConfig;
 import com.ncamc.service.LoginService;
-import com.ncamc.utils.RedisCache;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -34,15 +32,6 @@ public class RpcClientController {
 
     @Autowired
     private RabbitTemplate rabbitTemplate;
-
-    @Autowired
-    private RedisCache redisCache;
-
-    @Autowired
-    private JwtProperties jwtProperties;
-
-    public static final String LOGIN_TOKEN = "login_token:";
-    public static final String LOGIN_USER = "login_user:";
 
     @ApiOperation("发送用户信息")
     @GetMapping("/send")

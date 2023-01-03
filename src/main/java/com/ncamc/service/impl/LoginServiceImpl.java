@@ -124,14 +124,14 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements L
     public ResponseResult getUsername(HttpServletRequest request) {
         String token = redisCache.getCacheObject(LOGIN_TOKEN);
         if (!StringUtils.hasText(token)) {
-            throw new RuntimeException("认证失败");
+            throw new RuntimeException("没有该数据");
         }
         Long uid = null;
         try {
             uid = JwtUtils.getInfoFromId(token, jwtProperties.getPublicKey());
         } catch (Exception e) {
             e.printStackTrace();
-            throw new RuntimeException("token非法");
+            throw new RuntimeException("解析失败");
         }
         String key = LOGIN_USER + uid;
         LoginUser loginUser = redisCache.getCacheObject(key);
@@ -189,7 +189,7 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements L
         ResponseResult responseResult = null;
         String token = redisCache.getCacheObject(LOGIN_TOKEN);
         if (!StringUtils.hasText(token)) {
-            throw new RuntimeException("认证失败");
+            throw new RuntimeException("没有该数据");
         }
         try {
             Long uid = null;
@@ -197,7 +197,7 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements L
                 uid = JwtUtils.getInfoFromId(token, jwtProperties.getPublicKey());
             } catch (Exception e) {
                 e.printStackTrace();
-                throw new RuntimeException("token非法");
+                throw new RuntimeException("解析失败");
             }
             String key = LOGIN_USER + uid;
             redisCache.deleteObject(key);
