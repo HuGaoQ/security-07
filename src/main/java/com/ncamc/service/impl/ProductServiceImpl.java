@@ -6,9 +6,7 @@ import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.ncamc.entity.Pages;
 import com.ncamc.entity.Product;
-import com.ncamc.entity.ResponseResult;
 import com.ncamc.entity.User;
 import com.ncamc.internal.Constant;
 import com.ncamc.mapper.ProductMapper;
@@ -22,7 +20,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * @Author: hugaoqiang
@@ -72,36 +71,30 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
      * 查询分页信息
      */
     @Override
-    public ResponseResult listPage(Map<String, Object> params) {
-        Page<Product> page = null;
-        int pageNo = Integer.parseInt(params.get("pageNo").toString());
-        int pageSize = Integer.parseInt(params.get("pageSize").toString());
+    public ApiResult listPage(Page<Product> page, Map<String, Object> params) {
         if (ObjectUtils.isEmpty(params.get("prdIns").toString())) {
-            page = new Page<>(pageNo, pageSize);
-            productMapper.selectPage(page, null);
+            return ApiResult.ok(Constant.STR_EMPTY,productMapper.selectPage(page, null));
         } else {
-            String prdIns = params.get("prdIns").toString();
-            page = new Page<>(pageNo, pageSize);
+            String prdIns = MapUtils.getString(params, "prdIns");
             LambdaQueryWrapper<Product> wrapper = new LambdaQueryWrapper<>();
             wrapper.like(StringUtils.isNotBlank(prdIns), Product::getPrdName, prdIns).or().like(StringUtils.isNotBlank(prdIns), Product::getInsName, prdIns);
-            productMapper.selectPage(page, wrapper);
+            return ApiResult.ok(Constant.STR_EMPTY,productMapper.selectPage(page, wrapper));
         }
-        return new ResponseResult(HttpStatus.OK.value(), "查询成功", new Pages<>(page.getPages(), page.getTotal(), page.getRecords()));
     }
 
     /**
      * 根据ID查询该产品信息
      */
     @Override
-    public Product selectByPrimaryKey(Integer id) {
-        return productMapper.selectById(id);
+    public ApiResult selectByPrimaryKey(Integer id) {
+        return ApiResult.ok(Constant.STR_EMPTY,productMapper.selectById(id));
     }
 
     /**
      * 根据ID查询该产品信息
      */
     @Override
-    public Product findById(Long id) {
+    public ApiResult findById(Long id) {
         Product product = null;
         String key = CACHE_KEY_USER + id;
         product = redisCache.getCacheObject(key);
@@ -113,18 +106,18 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
                 redisCache.setCacheObject(key, product);
             }
         }
-        return product;
+        return ApiResult.ok(Constant.STR_EMPTY,product);
     }
 
     /**
      * 根据ID删除该产品
      */
     @Override
-    public Integer deleteByPrimaryKey(Long id) {
+    public ApiResult deleteByPrimaryKey(Long id) {
         if (id != null) {
-            return productMapper.deleteById(id);
+            return ApiResult.ok(Constant.STR_EMPTY,productMapper.deleteById(id));
         }
-        return 0;
+        return ApiResult.ok(Constant.STR_EMPTY);
     }
 
 }

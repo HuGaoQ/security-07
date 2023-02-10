@@ -1,6 +1,6 @@
 package com.ncamc.config;
 
-import org.jetbrains.annotations.NotNull;
+import com.drew.lang.annotations.NotNull;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;

@@ -6,15 +6,16 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ncamc.config.JwtProperties;
 import com.ncamc.entity.LoginUser;
-import com.ncamc.entity.Pages;
-import com.ncamc.entity.ResponseResult;
 import com.ncamc.entity.User;
+import com.ncamc.internal.Constant;
 import com.ncamc.mapper.UserMapper;
 import com.ncamc.service.LoginService;
 import com.ncamc.utils.JwtUtils;
 import com.ncamc.utils.RedisCache;
+import com.wisdge.cloud.dto.ApiResult;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -61,8 +62,8 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements L
      * 注册用户
      */
     @Override
-    public ResponseResult register(User user) {
-        ResponseResult responseResult = null;
+    public ApiResult register(User user) {
+        ApiResult apiResult = null;
         try {
             if (!StringUtils.isEmpty(user)) {
                 SimpleDateFormat createTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -73,14 +74,14 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements L
                 user.setLoginTime(loginTime.format(new Date()));
                 user.setId(Long.parseLong(String.valueOf(users.size()+1)));
                 userMapper.insert(user);
-                responseResult = new ResponseResult(HttpStatus.OK.value(), "入住成功");
+                apiResult = new ApiResult(HttpStatus.OK.value(), "入住成功");
             }
         } catch (Exception e) {
             e.printStackTrace();
-            responseResult = new ResponseResult(HttpStatus.INTERNAL_SERVER_ERROR.value(), "入住失败", null);
+            apiResult = new ApiResult(HttpStatus.INTERNAL_SERVER_ERROR.value(), "入住失败", null);
         }
 
-        return responseResult;
+        return apiResult;
     }
 
     /**
@@ -88,13 +89,13 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements L
      */
     @SneakyThrows
     @Override
-    public ResponseResult login(User users) {
-        ResponseResult responseResult = null;
+    public ApiResult login(User users) {
+        ApiResult apiResult = null;
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(users.getUsername(), users.getPassword());
         Authentication authenticate = authenticationManager.authenticate(authenticationToken);
         LoginUser loginUser = (LoginUser) authenticate.getPrincipal();
         if (Objects.isNull(loginUser)) {
-            return new ResponseResult(HttpStatus.FOUND.value(), "账号或者密码错误", null);
+            return ApiResult.ok(HttpStatus.FOUND.value(), "账号或者密码错误");
         }
         User user = loginUser.getUser();
         if ("0".equals(user.getStatus())) {
@@ -105,23 +106,23 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements L
                 String key = LOGIN_USER+uid;
                 redisCache.setCacheObject(key, loginUser);
                 redisCache.setCacheObject(LOGIN_TOKEN, token);
-                responseResult = new ResponseResult(HttpStatus.OK.value(), "登录成功", token);
+                apiResult = new ApiResult(HttpStatus.OK.value(), "登录成功", token);
             } else {
                 user.setStatus("1");
                 userMapper.updateStatusById(user.getStatus(), user.getId());
-                responseResult = new ResponseResult(HttpStatus.MOVED_PERMANENTLY.value(), "该账户已停用，限登录五次，请联系管理员", null);
+                apiResult = new ApiResult(HttpStatus.MOVED_PERMANENTLY.value(), "该账户已停用，限登录五次，请联系管理员", null);
             }
         } else {
-            responseResult = new ResponseResult(HttpStatus.MOVED_PERMANENTLY.value(), "该账户已停用，请联系管理员", null);
+            apiResult = new ApiResult(HttpStatus.MOVED_PERMANENTLY.value(), "该账户已停用，请联系管理员", null);
         }
-        return responseResult;
+        return apiResult;
     }
 
     /**
      * 获取用户名称
      */
     @Override
-    public ResponseResult getUsername(HttpServletRequest request) {
+    public ApiResult getUsername(HttpServletRequest request) {
         String token = redisCache.getCacheObject(LOGIN_TOKEN);
         if (!StringUtils.hasText(token)) {
             throw new RuntimeException("没有该数据");
@@ -138,55 +139,49 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements L
         if (Objects.isNull(loginUser)) {
             throw new RuntimeException("没有该用户请从新登录");
         }
-        return new ResponseResult(HttpStatus.OK.value(), "查询成功", loginUser.getUser().getUsername());
+        return ApiResult.ok(HttpStatus.OK.value(), "查询成功", loginUser.getUser().getUsername());
     }
 
     /**
      * 分页查询用户
      */
     @Override
-    public ResponseResult listPage(Map<String, Object> params) {
-        Page<User> page = null;
-        int pageNo = Integer.parseInt(params.get("pageNo").toString());
-        int pageSize = Integer.parseInt(params.get("pageSize").toString());
+    public ApiResult listPage(Page<User> page, Map<String, Object> params) {
         if (ObjectUtils.isEmpty(params.get("username").toString())) {
-            page = new Page<>(pageNo, pageSize);
-            userMapper.selectPage(page, null);
+            return ApiResult.ok(Constant.STR_EMPTY,userMapper.selectPage(page, null));
         } else {
-            String username = params.get("username").toString();
-            page = new Page<>(pageNo, pageSize);
+            String username = MapUtils.getString(params, "username");
             LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
             wrapper.like(User::getUsername, username);
-            userMapper.selectPage(page, wrapper);
+            return ApiResult.ok(Constant.STR_EMPTY,userMapper.selectPage(page, wrapper));
         }
-        return new ResponseResult(HttpStatus.OK.value(), "查询成功", new Pages<>(page.getPages(), page.getTotal(), page.getRecords()));
     }
 
     /**
      * 根据ID查询该用户
      */
     @Override
-    public User selectById(Long id) {
-        return userMapper.selectById(id);
+    public ApiResult selectById(Long id) {
+        return ApiResult.ok(Constant.STR_EMPTY,userMapper.selectById(id));
     }
 
     /**
      * 根据ID删除该条数据
      */
     @Override
-    public Object deleteByPrimaryKey(Long id) {
+    public ApiResult deleteByPrimaryKey(Long id) {
         if (id != null) {
-            return userMapper.deleteById(id);
+            return ApiResult.ok(Constant.STR_EMPTY,userMapper.deleteById(id));
         }
-        return 0;
+        return ApiResult.ok(String.valueOf(Constant.INT_ZERO));
     }
 
     /**
      * 退出
      */
     @Override
-    public ResponseResult exit(HttpServletRequest request) {
-        ResponseResult responseResult = null;
+    public ApiResult exit(HttpServletRequest request) {
+        ApiResult apiResult = null;
         String token = redisCache.getCacheObject(LOGIN_TOKEN);
         if (!StringUtils.hasText(token)) {
             throw new RuntimeException("没有该数据");
@@ -201,11 +196,11 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements L
             }
             String key = LOGIN_USER + uid;
             redisCache.deleteObject(key);
-            responseResult = new ResponseResult(HttpStatus.OK.value(), "退出成功");
+            apiResult = new ApiResult(HttpStatus.OK.value(), "退出成功");
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return responseResult;
+        return apiResult;
     }
 
 }

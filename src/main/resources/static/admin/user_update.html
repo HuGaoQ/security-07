@@ -132,7 +132,7 @@
                 }
             }).then(d => {
                 if (d.data.code === 200) {
-                    this.fromdata = d.data.data
+                    this.fromdata = d.data.data.data
                 }else {
                     alert(d.data.message)
                 }

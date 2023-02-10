@@ -3,7 +3,6 @@ package com.ncamc.service;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.ncamc.entity.Product;
-import com.ncamc.entity.ResponseResult;
 import com.wisdge.cloud.dto.ApiResult;
 
 import java.util.Map;
@@ -23,26 +22,26 @@ public interface ProductService extends IService<Product> {
      * @param params
      * @return
      */
-    ResponseResult listPage(Map<String, Object> params);
+    ApiResult listPage(Page<Product> page, Map<String, Object> params);
 
     /**
      * 根据ID查询该产品信息
      * @param id
      * @return
      */
-    Product selectByPrimaryKey(Integer id);
+    ApiResult selectByPrimaryKey(Integer id);
 
     /**
      * 根据ID查询该产品信息
      * @param id
      * @return
      */
-    Product findById(Long id);
+    ApiResult findById(Long id);
 
     /**
      * 根据ID删除该产品
      * @param id
      * @return
      */
-    Integer deleteByPrimaryKey(Long id);
+    ApiResult deleteByPrimaryKey(Long id);
 }

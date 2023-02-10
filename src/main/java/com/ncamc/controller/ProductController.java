@@ -3,7 +3,6 @@ package com.ncamc.controller;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ncamc.entity.Product;
-import com.ncamc.entity.ResponseResult;
 import com.ncamc.internal.Constant;
 import com.ncamc.service.ProductService;
 import com.ncamc.utils.RedisCache;
@@ -86,13 +85,16 @@ public class ProductController {
             @ApiImplicitParam(name = "pageSize", value = "当前页条数", required = true, dataTypeClass = Integer.class, example = "当前页条数"),
             @ApiImplicitParam(name = "prdIns", value = "产品名称", dataTypeClass = String.class, example = "机构名称")
     })
-    public ResponseResult list(@RequestBody Map<String, Object> params) {
-        return productService.listPage(params);
+    public ApiResult list(@RequestBody Map<String, Object> params) {
+        Page<Product> page = new Page<>(MapUtils.getIntValue(params,"pageNo",0),MapUtils.getIntValue(params,"pageSize"));
+        Map<String, Object> map = new HashMap<>();
+        map.put("prdIns",MapUtils.getString(params,"prdIns"));
+        return ApiResult.ok(Constant.STR_EMPTY,productService.listPage(page,params));
     }
 
     @ApiOperation("数据库新增记录")
     @PostMapping("/add")
-    public ResponseResult add(@RequestBody Product product) {
+    public ApiResult add(@RequestBody Product product) {
         try {
             SimpleDateFormat newDate = new SimpleDateFormat("yyyy-MM-dd");
             SimpleDateFormat newTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -102,13 +104,14 @@ public class ProductController {
             product.setNewTime(newTime.format(new Date()));
             boolean b = productService.save(product);
             if (b) {
-                product = productService.selectByPrimaryKey(product.getId());
+                ApiResult apiResult = productService.selectByPrimaryKey(product.getId());
+                product =(Product) apiResult.getData();
                 redisCache.setCacheObject(CACHE_KEY_USER + product.getId(), product);
             }
-            return new ResponseResult(HttpStatus.OK.value(), "添加成功");
+            return ApiResult.ok(HttpStatus.OK.value(), "添加成功");
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseResult(HttpStatus.INTERNAL_SERVER_ERROR.value(), "添加失败");
+            return ApiResult.ok(HttpStatus.INTERNAL_SERVER_ERROR.value(), "添加失败");
         }
     }
 
@@ -117,13 +120,13 @@ public class ProductController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "ID", required = true, dataTypeClass = Integer.class, example = "ID")
     })
-    public ResponseResult select(Long id) {
-        return new ResponseResult(HttpStatus.OK.value(), productService.findById(id));
+    public ApiResult select(Long id) {
+        return ApiResult.ok(HttpStatus.OK.value(),Constant.STR_EMPTY, productService.findById(id));
     }
 
     @ApiOperation("修改产品信息")
     @PostMapping("/update")
-    public ResponseResult update(@RequestBody Product product) {
+    public ApiResult update(@RequestBody Product product) {
         try {
             UpdateWrapper wrapper = new UpdateWrapper<>();
             wrapper.eq("id", product.getId());
@@ -132,10 +135,10 @@ public class ProductController {
                 redisCache.deleteObject(CACHE_KEY_USER + product.getId());
                 redisCache.setCacheObject(CACHE_KEY_USER + product.getId(), product);
             }
-            return new ResponseResult(HttpStatus.OK.value(), "修改成功");
+            return ApiResult.ok(HttpStatus.OK.value(), "修改成功");
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseResult(HttpStatus.INTERNAL_SERVER_ERROR.value(), "修改失败");
+            return ApiResult.ok(HttpStatus.INTERNAL_SERVER_ERROR.value(), "修改失败");
         }
     }
 
@@ -145,8 +148,8 @@ public class ProductController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "ID", required = true, dataTypeClass = Integer.class, example = "ID")
     })
-    public ResponseResult del(Long id) {
-        return new ResponseResult(HttpStatus.OK.value(), "删除成功", productService.deleteByPrimaryKey(id));
+    public ApiResult del(Long id) {
+        return ApiResult.ok(HttpStatus.OK.value(), "删除成功", productService.deleteByPrimaryKey(id));
     }
 
     @ApiOperation("修改对应WPS文件")

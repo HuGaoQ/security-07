@@ -1,8 +1,9 @@
 package com.ncamc.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.ncamc.entity.ResponseResult;
 import com.ncamc.entity.User;
+import com.wisdge.cloud.dto.ApiResult;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
@@ -14,48 +15,49 @@ public interface LoginService extends IService<User> {
      * @param user
      * @return
      */
-    ResponseResult register(User user);
+    ApiResult register(User user);
 
     /**
      * 登录
      * @param user
      * @return
      */
-    ResponseResult login(User user);
+    ApiResult login(User user);
 
     /**
      * 获取用户名称
      * @param request
      * @return
      */
-    ResponseResult getUsername(HttpServletRequest request);
+    ApiResult getUsername(HttpServletRequest request);
 
     /**
      * 分页查询用户
      * @param params
      * @return
      */
-    ResponseResult listPage(Map<String, Object> params);
+    ApiResult listPage(Page<User>page, Map<String, Object> params);
 
     /**
      * 根据ID查询该用户
+     *
      * @param id
      * @return
      */
-    User selectById(Long id);
+    ApiResult selectById(Long id);
 
     /**
      * 根据ID删除该条数据
      * @param id
      * @return
      */
-    Object deleteByPrimaryKey(Long id);
+    ApiResult deleteByPrimaryKey(Long id);
 
     /**
      * 退出
      * @param request
      * @return
      */
-    ResponseResult exit(HttpServletRequest request);
+    ApiResult exit(HttpServletRequest request);
 
 }

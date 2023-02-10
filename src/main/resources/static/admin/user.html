@@ -163,9 +163,12 @@
                         alert(d.data.message)
                     } else if (d.data.code === 403) {
                         alert(d.data.message)
-                    } else {
-                        that.items = d.data.data.data;
-                        that.pageCount = d.data.data.pageCount;
+                    } else if (d.data.code === 200){
+                        that.items = d.data.data.data.records;
+                        that.pageCount = d.data.data.data.pages;
+                    }else {
+                        alert("数据出错")
+                        location.href = "/index.html";
                     }
                 }).catch(function (error) {
                     console.log("e=", error)
@@ -222,10 +225,13 @@
                     location.href = "/login.html"
                 } else if (d.data.code === 403) {
                     alert(d.data.message)
+                } else if (d.data.code === 200){
+                    that.items = d.data.data.data.records;
+                    that.pageCount = d.data.data.data.pages;
                 } else {
-                    that.items = d.data.data.data;
-                    that.pageCount = d.data.data.pageCount;
-                }
+                alert("数据出错")
+                location.href = "/index.html";
+            }
             }).catch(function (error) {
                 console.log("e=", error)
             });
