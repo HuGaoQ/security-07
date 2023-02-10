@@ -10,10 +10,13 @@ import com.ncamc.entity.Pages;
 import com.ncamc.entity.Product;
 import com.ncamc.entity.ResponseResult;
 import com.ncamc.entity.User;
+import com.ncamc.internal.Constant;
 import com.ncamc.mapper.ProductMapper;
 import com.ncamc.service.ProductService;
 import com.ncamc.utils.RedisCache;
+import com.wisdge.cloud.dto.ApiResult;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.MapUtils;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -41,33 +44,28 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
      * 多表分页模糊条件查询
      */
     @Override
-    public ResponseResult getProductList(Map<String, Object> params) {
-        Page<Product> res = null;
-        int pageNo = Integer.parseInt(params.get("pageNo").toString());
-        int pageSize = Integer.parseInt(params.get("pageSize").toString());
-        String username = params.get("username").toString();
-        Integer id = Integer.parseInt(params.get("id").toString());
+    public ApiResult getProductList(Page<Map<String, Object>> page, Map<String, Object> map) {
+        Page<Map<String, Object>> res = null;
 
         QueryWrapper<Product> productQueryWrapper = new QueryWrapper<>();
         QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
 
-        Page<Product> page = new Page<>();
-        page.setCurrent(pageNo);
-        page.setSize(pageSize);
+        String username = MapUtils.getString(map, "username");
+        String id = MapUtils.getString(map, "id");
 
-        if (Strings.isNotBlank(username) && !(Strings.isNotBlank(id.toString()))) {
+        if (Strings.isNotBlank(username) && !(Strings.isNotBlank(id))) {
             productQueryWrapper.lambda().like(Product::getPrdName, username);
             res = this.baseMapper.page(page, productQueryWrapper);
         }
-        if (Strings.isNotBlank(id.toString()) && !(Strings.isNotBlank(username))) {
+        if (Strings.isNotBlank(id) && !(Strings.isNotBlank(username))) {
             userQueryWrapper.lambda().eq(User::getId, id);
             res = this.baseMapper.pages(page, userQueryWrapper);
         }
-        if (Strings.isNotBlank(id.toString()) && Strings.isNotBlank(username)) {
+        if (Strings.isNotBlank(id) && Strings.isNotBlank(username)) {
             productQueryWrapper.lambda().like(Product::getPrdName, username);
-            res = this.baseMapper.pageByIdAndLikeName(page, productQueryWrapper,id);
+            res = this.baseMapper.pageByIdAndLikeName(page, productQueryWrapper,Integer.parseInt(id));
         }
-        return new ResponseResult(HttpStatus.OK.value(), "查询成功", res);
+        return ApiResult.ok(HttpStatus.OK.value(),Constant.STR_EMPTY,res);
     }
 
     /**

@@ -8,6 +8,8 @@ import com.ncamc.entity.User;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
+import java.util.Map;
+
 public interface ProductMapper extends BaseMapper<Product> {
     /**
      * 多表分页模糊条件查询
@@ -16,11 +18,11 @@ public interface ProductMapper extends BaseMapper<Product> {
     String wrapperIdSql = "select * from sys_product p left join sys_factory f on p.factory_id = f.id where f.id = #{id} ${ew.customSqlSegment}";
 
     @Select(wrapperSql)
-    Page<Product> page(Page<Product> page,  @Param("ew")QueryWrapper<Product> productQueryWrapper);
+    Page<Map<String, Object>> page(Page<Map<String, Object>> page, @Param("ew")QueryWrapper<Product> productQueryWrapper);
 
     @Select(wrapperSql)
-    Page<Product> pages(Page<Product> page,  @Param("ew")QueryWrapper<User> userQueryWrapper);
+    Page<Map<String, Object>> pages(Page<Map<String, Object>> page,  @Param("ew")QueryWrapper<User> userQueryWrapper);
 
     @Select(wrapperIdSql)
-    Page<Product> pageByIdAndLikeName(Page<Product> page, QueryWrapper<Product> productQueryWrapper,@Param("id") Integer id);
+    Page<Map<String, Object>> pageByIdAndLikeName(Page<Map<String, Object>> page, QueryWrapper<Product> productQueryWrapper,@Param("id") Integer id);
 }

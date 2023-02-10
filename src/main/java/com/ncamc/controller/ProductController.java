@@ -1,8 +1,10 @@
 package com.ncamc.controller;
 
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ncamc.entity.Product;
 import com.ncamc.entity.ResponseResult;
+import com.ncamc.internal.Constant;
 import com.ncamc.service.ProductService;
 import com.ncamc.utils.RedisCache;
 import com.spire.doc.Document;
@@ -12,12 +14,14 @@ import com.spire.doc.documents.Paragraph;
 import com.spire.doc.documents.TextSelection;
 import com.spire.doc.documents.TextWrappingStyle;
 import com.spire.doc.fields.DocPicture;
+import com.wisdge.cloud.dto.ApiResult;
 import com.wisdge.web.springframework.WebUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.MapUtils;
 import org.apache.poi.hssf.usermodel.HSSFPrintSetup;
 import org.apache.poi.hssf.usermodel.HeaderFooter;
 import org.apache.poi.ss.usermodel.*;
@@ -37,6 +41,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -66,8 +71,12 @@ public class ProductController {
             @ApiImplicitParam(name = "username", value = "用户名", dataTypeClass = String.class, example = "用户名"),
             @ApiImplicitParam(name = "id", value = "ID", dataTypeClass = Integer.class, example = "ID")
     })
-    public ResponseResult getProductList(@RequestBody Map<String, Object> params){
-        return productService.getProductList(params);
+    public ApiResult getProductList(@RequestBody Map<String, Object> params){
+        Page<Map<String,Object>> page = new Page<>(MapUtils.getIntValue(params,"pageNo"),MapUtils.getIntValue(params,"pageSize"));
+        Map<String, Object> map = new HashMap<>();
+        map.put("username",MapUtils.getString(params,"username"));
+        map.put("id",MapUtils.getString(params,"id"));
+        return ApiResult.ok(Constant.STR_EMPTY,productService.getProductList(page,map));
     }
 
     @ApiOperation("查询分页信息")

@@ -1,8 +1,10 @@
 package com.ncamc.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.ncamc.entity.Product;
 import com.ncamc.entity.ResponseResult;
+import com.wisdge.cloud.dto.ApiResult;
 
 import java.util.Map;
 
@@ -14,7 +16,7 @@ public interface ProductService extends IService<Product> {
      * @param params
      * @return
      */
-    ResponseResult getProductList(Map<String, Object> params);
+    ApiResult getProductList(Page<Map<String, Object>> page, Map<String, Object> params);
 
     /**
      * 查询分页信息
