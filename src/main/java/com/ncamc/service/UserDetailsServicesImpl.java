@@ -3,6 +3,7 @@ package com.ncamc.service;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.ncamc.entity.LoginUser;
 import com.ncamc.entity.User;
+import com.ncamc.internal.Constant;
 import com.ncamc.mapper.MenusMapperss;
 import com.ncamc.mapper.UserMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +33,7 @@ public class UserDetailsServicesImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper();
         queryWrapper.eq(User::getUsername, username);
+        queryWrapper.eq(User::getDelFlag, Constant.INT_ZERO);
         User user = userMapper.selectOne(queryWrapper);
         if (Objects.isNull(user)) {
             throw new RuntimeException("账号或者密码错误");

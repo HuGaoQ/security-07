@@ -73,12 +73,12 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
     @Override
     public ApiResult listPage(Page<Product> page, Map<String, Object> params) {
         if (ObjectUtils.isEmpty(params.get("prdIns").toString())) {
-            return ApiResult.ok(Constant.STR_EMPTY,productMapper.selectPage(page, null));
+            return ApiResult.ok(Constant.STR_FIND_OK,productMapper.selectPage(page, null));
         } else {
             String prdIns = MapUtils.getString(params, "prdIns");
             LambdaQueryWrapper<Product> wrapper = new LambdaQueryWrapper<>();
             wrapper.like(StringUtils.isNotBlank(prdIns), Product::getPrdName, prdIns).or().like(StringUtils.isNotBlank(prdIns), Product::getInsName, prdIns);
-            return ApiResult.ok(Constant.STR_EMPTY,productMapper.selectPage(page, wrapper));
+            return ApiResult.ok(Constant.STR_FIND_OK,productMapper.selectPage(page, wrapper));
         }
     }
 
@@ -87,7 +87,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
      */
     @Override
     public ApiResult selectByPrimaryKey(Integer id) {
-        return ApiResult.ok(Constant.STR_EMPTY,productMapper.selectById(id));
+        return ApiResult.ok(HttpStatus.OK.value(),Constant.STR_FIND_OK,productMapper.selectById(id));
     }
 
     /**
@@ -106,7 +106,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
                 redisCache.setCacheObject(key, product);
             }
         }
-        return ApiResult.ok(Constant.STR_EMPTY,product);
+        return ApiResult.ok(HttpStatus.OK.value(),Constant.STR_FIND_OK,product);
     }
 
     /**
@@ -114,10 +114,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
      */
     @Override
     public ApiResult deleteByPrimaryKey(Long id) {
-        if (id != null) {
-            return ApiResult.ok(Constant.STR_EMPTY,productMapper.deleteById(id));
-        }
-        return ApiResult.ok(Constant.STR_EMPTY);
+            return ApiResult.ok(HttpStatus.OK.value(),Constant.STR_DEL,productMapper.deleteById(id));
     }
 
 }

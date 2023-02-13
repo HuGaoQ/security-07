@@ -80,7 +80,7 @@ public class LoginController {
         Page<User> page = new Page<>(MapUtils.getIntValue(params,"pageNo"),MapUtils.getIntValue(params,"pageSize"));
         Map<String,Object> map = new HashMap<>();
         map.put("username",MapUtils.getString(params,"username"));
-        return ApiResult.ok(HttpStatus.OK.value(), Constant.STR_EMPTY,loginService.listPage(page,params));
+        return loginService.listPage(page,params);
     }
 
     @ApiOperation("查询1条记录")
@@ -90,7 +90,7 @@ public class LoginController {
             @ApiImplicitParam(name = "id", value = "ID", required = true, dataTypeClass = Integer.class, example = "ID")
     })
     public ApiResult select(Long id) {
-        return ApiResult.ok(HttpStatus.OK.value(),Constant.STR_EMPTY,loginService.selectById(id));
+        return loginService.selectById(id);
     }
 
     @ApiOperation("修改用户信息")
@@ -124,7 +124,7 @@ public class LoginController {
             @ApiImplicitParam(name = "id", value = "ID", required = true, dataTypeClass = Integer.class, example = "ID")
     })
     public ApiResult del(Long id) {
-        return ApiResult.ok(HttpStatus.OK.value(), "删除成功", loginService.deleteByPrimaryKey(id));
+        return loginService.deleteByPrimaryKey(id);
     }
 
     @ApiOperation("登出")

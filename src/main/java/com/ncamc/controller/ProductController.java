@@ -89,7 +89,7 @@ public class ProductController {
         Page<Product> page = new Page<>(MapUtils.getIntValue(params,"pageNo",0),MapUtils.getIntValue(params,"pageSize"));
         Map<String, Object> map = new HashMap<>();
         map.put("prdIns",MapUtils.getString(params,"prdIns"));
-        return ApiResult.ok(Constant.STR_EMPTY,productService.listPage(page,params));
+        return productService.listPage(page,params);
     }
 
     @ApiOperation("数据库新增记录")
@@ -121,7 +121,7 @@ public class ProductController {
             @ApiImplicitParam(name = "id", value = "ID", required = true, dataTypeClass = Integer.class, example = "ID")
     })
     public ApiResult select(Long id) {
-        return ApiResult.ok(HttpStatus.OK.value(),Constant.STR_EMPTY, productService.findById(id));
+        return productService.findById(id);
     }
 
     @ApiOperation("修改产品信息")
@@ -149,7 +149,7 @@ public class ProductController {
             @ApiImplicitParam(name = "id", value = "ID", required = true, dataTypeClass = Integer.class, example = "ID")
     })
     public ApiResult del(Long id) {
-        return ApiResult.ok(HttpStatus.OK.value(), "删除成功", productService.deleteByPrimaryKey(id));
+        return productService.deleteByPrimaryKey(id);
     }
 
     @ApiOperation("修改对应WPS文件")

@@ -74,11 +74,11 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements L
                 user.setLoginTime(loginTime.format(new Date()));
                 user.setId(Long.parseLong(String.valueOf(users.size()+1)));
                 userMapper.insert(user);
-                apiResult = new ApiResult(HttpStatus.OK.value(), "入住成功");
+                apiResult = new ApiResult(HttpStatus.OK.value(),Constant.STR_RGISTER_OK);
             }
         } catch (Exception e) {
             e.printStackTrace();
-            apiResult = new ApiResult(HttpStatus.INTERNAL_SERVER_ERROR.value(), "入住失败", null);
+            apiResult = new ApiResult(HttpStatus.INTERNAL_SERVER_ERROR.value(), Constant.STR_RGISTER_DEL);
         }
 
         return apiResult;
@@ -95,7 +95,7 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements L
         Authentication authenticate = authenticationManager.authenticate(authenticationToken);
         LoginUser loginUser = (LoginUser) authenticate.getPrincipal();
         if (Objects.isNull(loginUser)) {
-            return ApiResult.ok(HttpStatus.FOUND.value(), "账号或者密码错误");
+            return ApiResult.ok(HttpStatus.FOUND.value(), Constant.STR_ACCOUNT_OR_PASSWORD_ERROR);
         }
         User user = loginUser.getUser();
         if ("0".equals(user.getStatus())) {
@@ -106,9 +106,9 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements L
                 String key = LOGIN_USER+uid;
                 redisCache.setCacheObject(key, loginUser);
                 redisCache.setCacheObject(LOGIN_TOKEN, token);
-                apiResult = new ApiResult(HttpStatus.OK.value(), "登录成功", token);
+                apiResult = new ApiResult(HttpStatus.OK.value(), Constant.STR_LOGIN, token);
             } else {
-                user.setStatus("1");
+                user.setStatus(Constant.INT_ONE);
                 userMapper.updateStatusById(user.getStatus(), user.getId());
                 apiResult = new ApiResult(HttpStatus.MOVED_PERMANENTLY.value(), "该账户已停用，限登录五次，请联系管理员", null);
             }
@@ -139,7 +139,7 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements L
         if (Objects.isNull(loginUser)) {
             throw new RuntimeException("没有该用户请从新登录");
         }
-        return ApiResult.ok(HttpStatus.OK.value(), "查询成功", loginUser.getUser().getUsername());
+        return ApiResult.ok(HttpStatus.OK.value(), Constant.STR_FIND_OK, loginUser.getUser().getUsername());
     }
 
     /**
@@ -148,12 +148,12 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements L
     @Override
     public ApiResult listPage(Page<User> page, Map<String, Object> params) {
         if (ObjectUtils.isEmpty(params.get("username").toString())) {
-            return ApiResult.ok(Constant.STR_EMPTY,userMapper.selectPage(page, null));
+            return ApiResult.ok(Constant.STR_FIND_OK,userMapper.selectPage(page, null));
         } else {
             String username = MapUtils.getString(params, "username");
             LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
             wrapper.like(User::getUsername, username);
-            return ApiResult.ok(Constant.STR_EMPTY,userMapper.selectPage(page, wrapper));
+            return ApiResult.ok(Constant.STR_FIND_OK,userMapper.selectPage(page, wrapper));
         }
     }
 
@@ -162,7 +162,7 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements L
      */
     @Override
     public ApiResult selectById(Long id) {
-        return ApiResult.ok(Constant.STR_EMPTY,userMapper.selectById(id));
+        return ApiResult.ok(HttpStatus.OK.value(),Constant.STR_FIND_OK,userMapper.selectById(id));
     }
 
     /**
@@ -170,10 +170,7 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements L
      */
     @Override
     public ApiResult deleteByPrimaryKey(Long id) {
-        if (id != null) {
-            return ApiResult.ok(Constant.STR_EMPTY,userMapper.deleteById(id));
-        }
-        return ApiResult.ok(String.valueOf(Constant.INT_ZERO));
+        return ApiResult.ok(HttpStatus.OK.value(),Constant.STR_DEL,userMapper.deleteById(id));
     }
 
     /**
@@ -196,7 +193,7 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements L
             }
             String key = LOGIN_USER + uid;
             redisCache.deleteObject(key);
-            apiResult = new ApiResult(HttpStatus.OK.value(), "退出成功");
+            apiResult = new ApiResult(HttpStatus.OK.value(), Constant.STR_OUT);
         } catch (Exception e) {
             e.printStackTrace();
         }
