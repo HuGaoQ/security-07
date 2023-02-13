@@ -140,7 +140,7 @@
                 }
             },
             getListPage: function (num) {
-                let that = this;
+                var that = this;
                 that.pageNo = num;
 
                 if (that.pageNo <= 0) {
@@ -214,7 +214,7 @@
             }
         },
         created() {
-            let that = this;
+            var that = this;
             axios.post("/user/list", {
                 pageNo: that.pageNo,
                 pageSize: that.pageSize,

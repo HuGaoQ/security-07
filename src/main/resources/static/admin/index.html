@@ -280,14 +280,16 @@
 
                                     <p>
                                         <span id="names"></span>
-                                        <small>最后登录 11:20AM</small>
+                                        <small id="endtime" >
+                                            最后登录:{{ Object(time).toLocaleString().split(' ')[0].replace('-', '.').replace('-', '.').replace('T', ' ').replace(time.substr(time.lastIndexOf('.'),time.lenght),'') }}
+                                        </small>
                                     </p>
                                 </li>
 
                                 <!-- Menu Footer-->
                                 <li class="user-footer">
                                     <div class="pull-left">
-                                        <a href="#" class="btn btn-default btn-flat">修改密码</a>
+                                        <a href="../update_user_password.html" class="btn btn-default btn-flat">修改密码</a>
                                     </div>
                                     <div class="pull-right">
                                         <a href="#" class="btn btn-default btn-flat" @click="exit()">注销</a>
@@ -382,6 +384,9 @@
 <script>
     new Vue({
         el: "#app",
+        data: {
+            time: ""
+        },
         methods:{
             exit: function(){
                 axios.get("/user/logout").then(res => {
@@ -395,10 +400,12 @@
         },
         created() {
             axios.get("/user/getUsername").then(res => {
-                console.log(res.data.data)
                 $("#name").html(res.data.data)
                 $("#names").html(res.data.data)
                 $("#namess").html(res.data.data)
+            });
+            axios.get("/user/getLoginTime").then(res => {
+                this.time = res.data.data.time;
             });
         }
     })
