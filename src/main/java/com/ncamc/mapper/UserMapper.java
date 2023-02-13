@@ -43,5 +43,5 @@ public interface UserMapper extends BaseMapper<User> {
      * 获取用户最后登录时间
      * @return
      */
-    Map<String,Object> getLoginTime(@Param("username") String username);
+    String getLoginTime(@Param("username") String username);
 }

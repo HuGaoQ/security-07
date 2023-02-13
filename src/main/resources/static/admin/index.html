@@ -281,7 +281,6 @@
                                     <p>
                                         <span id="names"></span>
                                         <small id="endtime" >
-                                            最后登录:{{ Object(time).toLocaleString().split(' ')[0].replace('-', '.').replace('-', '.').replace('T', ' ').replace(time.substr(time.lastIndexOf('.'),time.lenght),'') }}
                                         </small>
                                     </p>
                                 </li>
@@ -384,9 +383,6 @@
 <script>
     new Vue({
         el: "#app",
-        data: {
-            time: ""
-        },
         methods:{
             exit: function(){
                 axios.get("/user/logout").then(res => {
@@ -405,7 +401,7 @@
                 $("#namess").html(res.data.data)
             });
             axios.get("/user/getLoginTime").then(res => {
-                this.time = res.data.data.time;
+                $("#endtime").html("最后登录："+res.data.data);
             });
         }
     })

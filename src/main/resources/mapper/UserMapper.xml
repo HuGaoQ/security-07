@@ -44,7 +44,7 @@
                 #{params.status,jdbcType=VARCHAR});
     </insert>
 
-    <select id="getLoginTime" resultType="java.util.Map">
+    <select id="getLoginTime" resultType="java.lang.String">
         select max(`time`) 'time' from sys_login_time where `name` = #{username,jdbcType=VARCHAR};
     </select>
 </mapper>
