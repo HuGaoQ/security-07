@@ -4,7 +4,7 @@
 
     <update id="updateNumberById">
         update sys_user
-        set number = #{number,jdbcType=NUMERIC}+1
+        set `number` = #{number,jdbcType=NUMERIC}+1
         where
         id = #{id,jdbcType=NUMERIC}
     </update>
@@ -18,7 +18,7 @@
 
     <update id="chongZhiNumberById">
         update sys_user
-        set number = #{number,jdbcType=NUMERIC}
+        set `number` = #{number,jdbcType=NUMERIC}
         where
         id = #{id,jdbcType=NUMERIC}
     </update>
@@ -34,4 +34,17 @@
         select  * from sys_user
     </select>
 
+    <insert id="saveLoginTime">
+        insert into sys_login_time
+            (`name`,
+             `time`,
+             `status`)
+        VALUES (#{params.name,jdbcType=VARCHAR},
+                now(),
+                #{params.status,jdbcType=VARCHAR});
+    </insert>
+
+    <select id="getLoginTime" resultType="java.util.Map">
+        select max(`time`) 'time' from sys_login_time where `name` = #{username,jdbcType=VARCHAR};
+    </select>
 </mapper>

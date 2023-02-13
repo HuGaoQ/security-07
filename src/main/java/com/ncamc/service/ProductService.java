@@ -25,11 +25,10 @@ public interface ProductService extends IService<Product> {
     ApiResult listPage(Page<Product> page, Map<String, Object> params);
 
     /**
-     * 根据ID查询该产品信息
-     * @param id
+     * 新增产品信息
      * @return
      */
-    ApiResult selectByPrimaryKey(Integer id);
+    ApiResult add(Product product);
 
     /**
      * 根据ID查询该产品信息
@@ -37,6 +36,13 @@ public interface ProductService extends IService<Product> {
      * @return
      */
     ApiResult findById(Long id);
+
+    /**
+     * 修改产品信息
+     * @param product
+     * @return
+     */
+    ApiResult updateProduct(Product product);
 
     /**
      * 根据ID删除该产品

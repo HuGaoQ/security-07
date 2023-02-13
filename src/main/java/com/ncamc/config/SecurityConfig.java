@@ -94,6 +94,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/user/login").anonymous()
                 //一下内容允许任意访问
                 .antMatchers("/user/getUsername").permitAll()
+                .antMatchers("/user/updatePassword").permitAll()
+                .antMatchers("/user/getLoginTime").permitAll()
                 .antMatchers("/user/logout").permitAll()
                 .antMatchers("/user/register").permitAll()
                 .antMatchers("/send").permitAll()

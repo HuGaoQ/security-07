@@ -2,6 +2,7 @@ package com.ncamc.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -20,6 +21,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -41,6 +45,9 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
 
     /**
      * 多表分页模糊条件查询
+     * @param page
+     * @param map
+     * @return
      */
     @Override
     public ApiResult getProductList(Page<Map<String, Object>> page, Map<String, Object> map) {
@@ -62,36 +69,58 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         }
         if (Strings.isNotBlank(id) && Strings.isNotBlank(username)) {
             productQueryWrapper.lambda().like(Product::getPrdName, username);
-            res = this.baseMapper.pageByIdAndLikeName(page, productQueryWrapper,Integer.parseInt(id));
+            res = this.baseMapper.pageByIdAndLikeName(page, productQueryWrapper, Integer.parseInt(id));
         }
-        return ApiResult.ok(HttpStatus.OK.value(),Constant.STR_EMPTY,res);
+        return ApiResult.ok(HttpStatus.OK.value(), Constant.STR_FIND_OK, res);
     }
 
     /**
      * 查询分页信息
+     * @param page
+     * @param params
+     * @return
      */
     @Override
     public ApiResult listPage(Page<Product> page, Map<String, Object> params) {
         if (ObjectUtils.isEmpty(params.get("prdIns").toString())) {
-            return ApiResult.ok(Constant.STR_FIND_OK,productMapper.selectPage(page, null));
+            return ApiResult.ok(Constant.STR_FIND_OK, productMapper.selectPage(page, null));
         } else {
             String prdIns = MapUtils.getString(params, "prdIns");
             LambdaQueryWrapper<Product> wrapper = new LambdaQueryWrapper<>();
             wrapper.like(StringUtils.isNotBlank(prdIns), Product::getPrdName, prdIns).or().like(StringUtils.isNotBlank(prdIns), Product::getInsName, prdIns);
-            return ApiResult.ok(Constant.STR_FIND_OK,productMapper.selectPage(page, wrapper));
+            return ApiResult.ok(Constant.STR_FIND_OK, productMapper.selectPage(page, wrapper));
+        }
+    }
+
+    /**
+     * 新增产品信息
+     * @return
+     */
+    @Override
+    public ApiResult add(Product product) {
+        try {
+            SimpleDateFormat newDate = new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat newTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            List<Product> products = productMapper.selectList(null);
+            product.setId(products.size() + 1);
+            product.setNewDate(newDate.format(new Date()));
+            product.setNewTime(newTime.format(new Date()));
+            int count = productMapper.insert(product);
+            if (count == 1) {
+                product = productMapper.selectById(product.getId());
+                redisCache.setCacheObject(CACHE_KEY_USER + product.getId(), product);
+            }
+            return ApiResult.ok(HttpStatus.OK.value(), Constant.STR_ADD_OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ApiResult.ok(HttpStatus.INTERNAL_SERVER_ERROR.value(), Constant.STR_ADD_ERROR);
         }
     }
 
     /**
      * 根据ID查询该产品信息
-     */
-    @Override
-    public ApiResult selectByPrimaryKey(Integer id) {
-        return ApiResult.ok(HttpStatus.OK.value(),Constant.STR_FIND_OK,productMapper.selectById(id));
-    }
-
-    /**
-     * 根据ID查询该产品信息
+     * @param id
+     * @return
      */
     @Override
     public ApiResult findById(Long id) {
@@ -106,15 +135,39 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
                 redisCache.setCacheObject(key, product);
             }
         }
-        return ApiResult.ok(HttpStatus.OK.value(),Constant.STR_FIND_OK,product);
+        return ApiResult.ok(HttpStatus.OK.value(), Constant.STR_FIND_OK, product);
+    }
+
+    /**
+     * 修改产品信息
+     * @param product
+     * @return
+     */
+    @Override
+    public ApiResult updateProduct(Product product) {
+        try {
+            UpdateWrapper wrapper = new UpdateWrapper<>();
+            wrapper.eq("id", product.getId());
+            int count = productMapper.update(product, wrapper);
+            if (count == 1) {
+                redisCache.deleteObject(CACHE_KEY_USER + product.getId());
+                redisCache.setCacheObject(CACHE_KEY_USER + product.getId(), product);
+            }
+            return ApiResult.ok(HttpStatus.OK.value(), Constant.STR_UPDATE_OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ApiResult.ok(HttpStatus.INTERNAL_SERVER_ERROR.value(), Constant.STR_UPDATE_ERROR);
+        }
     }
 
     /**
      * 根据ID删除该产品
+     * @param id
+     * @return
      */
     @Override
     public ApiResult deleteByPrimaryKey(Long id) {
-            return ApiResult.ok(HttpStatus.OK.value(),Constant.STR_DEL,productMapper.deleteById(id));
+        return ApiResult.ok(HttpStatus.OK.value(), Constant.STR_DEL_OK, productMapper.deleteById(id));
     }
 
 }

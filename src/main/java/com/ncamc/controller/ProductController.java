@@ -1,11 +1,8 @@
 package com.ncamc.controller;
 
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ncamc.entity.Product;
-import com.ncamc.internal.Constant;
 import com.ncamc.service.ProductService;
-import com.ncamc.utils.RedisCache;
 import com.spire.doc.Document;
 import com.spire.doc.FileFormat;
 import com.spire.doc.Section;
@@ -27,7 +24,6 @@ import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -57,11 +53,6 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
-    @Autowired
-    private RedisCache redisCache;
-
-    public static final String CACHE_KEY_USER = "user:";
-
     @ApiOperation("多表分页模糊条件查询")
     @PostMapping("/lists")
     @ApiImplicitParams({
@@ -70,15 +61,15 @@ public class ProductController {
             @ApiImplicitParam(name = "username", value = "用户名", dataTypeClass = String.class, example = "用户名"),
             @ApiImplicitParam(name = "id", value = "ID", dataTypeClass = Integer.class, example = "ID")
     })
-    public ApiResult getProductList(@RequestBody Map<String, Object> params){
-        Page<Map<String,Object>> page = new Page<>(MapUtils.getIntValue(params,"pageNo"),MapUtils.getIntValue(params,"pageSize"));
+    public ApiResult getProductList(@RequestBody Map<String, Object> params) {
+        Page<Map<String, Object>> page = new Page<>(MapUtils.getIntValue(params, "pageNo"), MapUtils.getIntValue(params, "pageSize"));
         Map<String, Object> map = new HashMap<>();
-        map.put("username",MapUtils.getString(params,"username"));
-        map.put("id",MapUtils.getString(params,"id"));
-        return ApiResult.ok(Constant.STR_EMPTY,productService.getProductList(page,map));
+        map.put("username", MapUtils.getString(params, "username"));
+        map.put("id", MapUtils.getString(params, "id"));
+        return productService.getProductList(page, map);
     }
 
-    @ApiOperation("查询分页信息")
+    @ApiOperation("查询产品分页信息")
     @PostMapping("/list")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "pageNo", value = "当前页", required = true, dataTypeClass = Integer.class, example = "当前页"),
@@ -86,33 +77,16 @@ public class ProductController {
             @ApiImplicitParam(name = "prdIns", value = "产品名称", dataTypeClass = String.class, example = "机构名称")
     })
     public ApiResult list(@RequestBody Map<String, Object> params) {
-        Page<Product> page = new Page<>(MapUtils.getIntValue(params,"pageNo",0),MapUtils.getIntValue(params,"pageSize"));
+        Page<Product> page = new Page<>(MapUtils.getIntValue(params, "pageNo", 0), MapUtils.getIntValue(params, "pageSize"));
         Map<String, Object> map = new HashMap<>();
-        map.put("prdIns",MapUtils.getString(params,"prdIns"));
-        return productService.listPage(page,params);
+        map.put("prdIns", MapUtils.getString(params, "prdIns"));
+        return productService.listPage(page, params);
     }
 
-    @ApiOperation("数据库新增记录")
+    @ApiOperation("新增产品信息")
     @PostMapping("/add")
     public ApiResult add(@RequestBody Product product) {
-        try {
-            SimpleDateFormat newDate = new SimpleDateFormat("yyyy-MM-dd");
-            SimpleDateFormat newTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            List<Product> products =  productService.list();
-            product.setId(products.size()+1);
-            product.setNewDate(newDate.format(new Date()));
-            product.setNewTime(newTime.format(new Date()));
-            boolean b = productService.save(product);
-            if (b) {
-                ApiResult apiResult = productService.selectByPrimaryKey(product.getId());
-                product =(Product) apiResult.getData();
-                redisCache.setCacheObject(CACHE_KEY_USER + product.getId(), product);
-            }
-            return ApiResult.ok(HttpStatus.OK.value(), "添加成功");
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ApiResult.ok(HttpStatus.INTERNAL_SERVER_ERROR.value(), "添加失败");
-        }
+        return productService.add(product);
     }
 
     @ApiOperation("查询1条记录")
@@ -127,19 +101,7 @@ public class ProductController {
     @ApiOperation("修改产品信息")
     @PostMapping("/update")
     public ApiResult update(@RequestBody Product product) {
-        try {
-            UpdateWrapper wrapper = new UpdateWrapper<>();
-            wrapper.eq("id", product.getId());
-            boolean b = productService.update(product, wrapper);
-            if (b) {
-                redisCache.deleteObject(CACHE_KEY_USER + product.getId());
-                redisCache.setCacheObject(CACHE_KEY_USER + product.getId(), product);
-            }
-            return ApiResult.ok(HttpStatus.OK.value(), "修改成功");
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ApiResult.ok(HttpStatus.INTERNAL_SERVER_ERROR.value(), "修改失败");
-        }
+        return productService.updateProduct(product);
     }
 
     @ApiOperation("删除1条记录")
@@ -214,7 +176,7 @@ public class ProductController {
         //创建工作薄
         XSSFWorkbook wk = new XSSFWorkbook();
         //创建表单
-        XSSFSheet sheet = genSheet(wk,"产品信息Test");
+        XSSFSheet sheet = genSheet(wk, "产品信息Test");
         //创建表单样式
         XSSFCellStyle titleStyle = genTitleStyle(wk);//创建标题样式
         XSSFCellStyle contextStyle = genContextStyle(wk);//创建文本样式
@@ -278,7 +240,7 @@ public class ProductController {
         //填入数据
         for (int i = 0; i < resultList.size(); i++) {
             Product product = resultList.get(i);
-            XSSFRow curRow = sheet.createRow(i+2);
+            XSSFRow curRow = sheet.createRow(i + 2);
             // ID
             XSSFCell curCell = curRow.createCell(0);
             curCell.setCellValue(product.getId());
@@ -330,7 +292,7 @@ public class ProductController {
     }
 
     //设置表单，并生成表单
-    public static XSSFSheet genSheet(XSSFWorkbook workbook, String sheetName){
+    public static XSSFSheet genSheet(XSSFWorkbook workbook, String sheetName) {
         //生成表单
         XSSFSheet sheet = workbook.createSheet(sheetName);
         //设置表单文本居中
@@ -338,7 +300,7 @@ public class ProductController {
         sheet.setFitToPage(false);
         //打印时在底部右边显示文本页信息
         Footer footer = sheet.getFooter();
-        footer.setRight( "Page " + HeaderFooter.numPages()+ " Of "+ HeaderFooter.page());
+        footer.setRight("Page " + HeaderFooter.numPages() + " Of " + HeaderFooter.page());
         //打印时在头部右边显示Excel创建日期信息
         Header header = sheet.getHeader();
         header.setRight("Create Date " + HeaderFooter.date() + " " + HeaderFooter.time());

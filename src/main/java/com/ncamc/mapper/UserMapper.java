@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ncamc.entity.User;
 
 import java.util.List;
+import java.util.Map;
 
 public interface UserMapper extends BaseMapper<User> {
     /**
@@ -26,10 +27,21 @@ public interface UserMapper extends BaseMapper<User> {
     /**
      * 修改密码
      */
-    void updatePasswordById(@Param("password") String password,@Param("id") Long id);
+    Integer updatePasswordById(@Param("password") String password,@Param("id") Long id);
 
     /**
      * 查询所有用户
      */
     List<User> FindAll();
+
+    /**
+     * 添加登录时间
+     */
+    void saveLoginTime(@Param("params") Map<String,Object> map);
+
+    /**
+     * 获取用户最后登录时间
+     * @return
+     */
+    Map<String,Object> getLoginTime(@Param("username") String username);
 }

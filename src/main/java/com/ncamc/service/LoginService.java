@@ -32,19 +32,38 @@ public interface LoginService extends IService<User> {
     ApiResult getUsername(HttpServletRequest request);
 
     /**
-     * 分页查询用户
+     * 获取用户最后登录时间
+     * @return
+     */
+    ApiResult getLoginTime(ApiResult apiResult);
+
+    /**
+     * 修改密码
      * @param params
      * @return
      */
-    ApiResult listPage(Page<User>page, Map<String, Object> params);
+    ApiResult updatePassword(Map<String, Object> params);
+
+    /**
+     * 查询用户分页信息
+     * @param params
+     * @return
+     */
+    ApiResult listPage(Page<User> page, Map<String, Object> params);
 
     /**
      * 根据ID查询该用户
-     *
      * @param id
      * @return
      */
     ApiResult selectById(Long id);
+
+    /**
+     * 修改用户信息
+     * @param user
+     * @return
+     */
+    ApiResult updateUser(User user);
 
     /**
      * 根据ID删除该条数据
@@ -59,5 +78,4 @@ public interface LoginService extends IService<User> {
      * @return
      */
     ApiResult exit(HttpServletRequest request);
-
 }

@@ -36,7 +36,7 @@ public class UserDetailsServicesImpl implements UserDetailsService {
         queryWrapper.eq(User::getDelFlag, Constant.INT_ZERO);
         User user = userMapper.selectOne(queryWrapper);
         if (Objects.isNull(user)) {
-            throw new RuntimeException("账号或者密码错误");
+            throw new RuntimeException(Constant.STR_ACCOUNT_OR_PASSWORD_ERROR);
         }
         List<String> list = menusMapperss.SelectParamsByUserId(user.getId());
         return new LoginUser(user, list);
