@@ -395,9 +395,10 @@
         },
         created() {
             axios.get("/user/getUsername").then(res => {
-                res("#name").html(res.data.data)
-                res("#names").html(res.data.data)
-                res("#namess").html(res.data.data)
+                console.log(res.data.data)
+                $("#name").html(res.data.data)
+                $("#names").html(res.data.data)
+                $("#namess").html(res.data.data)
             });
         }
     })
