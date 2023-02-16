@@ -78,6 +78,21 @@ public interface Constant {
     String STR_ACCOUNT_OR_PASSWORD_ERROR = "账号或者密码错误";
 
     /**
+     * 添加部门成功
+     */
+    String STR_ADD_ROLE_OK = "添加部门成功该部门已经存在权限";
+
+    /**
+     * 添加权限成功
+     */
+    String STR_ADD_MENU_OK = "添加权限成功该用户已经存在部门";
+
+    /**
+     * 该部门已经存在该权限，请重新修改权限
+     */
+    String STR_NOT_AND_YY = "该部门已经存在相同权限，请重新修改权限";
+
+    /**
      * 数字 零
      */
     int INT_ZERO = 0;
