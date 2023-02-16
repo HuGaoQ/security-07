@@ -89,7 +89,6 @@ public class LoginController {
 
     @ApiOperation("根据ID查询该用户")
     @GetMapping("/findById")
-    @PreAuthorize("hasAuthority('system:dept:list')")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "ID", required = true, dataTypeClass = Integer.class, example = "ID")
     })
