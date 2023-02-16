@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html xmlns:v-on="http://www.w3.org/1999/xhtml" lang="">
+
+<head>
+    <!-- 页面meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>权限信息</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" name="viewport">
+    <link rel="stylesheet" href="../plugins/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../plugins/adminLTE/css/AdminLTE.css">
+    <link rel="stylesheet" href="../plugins/adminLTE/css/skins/_all-skins.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="../plugins/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../plugins/adminLTE/js/vue-2.6.10.js"></script>
+    <script src="../plugins/adminLTE/js/axios.min.js"></script>
+    <script src="../plugins/adminLTE/js/main.js"></script>
+</head>
+
+<body class="hold-transition skin-red sidebar-mini">
+<!-- .box-body -->
+
+<div class="box-header with-border">
+    <h3 class="box-title">权限信息</h3>
+</div>
+
+<div id="app">
+    <div class="box-body">
+
+        <!-- 数据表格 -->
+        <div class="table-box">
+
+            <!--工具栏-->
+            <div class="pull-left">
+                <div class="form-group form-inline">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default" title="刷新" onclick="window.location.reload();">
+                            <i class="fa fa-refresh"></i> 刷新
+                        </button>
+                        <button type="button" class="btn btn-default" title="赋予权限" @click="security()">
+                                <i class="fa fa-circle-o"></i> 添加权限标识
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!--工具栏/-->
+            <div class="box-tools pull-right">
+                <div class="has-feedback">
+                    <label>
+                        用户名：
+                        <input placeholder="用户名" v-model="username">
+                    </label>
+                    <button class="btn btn-default" @click="getListPage()">查询</button>
+                </div>
+            </div>
+            <!--数据列表-->
+            <table id="dataList" class="table table-bordered table-striped table-hover dataTable">
+                <thead>
+                <tr>
+                    <!--sorting_asc-->
+                    <th class="text-center">编号</th>
+                    <th class="text-center">用户名</th>
+                    <th class="text-center">部门名称</th>
+                    <th class="text-center">权限名称</th>
+                    <th class="text-center">权限</th>
+                    <th class="text-center">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="(item,i) in items">
+                    <td class="text-center">{{i + 1}}</td>
+                    <td class="text-center">{{item.nickName}}</td>
+                    <td class="text-center" v-if="item.name == null">没有部门</td>
+                    <td class="text-center" v-else-if="item.name != null">{{item.name}}</td>
+                    <td class="text-center" v-if="item.menuName == null">没有权限名称</td>
+                    <td class="text-center" v-else-if="item.menuName != null">{{item.menuName}}</td>
+                    <td class="text-center" v-if="item.perms == null">没有权限</td>
+                    <td class="text-center" v-else-if="item.perms != null">{{item.perms}}</td>
+                    <td class="text-center">
+                        <a @click="addSecurity(item.id)" class="btn btn-w-xs btn-round btn-info">添加权限</a>
+                        <a @click="updateSecurity(item.id)" class="btn btn-w-xs btn-round btn-info">修改权限</a>
+                        <a @click="delSecurity(item.id)" class="btn btn-w-xs btn-round btn-info">删除权限</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <!--数据列表/-->
+        </div>
+        <!-- 数据表格 /-->
+        <div class="col-lg-4 text-center">
+            <nav>
+                <ul class="pagination">
+                    <li v-on:click="getListPage(pageNo-1)">
+                        <a href="#" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <li v-on:click="getListPage(p)" :class="{active:p==pageNo}" v-for="(p,index) in pages"><a href="#">{{p}}</a>
+                    </li>
+                    <li v-on:click="getListPage(pageNo+1)">
+                        <a href="#" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+<!-- /.box-body -->
+<script>
+    new Vue({
+        el: "#app",
+        data: {
+            pageNo: 1,//当前页
+            pageSize: 3,//当前页条数
+            pageCount: 1,
+            username: "",
+            name: "",
+            items: []
+        },
+        methods: {
+            getListPage: function (num) {
+                var that = this;
+                that.pageNo = num;
+
+                if (that.pageNo <= 0) {
+                    alert("已经是第一页");
+                    that.pageNo = 1;
+                }
+
+                if (that.pageNo > that.pageCount) {
+                    alert("已经是最后一页");
+                    console.log("=====", that.pageCount);
+                    that.pageNo = that.pageCount;
+                }
+
+                axios.post("/security/findAllSecurity", {
+                    pageNo: that.pageNo,
+                    pageSize: that.pageSize,
+                    username: that.username
+                }).then(function (d) {
+                    if (d.data.code === 401) {
+                        alert(d.data.message)
+                    } else if (d.data.code === 403) {
+                        alert(d.data.message)
+                    } else if (d.data.code === 200){
+                        that.items = d.data.data.records;
+                        that.pageCount = d.data.data.pages;
+                    }else {
+                        alert("数据出错")
+                        location.href = "/index.html";
+                    }
+                }).catch(function (error) {
+                    console.log("e=", error)
+                });
+            },
+            addSecurity: function (val){
+                location.href = "security_add.html?id="+val;
+            },
+            updateSecurity: function (id) {
+                location.href = "security_update.html?id=" + id;
+            },
+            delSecurity: function (val) {
+                axios.get("/security/delSecurity", {
+                    params: {
+                        id: val
+                    }
+                }).then(res => {
+                    if (res.data.code === 401) {
+                        alert(res.data.message)
+                        location.href = "/login.html";
+                    } else if (res.data.code === 403) {
+                        alert(res.data.message)
+                    } else if (res.data.code === 200) {
+                        location.href = "security.html";
+                    } else {
+                        alert(res.data.message)
+                    }
+                })
+            },
+            security: function() {
+                location.href = "security_add_bs.html";
+            }
+        },
+        created() {
+            var that = this;
+            axios.post("/security/findAllSecurity", {
+                pageNo: that.pageNo,
+                pageSize: that.pageSize,
+                username: that.username
+            }).then(function (d) {
+                if (d.data.code === 401) {
+                    alert(d.data.message)
+                    location.href = "/login.html"
+                } else if (d.data.code === 403) {
+                    alert(d.data.message)
+                } else if (d.data.code === 200){
+                    that.items = d.data.data.records;
+                    that.pageCount = d.data.data.pages;
+                } else {
+                alert("数据出错")
+                location.href = "/index.html";
+            }
+            }).catch(function (error) {
+                console.log("e=", error)
+            });
+        },
+        computed: {
+            pages: function () {
+                let i;
+                let list = [];
+                //当前页
+                let pn = this.pageNo;
+                //总页数
+                let pc = this.pageCount;
+
+                if (pc <= 3) {
+                    for (let i = 1; i <= pc; i++) {
+                        list.push(i);
+                    }
+                } else {
+                    if (pn <= 3) {
+                        for (i = 1; i <= 3; i++) {
+                            list.push(i);
+                        }
+                    } else {
+                        for (let i = pn - 2; i <= pn; i++) {
+                            list.push(i);
+                        }
+                    }
+                }
+                return list;
+            }
+        }
+    })
+</script>
+
+</body>
+
+</html>

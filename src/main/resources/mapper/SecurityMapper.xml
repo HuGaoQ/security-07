@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ncamc.mapper.SecurityMapper">
+
+    <select id="findAllSecurity" resultType="java.util.Map">
+        SELECT
+            su.id id,
+            su.nick_name nickName,
+            sr.name `name`,
+            sm.menu_name menuName,
+            sm.perms perms
+        FROM
+            sys_user su
+                LEFT JOIN sys_user_role sur ON su.id = sur.user_id
+                LEFT JOIN sys_role sr ON sr.id = sur.role_id
+                LEFT JOIN sys_role_menu srm ON sr.id = srm.role_id
+                LEFT JOIN sys_menu sm ON srm.menu_id = sm.id
+        WHERE
+            su.del_flag = 0
+            AND
+            su.nick_name NOT IN ( "管理员" )
+        <if test="username != null and username != ''">
+            AND CONCAT(IFNULL(su.nick_name, '')) LIKE
+            concat('%',#{username,jdbcType=VARCHAR},'%')
+        </if>
+    </select>
+
+    <select id="getAllRole" resultType="com.ncamc.entity.Role">
+        SELECT
+            id,
+            role_key
+        FROM
+            sys_role
+        WHERE
+            del_flag = 0;
+    </select>
+
+    <select id="getAllMenu" resultType="com.ncamc.entity.Menu">
+        SELECT
+            id,
+            menu_name
+        FROM
+            sys_menu
+        WHERE
+            del_flag = 0;
+    </select>
+
+    <select id="findRoleID" resultType="java.lang.String">
+        SELECT
+            sr.id id
+        FROM
+            sys_user su
+                LEFT JOIN sys_user_role sur ON su.id = sur.user_id
+                LEFT JOIN sys_role sr ON sr.id = sur.role_id
+        WHERE
+            sr.del_flag = 0
+          AND
+            su.del_flag = 0
+          AND
+            su.nick_name = #{nickName,jdbcType=VARCHAR};
+    </select>
+
+    <select id="findMenuID" resultType="java.lang.String">
+        SELECT
+            sm.id
+        FROM
+            sys_role sr
+                LEFT JOIN sys_role_menu srm ON sr.id = srm.role_id
+                LEFT JOIN sys_menu sm ON srm.menu_id = sm.id
+        WHERE
+            sm.del_flag = 0
+          AND
+            sr.del_flag = 0
+          AND
+            sr.id = #{roleID,jdbcType=NUMERIC};
+    </select>
+
+    <select id="getOneRole" resultType="com.ncamc.entity.Role">
+        SELECT
+            sr.*
+        FROM
+            sys_user su
+                LEFT JOIN sys_user_role sur ON su.id = sur.user_id
+                LEFT JOIN sys_role sr ON sr.id = sur.role_id
+        WHERE
+            sr.del_flag = 0
+          AND
+            su.del_flag = 0
+          AND
+            su.nick_name = #{nickName,jdbcType=VARCHAR};
+    </select>
+
+    <select id="getOneMenu" resultType="java.lang.String">
+        SELECT
+            sm.menu_name menuName
+        FROM
+            sys_role sr
+                LEFT JOIN sys_role_menu srm ON sr.id = srm.role_id
+                LEFT JOIN sys_menu sm ON srm.menu_id = sm.id
+        WHERE
+            sm.del_flag = 0
+          AND
+            sr.del_flag = 0
+          AND
+            sr.id = #{rid,jdbcType=NUMERIC};
+    </select>
+
+    <insert id="saveUserRole">
+        insert into sys_user_role
+        (`user_id`,
+         `role_id`)
+        values (#{uid,jdbcType=NUMERIC},
+                #{rid,jdbcType=NUMERIC})
+    </insert>
+
+    <insert id="saveRoleMenu">
+        insert into sys_role_menu
+        (`role_id`,
+         `menu_id`)
+        values (#{rid,jdbcType=NUMERIC},
+                #{mid,jdbcType=NUMERIC})
+    </insert>
+
+    <update id="updateRoleMenu">
+        update sys_role_menu
+        set
+            menu_id = #{mid,jdbcType=NUMERIC}
+        where
+            role_id = #{rid,jdbcType=NUMERIC}
+    </update>
+
+    <delete id="deleteSecurityById">
+        delete from sys_role_menu
+        where role_id = #{roleID,jdbcType=NUMERIC}
+    </delete>
+</mapper>

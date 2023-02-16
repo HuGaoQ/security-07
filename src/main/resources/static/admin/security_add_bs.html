@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=9; IE=8; IE=7; IE=EDGE">
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7"/>
+    <title>添加权限标识</title>
+    <link rel="stylesheet" type="text/css" href="../css/webbase.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/pages-register.css"/>
+</head>
+
+<body>
+<div id="app">
+    <div class="register py-container ">
+        <!--head-->
+        <div class="logoArea">
+            <a href="" class="logo"></a>
+        </div>
+        <!--register-->
+        <div class="registerArea">
+            <h3>添加权限标识</h3>
+            <div class="info">
+                <form class="sui-form form-horizontal">
+
+                    <div class="control-group">
+                        <label class="control-label">权限名称：</label>
+                        <div class="controls">
+                            <label for="menuName"></label><input type="text" placeholder="权限名称" class="input-xfat input-xlarge" v-model="fromdata.menuName"
+                                                                 @blur="menuName()" id="menuName">
+                            <span><span id="spanMenuName" style="color: red; "></span></span>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label">权限：</label>
+                        <div class="controls">
+                            <label for="perms"></label><input type="text" placeholder="权限" class="input-xfat input-xlarge" v-model="fromdata.perms"
+                                                                 @blur="perms()" id="perms">
+                            <span><span id="spanPerms" style="color: red; "></span></span>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label"></label>
+                        <div class="controls btn-reg">
+                            <label>
+                                <input value="添加" class="sui-btn btn-block btn-xlarge btn-danger" @click="add()"/>
+                            </label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="../plugins/jQuery/jquery-2.2.3.min.js"></script>
+<script src="../plugins/bootstrap/js/bootstrap.min.js"></script>
+<script src="../plugins/adminLTE/js/main.js"></script>
+<script src="../plugins/adminLTE/js/vue-2.6.10.js"></script>
+<script src="../plugins/adminLTE/js/axios.min.js"></script>
+</body>
+<script>
+    new Vue({
+        el: "#app",
+        data: {
+            fromdata: {}
+        },
+        methods: {
+            menuName() {
+                let menuName = $("#menuName").val();
+                if (menuName.length > 0) {
+                    $("#menuName").css("border-color", "green")
+                    $("#spanMenuName").html("")
+                } else {
+                    $("#menuName").css("border-color", "red")
+                    $("#spanMenuName").html("权限名称不能为空")
+                }
+            },
+            perms() {
+                let perms = $("#perms").val();
+                if (perms.length > 0) {
+                    $("#perms").css("border-color", "green")
+                    $("#spanPerms").html("")
+                } else {
+                    $("#perms").css("border-color", "red")
+                    $("#spanPerms").html("权限不能为空")
+                }
+            },
+            add() {
+                axios.post('/security/add', this.fromdata).then(res => {
+                    if (res.data.code === 200) {
+                        location.href = "security.html";
+                    } else {
+                        alert(res.data.message);
+                    }
+                }).catch(res => {
+                    console.log(res)
+                })
+            }
+        }
+    })
+</script>
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=9; IE=8; IE=7; IE=EDGE">
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7"/>
+    <title>修改权限</title>
+    <link rel="stylesheet" type="text/css" href="../css/webbase.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/pages-register.css"/>
+</head>
+
+<body>
+<div id="app">
+    <div class="register py-container ">
+        <!--head-->
+        <div class="logoArea">
+            <a href="" class="logo"></a>
+        </div>
+        <!--register-->
+        <div class="registerArea">
+            <h3>修改权限</h3>
+            <div class="info">
+                <form class="sui-form form-horizontal">
+
+                    <div class="control-group">
+                        <label class="control-label">用户名：</label>
+                        <div class="controls">
+                            <label for="nickName"></label>
+                            <input type="text" placeholder="用户名" class="input-xfat input-xlarge"
+                                   v-model="users.nickName" id="nickName" readonly>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label">部门：</label>
+                        <div class="controls">
+                            <label for="roleKey"></label>
+                            <input type="text" placeholder="用户名" class="input-xfat input-xlarge"
+                                   v-model="roles.roleKey" id="roleKey" readonly>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label">权限：</label>
+                        <div class="controls">
+                            <select class="input-xfat input-xlarge" v-model="fromdata.menuName">
+                                <option value="请选择权限">请选择权限</option>
+                                <option v-for="(m,i) in menus" :value="m.menuName">{{m.menuName}}</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label"></label>
+                        <div class="controls btn-reg">
+                            <label>
+                                <input value="修改" class="sui-btn btn-block btn-xlarge btn-danger" @click="update()"/>
+                            </label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../plugins/jQuery/jquery-2.2.3.min.js"></script>
+<script src="../plugins/bootstrap/js/bootstrap.min.js"></script>
+<script src="../plugins/adminLTE/js/main.js"></script>
+<script src="../plugins/adminLTE/js/vue-2.6.10.js"></script>
+<script src="../plugins/adminLTE/js/axios.min.js"></script>
+<script src="../plugins/adminLTE/js/getParameter.js"></script>
+</body>
+<script>
+    let id = getParameter("id");
+    new Vue({
+        el: "#app",
+        data: {
+            fromdata: {},
+            users: [],
+            roles: [],
+            menus: []
+        },
+        methods: {
+            update() {
+                let data = new FormData();
+                data.append('rid', this.roles.id);
+                data.append('menu', this.fromdata.menuName);
+                let config = {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                }
+                axios.post('/security/updateSecurity', data,config).then(res => {
+                    if (res.data.code === 200) {
+                        location.href = "security.html";
+                    } else if (res.data.code === 500){
+                        alert(res.data.message);
+                    }
+                }).catch(res => {
+                    console.log(res)
+                })
+            }
+        },
+        created() {
+            axios.get('/security/findSecurityByNickNameID', {
+                params: {
+                    id: id
+                }
+            }).then(res => {
+                this.users = res.data.data.user;
+                this.roles = res.data.data.role;
+                this.menus = res.data.data.menu;
+            })
+        }
+    })
+</script>
+</html>
