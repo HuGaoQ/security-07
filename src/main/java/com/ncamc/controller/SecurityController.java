@@ -8,6 +8,7 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,6 +36,7 @@ public class SecurityController {
 
     @ApiOperation("添加权限标识")
     @PostMapping("/add")
+    @PreAuthorize("hasAuthority('system:dept:list')")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "menuName", value = "权限名称", required = true, dataTypeClass = String.class, example = "权限名称"),
             @ApiImplicitParam(name = "perms", value = "权限标识", required = true, dataTypeClass = String.class, example = "权限标识")
@@ -55,6 +57,7 @@ public class SecurityController {
 
     @ApiOperation("赋予权限")
     @PostMapping("/saveSecurity")
+    @PreAuthorize("hasAuthority('system:dept:list')")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "rid", value = "角色ID", required = true, dataTypeClass = List.class, example = "角色ID"),
             @ApiImplicitParam(name = "mid", value = "权限ID", required = true, dataTypeClass = List.class, example = "权限ID")
@@ -74,6 +77,7 @@ public class SecurityController {
 
     @ApiOperation("修改权限")
     @PostMapping("/updateSecurity")
+    @PreAuthorize("hasAuthority('system:dept:list')")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "rid", value = "部门ID", required = true, dataTypeClass = String.class, example = "部门ID"),
             @ApiImplicitParam(name = "menu", value = "权限", required = true, dataTypeClass = String.class, example = "权限")
@@ -84,6 +88,7 @@ public class SecurityController {
 
     @ApiOperation("删除当前部门权限")
     @GetMapping("/delSecurity")
+    @PreAuthorize("hasAuthority('system:dept:list')")
     @ApiImplicitParams(
             @ApiImplicitParam(name = "id", value = "用户ID", required = true,dataTypeClass = Integer.class,example = "用户ID")
     )
