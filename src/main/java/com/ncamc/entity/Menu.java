@@ -4,16 +4,12 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.Date;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 @TableName("sys_menu")
 public class Menu implements Serializable {
 
@@ -70,6 +66,18 @@ public class Menu implements Serializable {
      */
     @TableField(value = "create_time")
     private Date createTime;
+
+    /**
+     * 创建人
+     */
+    @TableField(value = "create_by")
+    private String createBy;
+
+    /**
+     * 修改人
+     */
+    @TableField(value = "update_by")
+    private String updateBy;
 
     /**
      * 修改时间
