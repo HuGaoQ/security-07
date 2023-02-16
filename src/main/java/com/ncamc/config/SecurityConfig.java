@@ -91,19 +91,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/plugins/**"
                 ).permitAll()
                 //以下内容允许匿名访问
-                .antMatchers("/user/login").anonymous()
+                .antMatchers("/user/login").permitAll()
                 //一下内容允许任意访问
-                .antMatchers("/user/getUsername").permitAll()
-                .antMatchers("/user/updatePassword").permitAll()
-                .antMatchers("/user/getLoginTime").permitAll()
-                .antMatchers("/user/findAllNameSecurityRole").permitAll()
-                .antMatchers("/user/saveSecurity").anonymous()
-                .antMatchers("/user/logout").permitAll()
-                .antMatchers("/user/register").permitAll()
-                .antMatchers("/send").permitAll()
-                .antMatchers("/product/doc").permitAll()
-                .antMatchers("/swagger-ui.html").permitAll()
-                .antMatchers("/swagger-resources/**").permitAll()
+                .antMatchers("/swagger-ui.html").anonymous()
+                .antMatchers("/swagger-resources/**").anonymous()
 //                .antMatchers("/**").permitAll()
                 .anyRequest().authenticated();
         //添加过滤器

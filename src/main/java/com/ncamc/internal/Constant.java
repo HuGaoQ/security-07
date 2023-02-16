@@ -8,6 +8,26 @@ public interface Constant {
     String JWT_HEADER_TOKEN = "token";
 
     /**
+     * 登录存储的token
+     */
+    String LOGIN_TOKEN = "login_token:";
+
+    /**
+     * 登录存储的用户
+     */
+    String LOGIN_USER = "login_user:";
+
+    /**
+     * 前缀login：
+     */
+    String CACHE_KEY_LOGIN = "login:";
+
+    /**
+     * 前缀user:
+     */
+    String CACHE_KEY_USER = "user:";
+
+    /**
      * 空字符串
      */
     String STR_EMPTY = "";

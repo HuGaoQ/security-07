@@ -3,24 +3,21 @@ package com.ncamc.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.ncamc.config.JwtProperties;
 import com.ncamc.entity.LoginUser;
 import com.ncamc.entity.Menu;
 import com.ncamc.entity.Role;
 import com.ncamc.entity.User;
 import com.ncamc.internal.Constant;
+import com.ncamc.internal.TokenService;
 import com.ncamc.mapper.SecurityMapper;
 import com.ncamc.mapper.UserMapper;
 import com.ncamc.service.SecurityService;
-import com.ncamc.utils.JwtUtils;
-import com.ncamc.utils.RedisCache;
 import com.wisdge.cloud.dto.ApiResult;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import java.util.*;
 
@@ -34,13 +31,7 @@ public class SecurityServiceImpl extends ServiceImpl<SecurityMapper,Menu> implem
     private UserMapper userMapper;
 
     @Autowired
-    private JwtProperties jwtProperties;
-
-    @Autowired
-    private RedisCache redisCache;
-
-    public static final String LOGIN_TOKEN = "login_token:";
-    public static final String LOGIN_USER = "login_user:";
+    private TokenService tokenService;
 
     /**
      * 查询所有权限分页信息
@@ -62,19 +53,7 @@ public class SecurityServiceImpl extends ServiceImpl<SecurityMapper,Menu> implem
     @Override
     public ApiResult add(Map<String,Object> params) {
         ApiResult apiResult = null;
-        String token = redisCache.getCacheObject(LOGIN_TOKEN);
-        if (!StringUtils.hasText(token)) {
-            throw new RuntimeException("没有该数据");
-        }
-        Long uid = null;
-        try {
-            uid = JwtUtils.getInfoFromId(token, jwtProperties.getPublicKey());
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException("解析失败");
-        }
-        String key = LOGIN_USER + uid;
-        LoginUser loginUser = redisCache.getCacheObject(key);
+        LoginUser loginUser = tokenService.getLoginUser();
         User user = loginUser.getUser();
         if (Objects.isNull(user)) {
             throw new RuntimeException("没有该用户请从新登录");

@@ -9,6 +9,7 @@ import com.ncamc.config.JwtProperties;
 import com.ncamc.entity.LoginUser;
 import com.ncamc.entity.User;
 import com.ncamc.internal.Constant;
+import com.ncamc.internal.TokenService;
 import com.ncamc.mapper.UserMapper;
 import com.ncamc.service.LoginService;
 import com.ncamc.utils.JwtUtils;
@@ -26,7 +27,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -51,12 +51,10 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements L
     private RedisCache redisCache;
 
     @Autowired
+    private TokenService tokenService;
+
+    @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
-
-    public static final String LOGIN_TOKEN = "login_token:";
-    public static final String LOGIN_USER = "login_user:";
-
-    public static final String CACHE_KEY_LOGIN = "login:";
 
     /**
      * 注册用户
@@ -121,9 +119,9 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements L
                 String uid = loginUser.getUser().getId().toString();
                 //通过ID生成token
                 String token = JwtUtils.generateToken(uid, jwtProperties.getPrivateKey(), jwtProperties.getExpire());
-                String key = LOGIN_USER + uid;
+                String key = Constant.LOGIN_USER + uid;
                 redisCache.setCacheObject(key, loginUser);
-                redisCache.setCacheObject(LOGIN_TOKEN, token);
+                redisCache.setCacheObject(Constant.LOGIN_TOKEN, token);
                 apiResult = new ApiResult(HttpStatus.OK.value(), Constant.STR_LOGIN_OK, token);
             } else {
                 //设置状态字段为1
@@ -140,27 +138,11 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements L
 
     /**
      * 获取用户名称
-     * @param request
      * @return
      */
     @Override
-    public ApiResult getUsername(HttpServletRequest request) {
-        String token = redisCache.getCacheObject(LOGIN_TOKEN);
-        if (!StringUtils.hasText(token)) {
-            throw new RuntimeException("没有该数据");
-        }
-        Long uid = null;
-        try {
-            uid = JwtUtils.getInfoFromId(token, jwtProperties.getPublicKey());
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException("解析失败");
-        }
-        String key = LOGIN_USER + uid;
-        LoginUser loginUser = redisCache.getCacheObject(key);
-        if (Objects.isNull(loginUser)) {
-            throw new RuntimeException("没有该用户请从新登录");
-        }
+    public ApiResult getUsername() {
+        LoginUser loginUser = tokenService.getLoginUser();
         return ApiResult.ok(HttpStatus.OK.value(), Constant.STR_FIND_OK, loginUser.getUser().getUsername());
     }
 
@@ -186,19 +168,7 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements L
         String original_password = MapUtils.getString(params, "original_password");
         String new_password = MapUtils.getString(params, "new_password");
 
-        String token = redisCache.getCacheObject(LOGIN_TOKEN);
-        if (!StringUtils.hasText(token)) {
-            throw new RuntimeException("没有该数据");
-        }
-        Long uid = null;
-        try {
-            uid = JwtUtils.getInfoFromId(token, jwtProperties.getPublicKey());
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException("解析失败");
-        }
-        String key = LOGIN_USER + uid;
-        LoginUser loginUser = redisCache.getCacheObject(key);
+        LoginUser loginUser = tokenService.getLoginUser();
         User user = loginUser.getUser();
         if (Objects.isNull(user)) {
             throw new RuntimeException("没有该用户请从新登录");
@@ -260,8 +230,8 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements L
             }
             int count = userMapper.update(user, wrapper);
             if (count == 1) {
-                redisCache.deleteObject(CACHE_KEY_LOGIN + user.getId());
-                redisCache.setCacheObject(CACHE_KEY_LOGIN + user.getId(), user);
+                redisCache.deleteObject(Constant.CACHE_KEY_LOGIN + user.getId());
+                redisCache.setCacheObject(Constant.CACHE_KEY_LOGIN + user.getId(), user);
             }
             return ApiResult.ok(HttpStatus.OK.value(), Constant.STR_UPDATE_OK, count);
         } catch (Exception e) {
@@ -282,31 +252,11 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements L
 
     /**
      * 退出
-     * @param request
      * @return
      */
     @Override
-    public ApiResult exit(HttpServletRequest request) {
-        ApiResult apiResult = null;
-        String token = redisCache.getCacheObject(LOGIN_TOKEN);
-        if (!StringUtils.hasText(token)) {
-            throw new RuntimeException("没有该数据");
-        }
-        try {
-            Long uid = null;
-            try {
-                uid = JwtUtils.getInfoFromId(token, jwtProperties.getPublicKey());
-            } catch (Exception e) {
-                e.printStackTrace();
-                throw new RuntimeException("解析失败");
-            }
-            String key = LOGIN_USER + uid;
-            redisCache.deleteObject(key);
-            apiResult = new ApiResult(HttpStatus.OK.value(), Constant.STR_OUT_OK);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return apiResult;
+    public ApiResult exit() {
+        return tokenService.apiResult();
     }
 
 }

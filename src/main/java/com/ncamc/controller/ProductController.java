@@ -100,6 +100,7 @@ public class ProductController {
 
     @ApiOperation("修改产品信息")
     @PostMapping("/update")
+    @PreAuthorize("hasAuthority('system:dept:list')")
     public ApiResult update(@RequestBody Product product) {
         return productService.updateProduct(product);
     }

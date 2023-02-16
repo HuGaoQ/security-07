@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -52,14 +51,14 @@ public class LoginController {
 
     @ApiOperation("获取用户名称")
     @GetMapping("/getUsername")
-    public ApiResult getUsername(HttpServletRequest request) {
-        return loginService.getUsername(request);
+    public ApiResult getUsername() {
+        return loginService.getUsername();
     }
 
     @ApiOperation("获取用户最后登录时间")
     @GetMapping("/getLoginTime")
-    public ApiResult getLoginTime(HttpServletRequest request) {
-        ApiResult apiResult = loginService.getUsername(request);
+    public ApiResult getLoginTime() {
+        ApiResult apiResult = loginService.getUsername();
         return loginService.getLoginTime(apiResult);
     }
 
@@ -115,8 +114,8 @@ public class LoginController {
 
     @ApiOperation("退出")
     @GetMapping(value = "/logout")
-    public ApiResult exit(HttpServletRequest request) {
-        return loginService.exit(request);
+    public ApiResult exit() {
+        return loginService.exit();
     }
 
 }

@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.ncamc.entity.User;
 import com.wisdge.cloud.dto.ApiResult;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 public interface LoginService extends IService<User> {
@@ -26,10 +25,9 @@ public interface LoginService extends IService<User> {
 
     /**
      * 获取用户名称
-     * @param request
      * @return
      */
-    ApiResult getUsername(HttpServletRequest request);
+    ApiResult getUsername();
 
     /**
      * 获取用户最后登录时间
@@ -74,8 +72,7 @@ public interface LoginService extends IService<User> {
 
     /**
      * 退出
-     * @param request
      * @return
      */
-    ApiResult exit(HttpServletRequest request);
+    ApiResult exit();
 }

@@ -38,8 +38,6 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
     @Autowired
     private ProductMapper productMapper;
 
-    public static final String CACHE_KEY_USER = "user:";
-
     @Autowired
     private RedisCache redisCache;
 
@@ -108,7 +106,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
             int count = productMapper.insert(product);
             if (count == 1) {
                 product = productMapper.selectById(product.getId());
-                redisCache.setCacheObject(CACHE_KEY_USER + product.getId(), product);
+                redisCache.setCacheObject(Constant.CACHE_KEY_USER + product.getId(), product);
             }
             return ApiResult.ok(HttpStatus.OK.value(), Constant.STR_ADD_OK);
         } catch (Exception e) {
@@ -125,7 +123,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
     @Override
     public ApiResult findById(Long id) {
         Product product = null;
-        String key = CACHE_KEY_USER + id;
+        String key = Constant.CACHE_KEY_USER + id;
         product = redisCache.getCacheObject(key);
         if (Objects.isNull(product)) {
             product = productMapper.selectById(id);
@@ -150,8 +148,8 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
             wrapper.eq("id", product.getId());
             int count = productMapper.update(product, wrapper);
             if (count == 1) {
-                redisCache.deleteObject(CACHE_KEY_USER + product.getId());
-                redisCache.setCacheObject(CACHE_KEY_USER + product.getId(), product);
+                redisCache.deleteObject(Constant.CACHE_KEY_USER + product.getId());
+                redisCache.setCacheObject(Constant.CACHE_KEY_USER + product.getId(), product);
             }
             return ApiResult.ok(HttpStatus.OK.value(), Constant.STR_UPDATE_OK);
         } catch (Exception e) {
