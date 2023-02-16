@@ -89,7 +89,7 @@
                 }
             },
             add() {
-                axios.post('/security/add', this.fromdata).then(res => {
+                axios.post('/security/addSecurity', this.fromdata).then(res => {
                     if (res.data.code === 200) {
                         location.href = "security.html";
                     } else {

@@ -35,13 +35,12 @@ public class SecurityController {
     }
 
     @ApiOperation("添加权限标识")
-    @PostMapping("/add")
+    @PostMapping("/addSecurity")
     @PreAuthorize("hasAuthority('system:dept:list')")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "menuName", value = "权限名称", required = true, dataTypeClass = String.class, example = "权限名称"),
             @ApiImplicitParam(name = "perms", value = "权限标识", required = true, dataTypeClass = String.class, example = "权限标识")
-    }
-    )
+    })
     public ApiResult add(@RequestBody Map<String,Object> params){
         return securityService.add(params);
     }
