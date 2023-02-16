@@ -40,7 +40,7 @@ ncamc:
     priKeyPath: E:\\tmp\\rsa\\rsa.pri # 私钥地址
     expire: 60 # 过期时间,单位分钟
     cookieName: NCAMC_TOKEN
-    cookieMaxAge: 30 #cookie在浏览器上的最大存活时间 单位为分钟
+    cookieMaxAge: 60 #cookie在浏览器上的最大存活时间 单位为分钟
 
 scheduleinfo:
   Automatically: 0 1 * * * ?
