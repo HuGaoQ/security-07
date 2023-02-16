@@ -39,8 +39,7 @@
                                 class="fa fa-file-o"></i> 添加用户
                         </button>
                         <button type="button" class="btn btn-default" title="刷新" onclick="window.location.reload();">
-                            <i
-                                    class="fa fa-refresh"></i> 刷新
+                            <i class="fa fa-refresh"></i> 刷新
                         </button>
                     </div>
                 </div>
@@ -188,7 +187,7 @@
                 }).then(res => {
                     if (res.data.code === 401) {
                         alert(res.data.message)
-                        location.href = "/login.html";
+                        location.href = "../login.html";
                     } else if (res.data.code === 403) {
                         alert(res.data.message)
                     } else if (res.data.code === 200) {
@@ -211,6 +210,9 @@
                     //     alert("发送失败")
                     // }
                 })
+            },
+            security: function (){
+                location.href = "security.html";
             }
         },
         created() {
@@ -222,7 +224,7 @@
             }).then(function (d) {
                 if (d.data.code === 401) {
                     alert(d.data.message)
-                    location.href = "/login.html"
+                    location.href = "../login.html"
                 } else if (d.data.code === 403) {
                     alert(d.data.message)
                 } else if (d.data.code === 200){
